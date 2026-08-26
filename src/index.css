@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+@theme {
+  --color-obsidian: #0B0F17;
+  --color-obsidian-dark: #070A0F;
+  --color-obsidian-light: #111827;
+
+  --color-charcoal: #151D2A;
+  --color-charcoal-dark: #0F1622;
+  --color-charcoal-light: #1E293B;
+  --color-charcoal-lighter: #283548;
+
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-100: #d1fae5;
+  --color-emerald-200: #a7f3d0;
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10B981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-900: #064e3b;
+
+  --color-amber: #F59E0B;
+  --color-coral: #EF4444;
+  --color-violet-50: #f5f3ff;
+  --color-violet-100: #ede9fe;
+  --color-violet-200: #ddd6fe;
+  --color-violet-300: #c4b5fd;
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8B5CF6;
+  --color-violet-600: #7c3aed;
+  --color-violet-700: #6d28d9;
+  --color-violet-800: #5b21b6;
+  --color-violet-900: #4c1d95;
+
+  --color-textPrimary: #F8FAFC;
+  --color-textMuted: #94A3B8;
+  --color-border: #1E293B;
+}
+
+:root {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: dark;
+  background-color: #0B0F17;
+  color: #F8FAFC;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Outfit', sans-serif;
+}
+
+code, .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0F17;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Glassmorphic panels */
+.glass-panel {
+  background: rgba(21, 29, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #1E293B;
+}
+
+.glass-panel-hover {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel-hover:hover {
+  background: rgba(26, 36, 52, 0.95);
+  border-color: #334155;
+  transform: translateY(-2px);
+}
+
+.glass-card-special {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(16, 185, 129, 0.05) 50%, rgba(21, 29, 42, 0.9) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(139, 92, 246, 0.08);
+}
+
+.glass-card-special:hover {
+  border-color: rgba(139, 92, 246, 0.45);
+  box-shadow: 0 12px 36px 0 rgba(139, 92, 246, 0.18);
+}
+
+/* Scannig laser beam */
+.laser-line {
+  background: linear-gradient(90deg, transparent 0%, #10B981 30%, #34d399 50%, #10B981 70%, transparent 100%);
+  box-shadow: 0 0 15px 2px rgba(16, 185, 129, 0.8);
+}
+
+.animate-laser-scan {
+  animation: laserScan 2.5s ease-in-out infinite;
+}
+
+@keyframes laserScan {
+  0%, 100% {
+    top: 0%;
+    opacity: 0.9;
+  }
+  50% {
+    top: 96%;
+    opacity: 0.4;
+  }
+}
+
+/* Radial Gauge Styling */
+.radial-progress-circle {
+  transition: stroke-dashoffset 0.8s ease-in-out, stroke 0.4s ease;
+}
+
+/* Pulsing Badge Glow */
+.scarcity-pulse {
+  animation: scarcityPulse 1.8s infinite;
+}
+
+@keyframes scarcityPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(139, 92, 246, 0);
+  }
+}
+
+.danger-pulse {
+  animation: dangerPulse 1.5s infinite;
+}
+
+@keyframes dangerPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
+/* Custom Shadow Glows */
+.shadow-glow-emerald {
+  box-shadow: 0 0 20px -5px rgba(16, 185, 129, 0.45);
+}
+
+.shadow-glow-violet {
+  box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.5);
+}
+
+.shadow-glow-amber {
+  box-shadow: 0 0 20px -5px rgba(245, 158, 11, 0.4);
+}
+
+.shadow-glow-coral {
+  box-shadow: 0 0 20px -5px rgba(239, 68, 68, 0.4);
+}

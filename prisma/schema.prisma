@@ -1,0 +1,313 @@
+// ==============================================================================
+// Waste2Menu-AI (KitchenOS) Enterprise PostgreSQL Schema Definition
+// Automated Kitchen Prep-Scrap Tracking & Dynamic Daily Special Menu Generation
+// ==============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  CHEF
+  CASHIER
+  NGO_COORDINATOR
+}
+
+enum ScrapCategory {
+  BONES
+  VEGETABLE_SKINS
+  CITRUS_PEELS
+  HERB_STEMS
+  BAKERY_WHEY
+}
+
+enum ScrapStatus {
+  AVAILABLE
+  ALLOCATED
+  DISCARDED
+}
+
+enum SkuStatus {
+  ACTIVE
+  SOLD_OUT
+  REDISTRIBUTED
+  EXPIRED
+}
+
+enum BatchStatus {
+  PENDING_MATCH
+  OFFERED
+  CLAIMED
+  COMPLETED
+  CANCELLED
+  EXPIRED
+}
+
+enum FoodCategory {
+  VEG
+  NON_VEG
+  BAKERY
+  LIQUID_SOUP
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RELATIONAL MODELS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Staff, chefs, cashiers, and NGO coordinator accounts
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @db.VarChar(255)
+  name         String   @db.VarChar(150)
+  role         Role     @default(CHEF)
+  createdAt    DateTime @default(now()) @db.Timestamptz
+  updatedAt    DateTime @updatedAt @db.Timestamptz
+
+  // Reverse Relations
+  scrapLogs ScrapLedger[] @relation("ChefScrapLogs")
+  orders    Order[]       @relation("CashierOrders")
+
+  @@index([role])
+  @@map("users")
+}
+
+/// Commercial kitchen or restaurant branch entity
+model Restaurant {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(200)
+  address      String   @db.Text
+  latitude     Float    @db.DoublePrecision
+  longitude    Float    @db.DoublePrecision
+  contactPhone String   @db.VarChar(30)
+  openingTime  String   @db.VarChar(10) // e.g. "08:00"
+  closingTime  String   @db.VarChar(10) // e.g. "23:00"
+  createdAt    DateTime @default(now()) @db.Timestamptz
+  updatedAt    DateTime @updatedAt @db.Timestamptz
+
+  // Cascade Relations
+  rawInventories         RawInventory[]
+  scrapLedgers           ScrapLedger[]
+  dynamicSkus            DynamicSku[]
+  orders                 Order[]
+  redistributionBatches  RedistributionBatch[]
+  sustainabilityLogs     SustainabilityLog[]
+
+  @@index([latitude, longitude], name: "idx_restaurants_spatial")
+  @@map("restaurants")
+}
+
+/// Raw ingredients stored in kitchen cold storage and dry pantries
+model RawInventory {
+  id                String   @id @default(uuid()) @db.Uuid
+  restaurantId      String   @db.Uuid
+  name              String   @db.VarChar(150)
+  category          String   @db.VarChar(80)
+  currentStockKg    Float    @default(0.0) @db.DoublePrecision
+  costPerKg         Float    @db.DoublePrecision
+  baselineTrimRatio Float    @default(0.15) @db.DoublePrecision // e.g., 0.18 for 18% expected scrap
+  createdAt         DateTime @default(now()) @db.Timestamptz
+  updatedAt         DateTime @updatedAt @db.Timestamptz
+
+  // Foreign Key Relations
+  restaurant Restaurant    @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  scrapLogs  ScrapLedger[]
+
+  @@unique([restaurantId, name], name: "uq_restaurant_inventory_name")
+  @@index([restaurantId, category])
+  @@map("raw_inventories")
+}
+
+/// Immutable ledger of prep-scrap generation events logged by prep cooks/chefs
+model ScrapLedger {
+  id               String        @id @default(uuid()) @db.Uuid
+  restaurantId     String        @db.Uuid
+  cookId           String        @db.Uuid
+  rawInventoryId   String        @db.Uuid
+  scrapCategory    ScrapCategory
+  usableWeightKg   Float         @db.DoublePrecision
+  scrapWeightKg    Float         @db.DoublePrecision
+  trimRatio        Float         @db.DoublePrecision // Calculated: scrapWeight / (usableWeight + scrapWeight)
+  isAnomaly        Boolean       @default(false)
+  status           ScrapStatus   @default(AVAILABLE)
+  loggedAt         DateTime      @default(now()) @db.Timestamptz
+
+  // Foreign Key Relations
+  restaurant   Restaurant   @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  cook         User         @relation("ChefScrapLogs", fields: [cookId], references: [id], onDelete: Restrict)
+  rawInventory RawInventory @relation(fields: [rawInventoryId], references: [id], onDelete: Restrict)
+
+  @@index([restaurantId, scrapCategory, status], name: "idx_scrap_active_reservoir")
+  @@index([loggedAt(sort: Desc)])
+  @@index([cookId])
+  @@index([isAnomaly])
+  @@map("scrap_ledgers")
+}
+
+/// Culinary byproduct recipes converting kitchen trimmings into menu items
+model ByproductRecipe {
+  id                   String        @id @default(uuid()) @db.Uuid
+  name                 String        @unique @db.VarChar(200)
+  description          String        @db.Text
+  primaryScrapCategory ScrapCategory
+  scrapPerPortionKg    Float         @db.DoublePrecision
+  baseServingYield     Int           @default(10)
+  pantryCostPerPortion Float         @default(0.0) @db.DoublePrecision
+  suggestedPrice       Float         @db.DoublePrecision
+  pantryStaples        Json          @default("[]") // e.g. [{"item": "Salt", "qty": "5g"}, {"item": "Butter", "qty": "10g"}]
+  createdAt            DateTime      @default(now()) @db.Timestamptz
+  updatedAt            DateTime      @updatedAt @db.Timestamptz
+
+  // Reverse Relations
+  dynamicSkus DynamicSku[]
+
+  @@index([primaryScrapCategory])
+  @@map("byproduct_recipes")
+}
+
+/// Real-time daily specials active on the Point-of-Sale (POS)
+model DynamicSku {
+  id                 String     @id @default(uuid()) @db.Uuid
+  restaurantId       String     @db.Uuid
+  recipeId           String     @db.Uuid
+  itemName           String     @db.VarChar(200)
+  totalPortions      Int
+  remainingPortions  Int
+  unitPrice          Float      @db.DoublePrecision
+  costPerServing     Float      @db.DoublePrecision
+  status             SkuStatus  @default(ACTIVE)
+  createdAt          DateTime   @default(now()) @db.Timestamptz
+  expiryAt           DateTime   @db.Timestamptz
+
+  // Foreign Key Relations
+  restaurant Restaurant      @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  recipe     ByproductRecipe @relation(fields: [recipeId], references: [id], onDelete: Restrict)
+
+  // Reverse Relations
+  orderItems             OrderItem[]
+  redistributionBatches  RedistributionBatch[]
+
+  @@index([restaurantId, status], name: "idx_dynamic_skus_live_menu")
+  @@index([expiryAt])
+  @@map("dynamic_skus")
+}
+
+/// Customer orders placed via POS
+model Order {
+  id           String      @id @default(uuid()) @db.Uuid
+  restaurantId String      @db.Uuid
+  cashierId    String      @db.Uuid
+  totalAmount  Float       @db.DoublePrecision
+  createdAt    DateTime    @default(now()) @db.Timestamptz
+
+  // Foreign Key Relations
+  restaurant Restaurant  @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  cashier    User        @relation("CashierOrders", fields: [cashierId], references: [id], onDelete: Restrict)
+  items      OrderItem[]
+
+  @@index([restaurantId, createdAt(sort: Desc)])
+  @@index([cashierId])
+  @@map("orders")
+}
+
+/// Line items contained in an Order
+model OrderItem {
+  id           String      @id @default(uuid()) @db.Uuid
+  orderId      String      @db.Uuid
+  dynamicSkuId String?     @db.Uuid
+  itemName     String      @db.VarChar(200)
+  quantity     Int
+  unitPrice    Float       @db.DoublePrecision
+  subtotal     Float       @db.DoublePrecision
+
+  // Foreign Key Relations
+  order      Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  dynamicSku DynamicSku? @relation(fields: [dynamicSkuId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([dynamicSkuId])
+  @@map("order_items")
+}
+
+/// Verified NGO, food bank, and community shelter partners
+model Ngo {
+  id                  String   @id @default(uuid()) @db.Uuid
+  name                String   @db.VarChar(200)
+  contactPerson       String   @db.VarChar(150)
+  phone               String   @unique @db.VarChar(30)
+  email               String   @unique @db.VarChar(255)
+  latitude            Float    @db.DoublePrecision
+  longitude           Float    @db.DoublePrecision
+  maxCapacityServings Int      @default(150)
+  operatingStart      String   @db.VarChar(10) // e.g. "18:00"
+  operatingEnd        String   @db.VarChar(10) // e.g. "23:30"
+  isVerified          Boolean  @default(true)
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now()) @db.Timestamptz
+  updatedAt           DateTime @updatedAt @db.Timestamptz
+
+  // Reverse Relations
+  redistributionBatches RedistributionBatch[]
+
+  @@index([latitude, longitude], name: "idx_ngos_spatial")
+  @@index([isActive, isVerified])
+  @@map("ngos")
+}
+
+/// Surplus unsold portions routed to NGO partners at shift close
+model RedistributionBatch {
+  id           String       @id @default(uuid()) @db.Uuid
+  restaurantId String       @db.Uuid
+  dynamicSkuId String?      @db.Uuid
+  itemName     String       @db.VarChar(200)
+  foodCategory FoodCategory
+  portions     Int
+  weightKg     Float        @db.DoublePrecision
+  preparedAt   DateTime     @default(now()) @db.Timestamptz
+  status       BatchStatus  @default(PENDING_MATCH)
+  pickupOtp    String?      @db.VarChar(6)
+  assignedNgoId String?     @db.Uuid
+  createdAt    DateTime     @default(now()) @db.Timestamptz
+  updatedAt    DateTime     @updatedAt @db.Timestamptz
+
+  // Foreign Key Relations
+  restaurant  Restaurant  @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  dynamicSku  DynamicSku? @relation(fields: [dynamicSkuId], references: [id], onDelete: SetNull)
+  assignedNgo Ngo?        @relation(fields: [assignedNgoId], references: [id], onDelete: SetNull)
+
+  @@index([restaurantId, status], name: "idx_batches_dispatch_status")
+  @@index([assignedNgoId])
+  @@index([pickupOtp])
+  @@map("redistribution_batches")
+}
+
+/// Daily aggregated environmental and financial impact records
+model SustainabilityLog {
+  id                    String   @id @default(uuid()) @db.Uuid
+  restaurantId          String   @db.Uuid
+  date                  String   @db.VarChar(10) // Format: "YYYY-MM-DD"
+  totalScrapDivertedKg  Float    @default(0.0) @db.DoublePrecision
+  recoveredRevenue      Float    @default(0.0) @db.DoublePrecision
+  mealsDonatedCount     Int      @default(0)
+  co2eAvoidedKg         Float    @default(0.0) @db.DoublePrecision
+  waterSavedLiters      Float    @default(0.0) @db.DoublePrecision
+  createdAt             DateTime @default(now()) @db.Timestamptz
+  updatedAt             DateTime @updatedAt @db.Timestamptz
+
+  // Foreign Key Relations
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([restaurantId, date], name: "uq_restaurant_daily_sustainability")
+  @@index([restaurantId, date])
+  @@map("sustainability_logs")
+}
