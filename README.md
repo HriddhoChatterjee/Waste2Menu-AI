@@ -132,18 +132,18 @@ npm run dev
 ---
 
 ## 🔌 API Reference Overview
-Method,Endpoint,Description
-POST,/api/v1/scrap/log,Ingests prep scrap mass & runs ML knife anomaly check
-GET,/api/v1/scrap/reservoir,Retrieves active unallocated scrap totals
-GET,/api/v1/recipes/match-feasible,Runs ILP solver to find batch-viable recipes
-POST,/api/v1/recipes/approve-batch,Allocates scrap & pushes dynamic ephemeral SKU to POS
-GET,/api/v1/pos/live-menu,Returns active dynamic menu items with live portion counters
-POST,/api/v1/pos/order,Atomically decrements remaining stock and records sale
-POST,/api/v1/fallback/trigger-surplus,Runs closing-hour surplus check & ranks nearby NGOs
-POST,/api/v1/fallback/claim,Locks batch for NGO and issues single-use 6-digit OTP
-POST,/api/v1/fallback/verify-handover,Verifies OTP at cashier and updates ESG impact ledger
-GET,/api/v1/analytics/dashboard,Returns recovered revenue and environmental savings
-
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/v1/scrap/log` | Ingests prep scrap mass & runs ML knife anomaly check |
+| `GET` | `/api/v1/scrap/reservoir` | Retrieves active unallocated scrap totals |
+| `GET` | `/api/v1/recipes/match-feasible` | Runs ILP solver to find batch-viable recipes |
+| `POST` | `/api/v1/recipes/approve-batch` | Allocates scrap & pushes dynamic ephemeral SKU to POS |
+| `GET` | `/api/v1/pos/live-menu` | Returns active dynamic menu items with live portion counters |
+| `POST` | `/api/v1/pos/order` | Atomically decrements remaining stock and records sale |
+| `POST` | `/api/v1/fallback/trigger-surplus` | Runs closing-hour surplus check & ranks nearby NGOs |
+| `POST` | `/api/v1/fallback/claim` | Locks batch for NGO and issues single-use 6-digit OTP |
+| `POST` | `/api/v1/fallback/verify-handover` | Verifies OTP at cashier and updates ESG impact ledger |
+| `GET` | `/api/v1/analytics/dashboard` | Returns recovered revenue and environmental savings |
 ---
 
 ## 📜 License
