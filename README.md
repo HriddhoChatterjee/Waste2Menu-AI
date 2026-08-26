@@ -33,3 +33,118 @@ Traditional restaurant POS and ERP systems rely on a rigid **Forward Bill-of-Mat
 [ Sustainability Analytics ] ◄─── [ 6-Digit OTP Handover ] ◄─── [ NGO Proximity Dispatch ]
   • Recovered P&L ledger           • Cashier counter verification      • Haversine matrix routing
   • Avoided CO2e & water metrics   • Physical chain of custody         • Atomic status locking
+```
+
+---
+
+## ✨ Core Features
+
+* 🔪 **Smart Prep Logging & Anomaly Detection:** Ingests prep trimmings and audits knife technique in real time using an unsupervised **Isolation Forest** anomaly detector to flag excessive yield loss against baseline cut metrics.
+* 🧠 **Reverse Recipe Batch Optimizer (RIDE):** Solves multi-scrap combinatorial constraints using **Integer Linear Programming (PuLP)** to verify batch feasibility (>= 8 servings) and compute high-margin pricing (>85% gross margin) with near-zero raw ingredient costs.
+* ⚡ **Live POS Ephemeral Injection:** Automatically spawns dynamic SKUs on cashier screens and QR menus with live scarcity badging (`🔥 Only 12 Left`) and executes atomic inventory decrements per order.
+* 🏷️ **Closing-Hour Flash Markdown:** Dynamically adjusts time-decay discounts during the final 90 minutes of service to accelerate byproduct inventory liquidation.
+* 📍 **Geospatial NGO Redistribution Fallback:** Automatically aggregates unsold portions at shift close, identifies active shelters within 10 km via the **Haversine formula**, and manages physical handovers using a secure **6-digit OTP handshake**.
+* 📊 **ESG & Financial Analytics Ledger:** Aggregates recovered byproduct revenue alongside calculated environmental metrics:
+  - Avoided CO2e (kg) = Rescued Weight (kg) * 2.5
+  - Saved Water (Liters) = Rescued Weight (kg) * 80
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend UI** | Next.js 14+ (App Router), React, TypeScript, Tailwind CSS, Lucide Icons, Framer Motion |
+| **State & Sync** | Zustand, TanStack Query, WebSockets / Server-Sent Events |
+| **Backend API** | Python 3.11+, FastAPI, Uvicorn, Pydantic v2 |
+| **Database & ORM** | PostgreSQL 15+ / SQLite (Dev), SQLAlchemy 2.0 / Prisma ORM |
+| **Optimization & ML** | PuLP (Integer Linear Programming), scikit-learn (Isolation Forest), NumPy |
+| **Geospatial & Security** | Haversine Great-Circle Proximity Algorithm, 6-Digit OTP Verification |
+
+---
+
+## 📁 Repository Structure
+
+```text
+Waste2Menu-AI/
+├── backend/
+│   ├── app/
+│   │   ├── api/v1/            # FastAPI REST routers (scrap, recipes, pos, fallback, analytics)
+│   │   ├── core/              # Config, DB connection pool, security
+│   │   ├── models/            # SQLAlchemy database models
+│   │   ├── schemas/           # Pydantic validation schemas
+│   │   └── services/          # PuLP optimizer, ML anomaly auditor, Haversine matcher
+│   ├── main.py                # Server entry point & auto-seed lifecycle
+│   ├── requirements.txt       # Python dependencies
+│   └── Dockerfile
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── kitchen/       # Scrap entry & Active Reservoir view
+│   │   │   ├── recipes/       # Reverse recipe optimizer & KDS approval
+│   │   │   ├── pos/           # Cashier terminal & live portion decrement
+│   │   │   ├── ngo/           # NGO surplus claim feed & OTP verification
+│   │   │   └── analytics/     # P&L recovery & ESG impact dashboards
+│   │   ├── components/        # Modern dark-themed UI components
+│   │   └── store/             # Global client state stores
+│   ├── tailwind.config.ts
+│   └── package.json
+├── prisma/
+│   ├── schema.prisma          # PostgreSQL relational schema
+│   └── seed.ts                # Chennai demo seed script
+└── README.md
+```
+
+---
+
+## 🚀 Quickstart Guide
+
+### Prerequisites
+* Node.js 18+ & npm / pnpm
+* Python 3.11+
+* Git
+
+### 1. Clone Repository
+```bash
+git clone [https://github.com/HriddhoChatterjee/Waste2Menu-AI.git](https://github.com/HriddhoChatterjee/Waste2Menu-AI.git)
+cd Waste2Menu-AI
+```
+
+### 2. Backend Setup
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python main.py
+```
+- API Server will start at: http://localhost:8000
+- Interactive API Documentation (Swagger UI): http://localhost:8000/docs
+
+### 3. Frontend Setup
+```bash
+cd ../frontend
+npm install
+npm run dev
+```
+- Web Portal will be live at: http://localhost:3000
+
+---
+
+## 🔌 API Reference Overview
+Method,Endpoint,Description
+POST,/api/v1/scrap/log,Ingests prep scrap mass & runs ML knife anomaly check
+GET,/api/v1/scrap/reservoir,Retrieves active unallocated scrap totals
+GET,/api/v1/recipes/match-feasible,Runs ILP solver to find batch-viable recipes
+POST,/api/v1/recipes/approve-batch,Allocates scrap & pushes dynamic ephemeral SKU to POS
+GET,/api/v1/pos/live-menu,Returns active dynamic menu items with live portion counters
+POST,/api/v1/pos/order,Atomically decrements remaining stock and records sale
+POST,/api/v1/fallback/trigger-surplus,Runs closing-hour surplus check & ranks nearby NGOs
+POST,/api/v1/fallback/claim,Locks batch for NGO and issues single-use 6-digit OTP
+POST,/api/v1/fallback/verify-handover,Verifies OTP at cashier and updates ESG impact ledger
+GET,/api/v1/analytics/dashboard,Returns recovered revenue and environmental savings
+
+---
+
+## 📜 License
+Distributed under the MIT License. See LICENSE for more information.
