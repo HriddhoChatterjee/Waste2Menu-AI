@@ -84,6 +84,11 @@ class SoundEngine {
     }
   }
 
+  // Generic tactile button tap
+  public playTap() {
+    this.playPosTap();
+  }
+
   // POS Order success / register ring
   public playOrderSuccess() {
     if (!this.soundEnabled) return;

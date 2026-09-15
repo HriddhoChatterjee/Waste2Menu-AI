@@ -1,4 +1,16 @@
-export type Role = 'prep' | 'recipes' | 'pos' | 'ngo' | 'analytics';
+export type Role = 'dashboard' | 'prep' | 'recipes' | 'pos' | 'ngo' | 'analytics' | 'user_recipes';
+
+export type UserPersona = 'chef' | 'normal_user';
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  persona: UserPersona;
+  title: string;
+  avatar: string;
+  savedFoodKg: number;
+  recipesCreatedCount?: number;
+}
 
 export type ScrapCategory = 
   | 'poultry_bones' 
@@ -36,6 +48,21 @@ export interface VisionDetection {
   color: string;
 }
 
+export interface DetectedFoodItem {
+  id: string;
+  name: string;
+  category: ScrapCategory;
+  confidence: number;
+  weightKg: number;
+  bbox?: {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  };
+  color?: string;
+}
+
 export interface PantryIngredient {
   name: string;
   inStock: boolean;
@@ -60,6 +87,8 @@ export interface RecipeDish {
   chefTips: string;
   instructions: string[];
   tags: string[];
+  author?: string;
+  imageUrl?: string;
   status: 'ready_to_cook' | 'approved_to_pos' | 'insufficient_scrap';
 }
 
@@ -145,6 +174,7 @@ export interface StaffBenchmark {
 export interface AppNotification {
   id: string;
   type: 
+    | 'system'
     | 'scrap_scanned' 
     | 'recipe_unlocked' 
     | 'pos_pushed' 

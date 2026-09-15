@@ -29,17 +29,17 @@ export const ByproductCategoryChart: React.FC = () => {
   const totalKg = data.reduce((acc, d) => acc + d.value, 0);
 
   return (
-    <div className="glass-panel rounded-2xl p-5 border border-charcoal-light flex flex-col h-full">
-      <div className="flex items-center justify-between pb-3 border-b border-charcoal-light mb-2">
+    <div className="bg-[#FFFDF9] rounded-2xl p-5 border border-[#E8DFD1] flex flex-col h-full shadow-xs">
+      <div className="flex items-center justify-between pb-3 border-b border-[#E8DFD1] mb-2">
         <div>
-          <h3 className="font-heading font-bold text-white text-base">
+          <h3 className="font-heading font-bold text-stone-900 text-base">
             Byproduct Stockpile Breakdown
           </h3>
-          <p className="text-xs text-textMuted font-mono">
+          <p className="text-xs text-stone-500 font-mono">
             Active composition across culinary waste streams
           </p>
         </div>
-        <span className="font-mono font-bold text-xs text-emerald-400">
+        <span className="font-mono font-bold text-xs text-emerald-700">
           {totalKg.toFixed(1)} kg Active
         </span>
       </div>
@@ -55,17 +55,18 @@ export const ByproductCategoryChart: React.FC = () => {
               dataKey="value"
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} stroke="#151D2A" strokeWidth={2} />
+                <Cell key={`cell-${index}`} fill={entry.color} stroke="#FFFDF9" strokeWidth={2} />
               ))}
             </Pie>
             <Tooltip
               contentStyle={{
-                backgroundColor: '#0F1622',
-                borderColor: '#1E293B',
+                backgroundColor: '#FFFFFF',
+                borderColor: '#E8DFD1',
                 borderRadius: '12px',
-                color: '#F8FAFC',
+                color: '#1C1917',
                 fontFamily: 'JetBrains Mono',
-                fontSize: '12px'
+                fontSize: '12px',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)'
               }}
               formatter={(value: any) => [`${value} kg`, 'Mass Stockpile']}
             />
@@ -75,10 +76,10 @@ export const ByproductCategoryChart: React.FC = () => {
 
         {/* Center label */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-6">
-          <span className="font-heading font-black text-xl text-white">
+          <span className="font-heading font-black text-xl text-stone-900">
             {totalKg.toFixed(1)}
           </span>
-          <span className="text-[10px] font-mono text-textMuted uppercase">kg Scraps</span>
+          <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">kg Scraps</span>
         </div>
       </div>
     </div>

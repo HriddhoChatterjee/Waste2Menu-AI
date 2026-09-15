@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { 
   Role, 
+  UserPersona,
+  UserProfile,
+  DetectedFoodItem,
   ScrapItem, 
   RecipeDish, 
   ActiveSpecialSKU, 
@@ -22,22 +25,68 @@ import {
 import { sounds } from '../utils/soundEffects';
 import confetti from 'canvas-confetti';
 
+import { db, StoredUser } from '../services/db';
+
+export const CHEF_PROFILE: UserProfile = {
+  id: 'usr-chef-aarav',
+  name: 'Chef Aarav Singhania',
+  persona: 'chef',
+  title: 'Executive Culinary Director',
+  avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=200',
+  savedFoodKg: 142.8,
+  recipesCreatedCount: 6
+};
+
+export const NORMAL_USER_PROFILE: UserProfile = {
+  id: 'usr-home-priya',
+  name: 'Priya Sharma',
+  persona: 'normal_user',
+  title: 'Home Cook & Zero-Waste Enthusiast',
+  avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200',
+  savedFoodKg: 12.4,
+  recipesCreatedCount: 0
+};
+
 interface AppState {
+  // Authentication & Session Management
+  isAuthenticated: boolean;
+  isLoginModalOpen: boolean;
+  authModalMode: 'signin' | 'register';
+  openAuthModal: (mode?: 'signin' | 'register') => void;
+  setIsLoginModalOpen: (open: boolean) => void;
+  loginWithUser: (user: StoredUser) => void;
+  login: (persona: UserPersona) => void;
+  signOut: () => void;
+
+  // Outside Landing Dashboard Navigation
+  activeLandingSection: string;
+  setActiveLandingSection: (section: string) => void;
+
   // Navigation & Preferences
   currentRole: Role;
   setRole: (role: Role) => void;
+  userPersona: UserPersona;
+  setUserPersona: (persona: UserPersona) => void;
+  userProfile: UserProfile;
+  setUserProfile: (profile: Partial<UserProfile>) => void;
   soundEnabled: boolean;
   toggleSound: () => void;
   isSimulating: boolean;
 
-  // Screen 1: Scrap Reservoir
+  // Screen 1: Scrap Reservoir & Upload Detection
   scraps: ScrapItem[];
   addScrap: (item: Omit<ScrapItem, 'id' | 'timestamp'>) => void;
   removeScrap: (id: string) => void;
   decrementScrapStock: (category: string, weightKg: number) => void;
+  detectedUploadItems: DetectedFoodItem[];
+  setDetectedUploadItems: (items: DetectedFoodItem[]) => void;
+  updateDetectedItemWeight: (id: string, weightKg: number) => void;
+  removeDetectedItem: (id: string) => void;
+  addDetectedItem: (item: DetectedFoodItem) => void;
 
-  // Screen 2: Reverse Recipes
+  // Screen 2: Reverse Recipes & Chef Studio
   recipes: RecipeDish[];
+  addRecipe: (recipe: RecipeDish) => void;
   togglePantryIngredient: (recipeId: string, ingredientName: string) => void;
   pushRecipeToPos: (recipeId: string, yieldPortions?: number) => void;
 
@@ -77,11 +126,96 @@ interface AppState {
   resetAllData: () => void;
 }
 
+// Check for existing persistent session
+const savedSession = db.getSavedSession();
+const initialUser = savedSession ? db.getUserByEmail(savedSession.email) : null;
+
 export const useAppStore = create<AppState>((set, get) => ({
-  currentRole: 'prep',
+  // Authentication & Session
+  isAuthenticated: !!initialUser,
+  isLoginModalOpen: false,
+  authModalMode: 'signin',
+  openAuthModal: (mode = 'signin') => set({ isLoginModalOpen: true, authModalMode: mode }),
+  setIsLoginModalOpen: (open) => set({ isLoginModalOpen: open }),
+
+  loginWithUser: (user) => {
+    sounds.playSuccessChime();
+    const profile = db.toProfile(user);
+    set({
+      isAuthenticated: true,
+      userPersona: user.persona,
+      userProfile: profile,
+      currentRole: 'dashboard',
+      isLoginModalOpen: false
+    });
+    get().addNotification({
+      type: 'system',
+      title: `Welcome, ${profile.name}!`,
+      message: `Signed in as ${profile.title}. Workspace active.`,
+      roleTarget: 'all'
+    });
+  },
+
+  login: (persona) => {
+    sounds.playSuccessChime();
+    const email = persona === 'chef' ? 'chef@waste2menu.com' : 'user@waste2menu.com';
+    const user = db.getUserByEmail(email);
+    if (user) {
+      get().loginWithUser(user);
+    } else {
+      const profile = persona === 'chef' ? CHEF_PROFILE : NORMAL_USER_PROFILE;
+      set({
+        isAuthenticated: true,
+        userPersona: persona,
+        userProfile: profile,
+        currentRole: 'dashboard',
+        isLoginModalOpen: false
+      });
+    }
+  },
+
+  signOut: () => {
+    sounds.playPosTap();
+    db.clearSession();
+    set({
+      isAuthenticated: false,
+      currentRole: 'dashboard',
+      isLoginModalOpen: false
+    });
+    get().addNotification({
+      type: 'system',
+      title: 'Signed Out Successfully',
+      message: 'You are now viewing the outside public dashboard. Sign in or register to access kitchen stations.',
+      roleTarget: 'all'
+    });
+  },
+
+  // Outside Landing Dashboard Navigation
+  activeLandingSection: 'overview',
+  setActiveLandingSection: (section) => {
+    set({ activeLandingSection: section });
+    const el = document.getElementById(section);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  },
+
+  currentRole: 'dashboard',
   setRole: (role) => {
     sounds.playPosTap();
     set({ currentRole: role });
+  },
+
+  userPersona: 'chef',
+  setUserPersona: (persona) => {
+    get().login(persona);
+  },
+
+  userProfile: CHEF_PROFILE,
+  setUserProfile: (profile) => {
+    set((state) => ({
+      userProfile: { ...state.userProfile, ...profile }
+    }));
   },
 
   soundEnabled: true,
@@ -92,8 +226,47 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
   isSimulating: false,
 
-  // Scraps
+  // Scraps & Upload Detection Items
   scraps: INITIAL_SCRAPS,
+  detectedUploadItems: [
+    {
+      id: 'item-detect-1',
+      name: 'Onion Tops & Carrot Peels',
+      category: 'mirepoix_peels',
+      confidence: 0.97,
+      weightKg: 1.5,
+      bbox: { x: 18, y: 22, w: 42, h: 36 },
+      color: '#059669'
+    },
+    {
+      id: 'item-detect-2',
+      name: 'Potato Skins & Root Trims',
+      category: 'mirepoix_peels',
+      confidence: 0.94,
+      weightKg: 0.8,
+      bbox: { x: 55, y: 38, w: 32, h: 34 },
+      color: '#D97706'
+    }
+  ],
+  setDetectedUploadItems: (items) => set({ detectedUploadItems: items }),
+  updateDetectedItemWeight: (id, weightKg) => {
+    set((state) => ({
+      detectedUploadItems: state.detectedUploadItems.map((item) =>
+        item.id === id ? { ...item, weightKg: Math.max(0.1, Math.round(weightKg * 10) / 10) } : item
+      )
+    }));
+  },
+  removeDetectedItem: (id) => {
+    set((state) => ({
+      detectedUploadItems: state.detectedUploadItems.filter((i) => i.id !== id)
+    }));
+  },
+  addDetectedItem: (item) => {
+    set((state) => ({
+      detectedUploadItems: [...state.detectedUploadItems, item]
+    }));
+  },
+
   addScrap: (item) => {
     const newScrap: ScrapItem = {
       ...item,
@@ -140,8 +313,37 @@ export const useAppStore = create<AppState>((set, get) => ({
     });
   },
 
-  // Recipes
+  // Recipes & Chef Studio
   recipes: INITIAL_RECIPES,
+  addRecipe: (recipe) => {
+    const authorName = recipe.author || get().userProfile?.name || 'Chef Aarav Singhania';
+    const enrichedRecipe = {
+      ...recipe,
+      author: authorName
+    };
+    set((state) => ({
+      recipes: [enrichedRecipe, ...state.recipes],
+      userProfile: {
+        ...state.userProfile,
+        recipesCreatedCount: (state.userProfile.recipesCreatedCount || 0) + 1
+      }
+    }));
+    sounds.playSuccessChime();
+    try {
+      confetti({
+        particleCount: 50,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    } catch {}
+
+    get().addNotification({
+      type: 'recipe_unlocked',
+      title: 'Chef Recipe Published',
+      message: `Chef custom dish "${recipe.title}" is now available for all kitchen stations and home users!`,
+      roleTarget: 'all'
+    });
+  },
   togglePantryIngredient: (recipeId, ingredientName) => {
     set((state) => ({
       recipes: state.recipes.map((r) => {

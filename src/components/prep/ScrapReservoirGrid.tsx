@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   AlertCircle
 } from 'lucide-react';
+import { ScrollReveal } from '../common/ScrollReveal';
 
 export const ScrapReservoirGrid: React.FC = () => {
   const { scraps, removeScrap, setRole } = useAppStore();
@@ -73,24 +74,24 @@ export const ScrapReservoirGrid: React.FC = () => {
   }, {} as Record<string, number>);
 
   return (
-    <div className="glass-panel rounded-2xl p-5 border border-charcoal-light flex flex-col h-full">
+    <div className="glass-panel rounded-2xl p-5 border border-[#E8DFD1] flex flex-col h-full shadow-sm">
       
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-charcoal-light gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#E8DFD1] gap-3">
         <div className="flex items-center space-x-2.5">
-          <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+          <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-600 shadow-sm">
             <Layers className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h3 className="font-heading font-bold text-white text-base">
+              <h3 className="font-heading font-black text-[#1C1917] text-base">
                 Active Byproduct Scrap Reservoir
               </h3>
-              <span className="px-2 py-0.5 text-[11px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full">
+              <span className="px-2.5 py-0.5 text-[11px] font-mono font-bold bg-emerald-500/15 text-emerald-800 border border-emerald-500/30 rounded-full">
                 {totalStockpileKg.toFixed(1)} kg Total
               </span>
             </div>
-            <p className="text-xs text-textMuted font-mono">
+            <p className="text-xs text-[#6B6358] font-mono">
               Live Stockpile with Perishable Freshness Decay Timers
             </p>
           </div>
@@ -108,13 +109,13 @@ export const ScrapReservoirGrid: React.FC = () => {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center space-x-1.5 overflow-x-auto py-3 border-b border-charcoal-light/60 no-scrollbar">
+      <div className="flex items-center space-x-1.5 overflow-x-auto py-3 border-b border-[#E8DFD1]/60 no-scrollbar">
         <button
           onClick={() => setActiveFilter('all')}
-          className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
             activeFilter === 'all'
-              ? 'bg-emerald-500 text-obsidian font-bold shadow-sm'
-              : 'bg-charcoal text-textMuted hover:text-white border border-charcoal-light'
+              ? 'bg-emerald-500 text-white shadow-sm'
+              : 'bg-white text-[#6B6358] hover:text-[#1C1917] border border-[#E8DFD1] hover:bg-[#F5EFEB]'
           }`}
         >
           All Stockpiles ({scraps.length})
@@ -127,15 +128,15 @@ export const ScrapReservoirGrid: React.FC = () => {
             <button
               key={cat}
               onClick={() => setActiveFilter(cat)}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                 activeFilter === cat
-                  ? 'bg-charcoal-lighter text-emerald-300 border border-emerald-500/50 font-bold'
-                  : 'bg-charcoal text-textMuted hover:text-white border border-charcoal-light'
+                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 font-bold shadow-sm'
+                  : 'bg-white text-[#6B6358] hover:text-[#1C1917] border border-[#E8DFD1] hover:bg-[#F5EFEB]'
               }`}
             >
               {getCategoryIcon(cat)}
               <span>{getCategoryName(cat).split(' ')[0]}</span>
-              <span className="font-mono text-[10px] text-textMuted">({weight.toFixed(1)}k)</span>
+              <span className="font-mono text-[10px] text-[#6B6358]">({weight.toFixed(1)}k)</span>
             </button>
           );
         })}
@@ -144,109 +145,108 @@ export const ScrapReservoirGrid: React.FC = () => {
       {/* Grid of Scrap Cards */}
       <div className="mt-4 flex-1 overflow-y-auto space-y-3 pr-1">
         {filteredScraps.length === 0 ? (
-          <div className="text-center py-12 text-textMuted">
-            <Layers className="w-10 h-10 text-charcoal-light mx-auto mb-2" />
-            <p className="text-sm font-medium">Scrap Reservoir Empty for this category</p>
-            <p className="text-xs text-textMuted mt-1">Run an AI vision scan or log a manual smart scale entry above.</p>
+          <div className="text-center py-12 text-[#6B6358]">
+            <Layers className="w-10 h-10 text-[#D4C6B2] mx-auto mb-2" />
+            <p className="text-sm font-semibold">Scrap Reservoir Empty for this category</p>
+            <p className="text-xs text-[#6B6358] mt-1">Run an AI vision scan or log a manual smart scale entry above.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {filteredScraps.map((scrap) => {
+            {filteredScraps.map((scrap, idx) => {
               // Calculate simulated hours and minutes countdown
               const totalMins = Math.max(0, Math.floor(scrap.perishableHoursLeft * 60 - (ticker % 60)));
               const hours = Math.floor(totalMins / 60);
               const mins = totalMins % 60;
               const freshnessPercent = Math.min(100, Math.round((scrap.perishableHoursLeft / scrap.maxPerishableHours) * 100));
 
-              let statusColor = 'text-emerald-400';
+              let statusColor = 'text-emerald-700';
               let progressColor = 'bg-emerald-500';
               if (freshnessPercent < 35) {
                 statusColor = 'text-coral animate-pulse';
                 progressColor = 'bg-coral';
               } else if (freshnessPercent < 60) {
-                statusColor = 'text-amber';
+                statusColor = 'text-amber-600';
                 progressColor = 'bg-amber';
               }
 
               return (
-                <div
-                  key={scrap.id}
-                  className="p-4 rounded-xl bg-charcoal border border-charcoal-light hover:border-charcoal-lighter transition-all flex flex-col justify-between space-y-3 relative group"
-                >
-                  {/* Card top */}
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start space-x-2.5">
-                      <div className="p-2 rounded-lg bg-obsidian border border-charcoal-light mt-0.5">
-                        {getCategoryIcon(scrap.category)}
-                      </div>
-                      <div>
-                        <div className="flex items-center space-x-1.5">
-                          <h4 className="text-sm font-bold text-white">{scrap.name}</h4>
-                          {scrap.detectedFromVision && (
-                            <span className="px-1.5 py-0.2 text-[9px] font-mono font-bold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded">
-                              AI Vision
-                            </span>
-                          )}
+                <ScrollReveal key={scrap.id} delay={idx * 0.05} direction="up" distance={20}>
+                  <div className="p-4 rounded-xl bg-white border border-[#E8DFD1] hover:border-[#D4C6B2] hover:shadow-md transition-all flex flex-col justify-between space-y-3 relative group h-full">
+                    {/* Card top */}
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-2.5">
+                        <div className="p-2 rounded-xl bg-[#FDFBF7] border border-[#E8DFD1] mt-0.5">
+                          {getCategoryIcon(scrap.category)}
                         </div>
-                        <span className="text-[11px] font-mono text-textMuted uppercase">
-                          {getCategoryName(scrap.category)}
+                        <div>
+                          <div className="flex items-center space-x-1.5">
+                            <h4 className="text-sm font-bold text-[#1C1917]">{scrap.name}</h4>
+                            {scrap.detectedFromVision && (
+                              <span className="px-1.5 py-0.2 text-[9px] font-mono font-bold uppercase bg-emerald-500/15 text-emerald-800 border border-emerald-500/30 rounded">
+                                AI Vision
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[11px] font-mono text-[#6B6358] uppercase">
+                            {getCategoryName(scrap.category)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => removeScrap(scrap.id)}
+                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-[#6B6358] hover:text-coral hover:bg-[#F5EFEB] transition-all"
+                        title="Discard / Delete Scrap"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    {/* Mass & Freshness Stats */}
+                    <div className="grid grid-cols-2 gap-2 bg-[#FDFBF7] p-2.5 rounded-xl border border-[#E8DFD1]">
+                      <div>
+                        <span className="text-[10px] font-mono text-[#6B6358] uppercase block font-semibold">
+                          Stock Mass
+                        </span>
+                        <span className="text-base font-heading font-black text-emerald-700">
+                          {scrap.weightKg.toFixed(1)} <span className="text-xs font-normal text-[#6B6358]">kg</span>
+                        </span>
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] font-mono text-[#6B6358] uppercase block font-semibold">
+                          Freshness Safe Window
+                        </span>
+                        <span className={`text-xs font-mono font-bold flex items-center space-x-1 ${statusColor}`}>
+                          <Clock className="w-3 h-3" />
+                          <span>T-minus {hours}h {mins}m</span>
                         </span>
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => removeScrap(scrap.id)}
-                      className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-textMuted hover:text-coral hover:bg-obsidian transition-all"
-                      title="Discard / Delete Scrap"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-
-                  {/* Mass & Freshness Stats */}
-                  <div className="grid grid-cols-2 gap-2 bg-obsidian/70 p-2.5 rounded-xl border border-charcoal-light/70">
+                    {/* Freshness progress bar */}
                     <div>
-                      <span className="text-[10px] font-mono text-textMuted uppercase block">
-                        Stock Mass
-                      </span>
-                      <span className="text-base font-heading font-black text-emerald-400">
-                        {scrap.weightKg.toFixed(1)} <span className="text-xs font-normal text-textMuted">kg</span>
-                      </span>
+                      <div className="flex items-center justify-between text-[10px] font-mono text-[#6B6358] mb-1">
+                        <span>Perishable Freshness</span>
+                        <span className="font-bold">{freshnessPercent}% Safe</span>
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-[#EAE1D4] overflow-hidden border border-[#E8DFD1]/80">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${progressColor}`}
+                          style={{ width: `${freshnessPercent}%` }}
+                        />
+                      </div>
                     </div>
 
-                    <div>
-                      <span className="text-[10px] font-mono text-textMuted uppercase block">
-                        Freshness Safe Window
-                      </span>
-                      <span className={`text-xs font-mono font-bold flex items-center space-x-1 ${statusColor}`}>
-                        <Clock className="w-3 h-3" />
-                        <span>T-minus {hours}h {mins}m</span>
-                      </span>
-                    </div>
+                    {/* Notes / Quality */}
+                    {scrap.notes && (
+                      <div className="text-[11px] text-[#6B6358] line-clamp-1 italic font-mono">
+                        "{scrap.notes}"
+                      </div>
+                    )}
+
                   </div>
-
-                  {/* Freshness progress bar */}
-                  <div>
-                    <div className="flex items-center justify-between text-[10px] font-mono text-textMuted mb-1">
-                      <span>Perishable Freshness</span>
-                      <span>{freshnessPercent}% Safe</span>
-                    </div>
-                    <div className="w-full h-1.5 rounded-full bg-obsidian overflow-hidden border border-charcoal-light/50">
-                      <div
-                        className={`h-full rounded-full transition-all duration-500 ${progressColor}`}
-                        style={{ width: `${freshnessPercent}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Notes / Quality */}
-                  {scrap.notes && (
-                    <div className="text-[11px] text-textMuted line-clamp-1 italic">
-                      "{scrap.notes}"
-                    </div>
-                  )}
-
-                </div>
+                </ScrollReveal>
               );
             })}
           </div>

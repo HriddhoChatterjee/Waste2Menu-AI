@@ -85,25 +85,25 @@ export const ManualScaleEntry: React.FC = () => {
   };
 
   return (
-    <div className="glass-panel rounded-2xl p-5 border border-charcoal-light flex flex-col h-full">
+    <div className="glass-panel rounded-2xl p-5 border border-[#E8DFD1] flex flex-col h-full shadow-sm">
       
       {/* Title */}
-      <div className="flex items-center justify-between pb-3 border-b border-charcoal-light">
+      <div className="flex items-center justify-between pb-3.5 border-b border-[#E8DFD1]">
         <div className="flex items-center space-x-2.5">
-          <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+          <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-600 shadow-sm">
             <Scale className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-heading font-bold text-white text-base">
+            <h3 className="font-heading font-black text-[#1C1917] text-base">
               Smart Scale & Knife-Efficiency Engine
             </h3>
-            <p className="text-xs text-textMuted font-mono">
+            <p className="text-xs text-[#6B6358] font-mono">
               Manual Scale Fallback & Yield Variance Tracking
             </p>
           </div>
         </div>
         
-        <span className={`px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded-full border ${badgeClass}`}>
+        <span className={`px-2.5 py-0.5 text-[10px] font-mono font-bold uppercase rounded-full border ${badgeClass}`}>
           {statusText}
         </span>
       </div>
@@ -115,7 +115,7 @@ export const ManualScaleEntry: React.FC = () => {
           
           {/* Cook / Station */}
           <div>
-            <label className="block text-[11px] font-mono text-textMuted uppercase mb-1">
+            <label className="block text-[11px] font-mono text-[#6B6358] uppercase font-bold mb-1">
               Cook & Line Station
             </label>
             <select
@@ -128,7 +128,7 @@ export const ManualScaleEntry: React.FC = () => {
                 if (e.target.value.includes('Ananya')) setStation('Fish Monger');
                 if (e.target.value.includes('Sunita')) setStation('Herb & Chutney Line');
               }}
-              className="w-full bg-charcoal text-white text-xs font-semibold rounded-xl border border-charcoal-light p-2.5 focus:outline-none focus:border-emerald-500"
+              className="w-full bg-white text-[#1C1917] text-xs font-semibold rounded-xl border border-[#E8DFD1] p-2.5 focus:outline-none focus:border-emerald-500 shadow-sm"
             >
               <option value="Chef Rajesh Sharma">Chef Rajesh Sharma (Butchery)</option>
               <option value="Cook Imran Khan">Cook Imran Khan (Mirepoix Line)</option>
@@ -140,21 +140,21 @@ export const ManualScaleEntry: React.FC = () => {
 
           {/* Primary Dish */}
           <div>
-            <label className="block text-[11px] font-mono text-textMuted uppercase mb-1">
+            <label className="block text-[11px] font-mono text-[#6B6358] uppercase font-bold mb-1">
               Primary Dish Prepped
             </label>
             <input
               type="text"
               value={primaryDish}
               onChange={(e) => setPrimaryDish(e.target.value)}
-              className="w-full bg-charcoal text-white text-xs rounded-xl border border-charcoal-light p-2.5 focus:outline-none focus:border-emerald-500"
+              className="w-full bg-white text-[#1C1917] text-xs font-semibold rounded-xl border border-[#E8DFD1] p-2.5 focus:outline-none focus:border-emerald-500 shadow-sm"
               placeholder="e.g. Butter Chicken Cut"
             />
           </div>
 
           {/* Raw Cut Type */}
           <div>
-            <label className="block text-[11px] font-mono text-textMuted uppercase mb-1">
+            <label className="block text-[11px] font-mono text-[#6B6358] uppercase font-bold mb-1">
               Raw Cut Byproduct Category
             </label>
             <select
@@ -168,7 +168,7 @@ export const ManualScaleEntry: React.FC = () => {
                 if (val === 'herb_stems') setBenchmarkLossPercent(12.0);
                 if (val === 'bread_crusts') setBenchmarkLossPercent(10.0);
               }}
-              className="w-full bg-charcoal text-white text-xs font-semibold rounded-xl border border-charcoal-light p-2.5 focus:outline-none focus:border-emerald-500"
+              className="w-full bg-white text-[#1C1917] text-xs font-semibold rounded-xl border border-[#E8DFD1] p-2.5 focus:outline-none focus:border-emerald-500 shadow-sm"
             >
               <option value="poultry_bones">Poultry Bones & Carcasses</option>
               <option value="mirepoix_peels">Mirepoix & Vegetable Peels</option>
@@ -180,10 +180,10 @@ export const ManualScaleEntry: React.FC = () => {
 
           {/* Benchmark Target */}
           <div>
-            <label className="block text-[11px] font-mono text-textMuted uppercase mb-1">
+            <label className="block text-[11px] font-mono text-[#6B6358] uppercase font-bold mb-1">
               Benchmark Standard Baseline
             </label>
-            <div className="flex items-center bg-charcoal rounded-xl border border-charcoal-light px-3 py-2 text-xs font-mono text-emerald-400 font-bold justify-between">
+            <div className="flex items-center bg-white rounded-xl border border-[#E8DFD1] px-3 py-2 text-xs font-mono text-emerald-700 font-bold justify-between shadow-sm">
               <span>Standard Baseline Yield:</span>
               <span>{benchmarkLossPercent}% Max Loss</span>
             </div>
@@ -192,22 +192,22 @@ export const ManualScaleEntry: React.FC = () => {
         </div>
 
         {/* Weights Section & Radial Efficiency Gauge */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 bg-obsidian-dark/60 p-4 rounded-xl border border-charcoal-light items-center">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 bg-[#FDFBF7] p-4 rounded-2xl border border-[#E8DFD1] items-center shadow-inner">
           
           {/* Inputs */}
-          <div className="md:col-span-7 space-y-3">
+          <div className="md:col-span-7 space-y-3.5">
             
             {/* Usable Core Weight */}
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-textMuted font-mono">Usable Core Yield (kg)</span>
-                <span className="font-mono text-emerald-400 font-bold">{usableCoreKg.toFixed(1)} kg</span>
+                <span className="text-[#6B6358] font-mono font-medium">Usable Core Yield (kg)</span>
+                <span className="font-mono text-emerald-700 font-black">{usableCoreKg.toFixed(1)} kg</span>
               </div>
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
                   onClick={() => setUsableCoreKg(Math.max(0.1, Math.round((usableCoreKg - 0.5) * 10) / 10))}
-                  className="p-2 rounded-lg bg-charcoal hover:bg-charcoal-lighter text-white border border-charcoal-light"
+                  className="p-2 rounded-lg bg-white hover:bg-[#F5EFEB] text-[#1C1917] border border-[#E8DFD1] shadow-sm"
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
@@ -218,12 +218,12 @@ export const ManualScaleEntry: React.FC = () => {
                   step="0.1"
                   value={usableCoreKg}
                   onChange={(e) => setUsableCoreKg(parseFloat(e.target.value))}
-                  className="flex-1 accent-emerald-500 cursor-pointer"
+                  className="flex-1 accent-emerald-600 cursor-pointer"
                 />
                 <button
                   type="button"
                   onClick={() => setUsableCoreKg(Math.round((usableCoreKg + 0.5) * 10) / 10)}
-                  className="p-2 rounded-lg bg-charcoal hover:bg-charcoal-lighter text-white border border-charcoal-light"
+                  className="p-2 rounded-lg bg-white hover:bg-[#F5EFEB] text-[#1C1917] border border-[#E8DFD1] shadow-sm"
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </button>
@@ -233,14 +233,14 @@ export const ManualScaleEntry: React.FC = () => {
             {/* Trim Loss Weight */}
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-textMuted font-mono">Trim / Scrap Loss (kg)</span>
-                <span className="font-mono text-coral font-bold">{trimLossKg.toFixed(1)} kg</span>
+                <span className="text-[#6B6358] font-mono font-medium">Trim / Scrap Loss (kg)</span>
+                <span className="font-mono text-coral font-black">{trimLossKg.toFixed(1)} kg</span>
               </div>
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
                   onClick={() => setTrimLossKg(Math.max(0.1, Math.round((trimLossKg - 0.2) * 10) / 10))}
-                  className="p-2 rounded-lg bg-charcoal hover:bg-charcoal-lighter text-white border border-charcoal-light"
+                  className="p-2 rounded-lg bg-white hover:bg-[#F5EFEB] text-[#1C1917] border border-[#E8DFD1] shadow-sm"
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
@@ -256,7 +256,7 @@ export const ManualScaleEntry: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setTrimLossKg(Math.round((trimLossKg + 0.2) * 10) / 10)}
-                  className="p-2 rounded-lg bg-charcoal hover:bg-charcoal-lighter text-white border border-charcoal-light"
+                  className="p-2 rounded-lg bg-white hover:bg-[#F5EFEB] text-[#1C1917] border border-[#E8DFD1] shadow-sm"
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </button>
@@ -266,7 +266,7 @@ export const ManualScaleEntry: React.FC = () => {
           </div>
 
           {/* Radial Circular Gauge */}
-          <div className="md:col-span-5 flex flex-col items-center justify-center p-2 border-t md:border-t-0 md:border-l border-charcoal-light">
+          <div className="md:col-span-5 flex flex-col items-center justify-center p-2 border-t md:border-t-0 md:border-l border-[#E8DFD1]">
             <div className="relative w-28 h-28 flex items-center justify-center">
               <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                 {/* Background circle */}
@@ -274,7 +274,7 @@ export const ManualScaleEntry: React.FC = () => {
                   cx="50"
                   cy="50"
                   r={radius}
-                  stroke="#1E293B"
+                  stroke="#E8DFD1"
                   strokeWidth="8"
                   fill="transparent"
                 />
@@ -283,7 +283,7 @@ export const ManualScaleEntry: React.FC = () => {
                   cx="50"
                   cy="50"
                   r={radius}
-                  stroke="#334155"
+                  stroke="#CBD5E1"
                   strokeWidth="8"
                   strokeDasharray="2 6"
                   fill="transparent"
@@ -305,10 +305,10 @@ export const ManualScaleEntry: React.FC = () => {
 
               {/* Gauge center stats */}
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span className="font-heading font-black text-xl text-white">
+                <span className="font-heading font-black text-xl text-[#1C1917]">
                   {currentLossPercent}%
                 </span>
-                <span className="text-[9px] font-mono text-textMuted uppercase">
+                <span className="text-[9px] font-mono text-[#6B6358] uppercase font-bold">
                   Trim Loss
                 </span>
               </div>
@@ -316,14 +316,14 @@ export const ManualScaleEntry: React.FC = () => {
 
             {/* Benchmark deviation readout */}
             <div className="mt-1 text-center">
-              <span className="text-[11px] font-mono font-semibold text-textMuted">
+              <span className="text-[11px] font-mono font-semibold text-[#6B6358]">
                 {delta <= 0 ? (
-                  <span className="text-emerald-400 flex items-center justify-center space-x-1">
-                    <CheckCircle2 className="w-3 h-3" />
+                  <span className="text-emerald-700 flex items-center justify-center space-x-1 font-bold">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                     <span>{Math.abs(delta)}% below max loss (Optimal)</span>
                   </span>
                 ) : (
-                  <span className="text-coral flex items-center justify-center space-x-1">
+                  <span className="text-coral flex items-center justify-center space-x-1 font-bold">
                     <AlertTriangle className="w-3 h-3" />
                     <span>+{delta}% trim loss anomaly!</span>
                   </span>
@@ -337,16 +337,16 @@ export const ManualScaleEntry: React.FC = () => {
         {/* Submit button */}
         <button
           type="submit"
-          className="w-full py-3 px-4 rounded-xl bg-charcoal-lighter hover:bg-emerald-500 text-white hover:text-obsidian border border-charcoal-light hover:border-emerald-400 font-bold text-xs transition-all shadow-md flex items-center justify-center space-x-2 transform active:scale-98"
+          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white font-heading font-black text-xs transition-all shadow-glow-emerald flex items-center justify-center space-x-2 transform active:scale-98"
         >
           {isLogged ? (
             <>
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-white" />
               <span>Shift Scale Entry Logged!</span>
             </>
           ) : (
             <>
-              <Scale className="w-4 h-4" />
+              <Scale className="w-4 h-4 text-emerald-200" />
               <span>Log Scale Entry & Update Staff Benchmark (+{trimLossKg.toFixed(1)} kg)</span>
             </>
           )}

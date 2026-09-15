@@ -93,6 +93,8 @@ export const INITIAL_RECIPES: RecipeDish[] = [
       'Season with sea salt, finish with droplets of cold-pressed mustard oil, ladle into heated ceramic bowls.'
     ],
     tags: ['High Margin (92.7%)', 'Zero-Waste Hero', 'Collagen Rich', 'Chef Choice'],
+    author: 'Chef Aarav Singhania',
+    imageUrl: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80',
     status: 'ready_to_cook'
   },
   {
@@ -123,6 +125,8 @@ export const INITIAL_RECIPES: RecipeDish[] = [
       'Season to taste and top with fried crisp carrot threads and herb oil.'
     ],
     tags: ['Vegan Friendly', 'High Margin (93.7%)', 'Fast Prep (30m)'],
+    author: 'Chef Aarav Singhania',
+    imageUrl: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80',
     status: 'ready_to_cook'
   },
   {
@@ -153,6 +157,7 @@ export const INITIAL_RECIPES: RecipeDish[] = [
       'Toss with crisped appetizers or grilled proteins; finish with sesame and micro herbs.'
     ],
     tags: ['Bar Favorite', 'High Revenue Per Portion', 'Quick Prep'],
+    imageUrl: 'https://images.unsplash.com/photo-1527477378696-618ec538c10e?auto=format&fit=crop&w=800&q=80',
     status: 'ready_to_cook'
   },
   {
@@ -183,6 +188,7 @@ export const INITIAL_RECIPES: RecipeDish[] = [
       'Rest for 10 minutes at ambient temperature; serve with warm sourdough crisps.'
     ],
     tags: ['15-Min Flash Prep', 'Zero Energy Cost', 'High Table Turn'],
+    imageUrl: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80',
     status: 'ready_to_cook'
   },
   {
@@ -213,6 +219,7 @@ export const INITIAL_RECIPES: RecipeDish[] = [
       'Serve alongside whipped salted labneh crowned with pomegranate arils.'
     ],
     tags: ['Crunch Factor', 'Crowd Pleaser', 'Zero Prep Waste'],
+    imageUrl: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&w=800&q=80',
     status: 'ready_to_cook'
   }
 ];
