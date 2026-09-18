@@ -4,7 +4,7 @@
  * and Background Synchronization for offline surplus logs.
  */
 
-const CACHE_NAME = 'waste2menu-kiosk-v1';
+const CACHE_NAME = 'waste2menu-kiosk-v2';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
@@ -40,49 +40,52 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch Event: Cache-First with Network Revalidation
+// Fetch Event: Network-First for HTML/Navigation, Cache-First for static hashed assets
 self.addEventListener('fetch', (event) => {
-  // Only handle GET requests
   if (event.request.method !== 'GET') return;
 
   const requestUrl = new URL(event.request.url);
-
-  // Skip non-http/https (e.g. chrome-extension, data URIs)
   if (!requestUrl.protocol.startsWith('http')) return;
 
+  const isNavigation = event.request.mode === 'navigate' || 
+    (event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html'));
+
+  if (isNavigation) {
+    // Network-First for HTML: always get the freshest version if online
+    event.respondWith(
+      fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return networkResponse;
+      }).catch(() => {
+        // Fallback to cache when offline
+        return caches.match(event.request).then((cached) => cached || caches.match('./index.html') || caches.match('./'));
+      })
+    );
+    return;
+  }
+
+  // Cache-First for static assets (fonts, images, scripts)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Return cached asset immediately, and fetch in background to revalidate cache if online
+        // Revalidate in background
         fetch(event.request).then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, networkResponse.clone());
-            });
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse.clone()));
           }
-        }).catch(() => {
-          // Ignore background fetch error when offline
-        });
+        }).catch(() => {});
         return cachedResponse;
       }
 
-      // If not in cache, fetch from network and cache for future offline use
       return fetch(event.request).then((networkResponse) => {
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-          return networkResponse;
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         }
-
-        const responseToCache = networkResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
-
         return networkResponse;
-      }).catch(() => {
-        // If offline and request is an HTML navigation, return cached index.html
-        if (event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html')) {
-          return caches.match('./index.html') || caches.match('./');
-        }
       });
     })
   );
