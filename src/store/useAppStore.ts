@@ -193,11 +193,21 @@ export const useAppStore = create<AppState>((set, get) => ({
   // Outside Landing Dashboard Navigation
   activeLandingSection: 'overview',
   setActiveLandingSection: (section) => {
-    set({ activeLandingSection: section });
-    const el = document.getElementById(section);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    set({ activeLandingSection: section, currentRole: 'dashboard' });
+    setTimeout(() => {
+      const el = document.getElementById(section);
+      if (el) {
+        const headerOffset = 80;
+        const elementPosition = el.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 60);
   },
 
   currentRole: 'dashboard',

@@ -21,7 +21,6 @@ import {
   UserPlus,
   Users,
   Coins,
-  Compass,
   Smartphone
 } from 'lucide-react';
 import { NotificationTray } from './NotificationTray';
@@ -55,32 +54,53 @@ export const Navbar: React.FC = () => {
   const unreadCount = notifications.filter((n) => !n.read).length;
   const activeSpecialsCount = activeSpecials.filter((s) => !s.isSoldOut && s.remainingPortions > 0).length;
 
-  // Public Outside Dashboard Section Tabs (displayed when NOT logged in)
-  const outsideSections: { id: string; label: string; icon: React.ReactNode }[] = [
+  // Public Outside Navigation Station Tabs (displayed when NOT logged in)
+  const publicNavTabs = [
     {
       id: 'overview',
       label: 'Overview',
-      icon: <LayoutDashboard className="w-3.5 h-3.5 shrink-0" />
+      icon: <LayoutDashboard className="w-3.5 h-3.5 shrink-0" />,
+      action: () => {
+        setRole('dashboard');
+        setActiveLandingSection('overview');
+      },
+      isActive: currentRole === 'dashboard' && activeLandingSection === 'overview'
     },
     {
-      id: 'dishes',
-      label: 'Dishes Showcase',
-      icon: <ChefHat className="w-3.5 h-3.5 shrink-0" />
+      id: 'recipes',
+      label: 'Recipes & Dishes',
+      icon: <ChefHat className="w-3.5 h-3.5 shrink-0" />,
+      action: () => {
+        setRole('user_recipes');
+      },
+      isActive: currentRole === 'user_recipes'
+    },
+    {
+      id: 'prep',
+      label: 'Scrap Intake',
+      icon: <UploadCloud className="w-3.5 h-3.5 shrink-0" />,
+      action: () => {
+        setRole('prep');
+      },
+      isActive: currentRole === 'prep'
     },
     {
       id: 'impact',
       label: 'Food Saved',
-      icon: <BarChart3 className="w-3.5 h-3.5 shrink-0" />
+      icon: <BarChart3 className="w-3.5 h-3.5 shrink-0" />,
+      action: () => {
+        setRole('analytics');
+      },
+      isActive: currentRole === 'analytics'
     },
     {
       id: 'how-it-works',
       label: 'How It Works',
-      icon: <Sparkles className="w-3.5 h-3.5 shrink-0" />
-    },
-    {
-      id: 'suites',
-      label: 'Kitchen Suites',
-      icon: <Users className="w-3.5 h-3.5 shrink-0" />
+      icon: <Sparkles className="w-3.5 h-3.5 shrink-0" />,
+      action: () => {
+        setActiveLandingSection('how-it-works');
+      },
+      isActive: currentRole === 'dashboard' && activeLandingSection === 'how-it-works'
     }
   ];
 
@@ -148,8 +168,8 @@ export const Navbar: React.FC = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-40 w-full bg-white/95 backdrop-blur-xl border-b border-[#E8DFD1] shadow-xs">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 gap-2">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative">
+          <div className="flex items-center justify-between h-16">
             
             {/* Left: Logo & Live Sync Pill */}
             <div 
@@ -157,7 +177,7 @@ export const Navbar: React.FC = () => {
                 setRole('dashboard');
                 if (!isAuthenticated) setActiveLandingSection('overview');
               }}
-              className="flex items-center space-x-2.5 cursor-pointer group shrink-0"
+              className="flex items-center space-x-2.5 cursor-pointer group shrink-0 z-20"
             >
               <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500/15 to-violet-500/15 border border-emerald-500/30 shadow-xs group-hover:scale-105 transition-transform">
                 <Sparkles className="w-4 h-4 text-emerald-600 animate-pulse" />
@@ -189,32 +209,29 @@ export const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* Center: Dynamic Navigation Tabs */}
-            <div className="hidden xl:flex items-center justify-center flex-1 max-w-2xl px-2">
+            {/* Center: Dynamic Navigation Tabs - EXACTLY in the middle of the navbar */}
+            <div className="hidden lg:flex items-center justify-center absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 pointer-events-auto">
               {!isAuthenticated ? (
-                /* OUTSIDE DASHBOARD (LOGGED OUT) -> Public Sections */
-                <nav className="flex items-center space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1]">
-                  {outsideSections.map((sec) => {
-                    const isActive = activeLandingSection === sec.id;
-                    return (
-                      <button
-                        key={sec.id}
-                        onClick={() => setActiveLandingSection(sec.id)}
-                        className={`relative flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs transition-all duration-150 ${
-                          isActive
-                            ? 'bg-emerald-700 text-white shadow-xs font-bold'
-                            : 'text-[#5C5549] hover:text-[#1C1917] hover:bg-white/80 font-medium'
-                        }`}
-                      >
-                        {sec.icon}
-                        <span className="whitespace-nowrap">{sec.label}</span>
-                      </button>
-                    );
-                  })}
+                /* OUTSIDE DASHBOARD (LOGGED OUT) -> Public Nav Tabs (Every tab OPENS a view!) */
+                <nav className="flex items-center space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs">
+                  {publicNavTabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={tab.action}
+                      className={`relative flex items-center space-x-1.5 px-2.5 xl:px-3 py-1.5 rounded-xl text-xs transition-all duration-150 ${
+                        tab.isActive
+                          ? 'bg-emerald-700 text-white shadow-xs font-bold'
+                          : 'text-[#5C5549] hover:text-[#1C1917] hover:bg-white/80 font-medium'
+                      }`}
+                    >
+                      {tab.icon}
+                      <span className="whitespace-nowrap">{tab.label}</span>
+                    </button>
+                  ))}
                 </nav>
               ) : (
                 /* LOGGED IN -> Station Tabs According to Role */
-                <nav className="flex items-center space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1]">
+                <nav className="flex items-center space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs">
                   {loggedInRolesList.map((role) => {
                     const isActive = currentRole === role.id;
                     return (
@@ -222,7 +239,7 @@ export const Navbar: React.FC = () => {
                         key={role.id}
                         id={`nav-role-${role.id}`}
                         onClick={() => setRole(role.id)}
-                        className={`relative flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs transition-all duration-150 ${
+                        className={`relative flex items-center space-x-1.5 px-2.5 xl:px-3 py-1.5 rounded-xl text-xs transition-all duration-150 ${
                           isActive
                             ? 'bg-emerald-700 text-white shadow-xs font-bold'
                             : 'text-[#5C5549] hover:text-[#1C1917] hover:bg-white/80 font-medium'
@@ -249,23 +266,23 @@ export const Navbar: React.FC = () => {
             </div>
 
             {/* Right Action Controls Group */}
-            <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+            <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0 z-20">
               
               {/* Business Model & ROI Architecture Trigger Button */}
               <button
                 onClick={() => setIsBusinessModalOpen(true)}
-                className="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all border shadow-xs bg-amber-50 hover:bg-amber-100 text-amber-950 border-amber-300 active:scale-95"
+                className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all border shadow-xs bg-amber-50 hover:bg-amber-100 text-amber-950 border-amber-300 active:scale-95"
                 title="View Commercial Business Model, Unit Economics & Pricing"
               >
                 <Coins className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-                <span className="hidden sm:inline font-heading font-black">Business Model</span>
-                <span className="sm:hidden font-heading font-black">ROI</span>
+                <span className="hidden xl:inline font-heading font-black">Business Model</span>
+                <span className="xl:hidden font-heading font-black">ROI</span>
               </button>
 
               {/* Dedicated Offline Community Kiosk Button (PWA) */}
               <button
                 onClick={() => setRole('community_kiosk')}
-                className={`flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all border shadow-xs ${
+                className={`flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all border shadow-xs ${
                   currentRole === 'community_kiosk'
                     ? 'bg-emerald-800 text-white border-emerald-950 ring-2 ring-emerald-600/30'
                     : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border-emerald-300'
@@ -273,8 +290,8 @@ export const Navbar: React.FC = () => {
                 title="Zero-Cost Community Nutrition & Offline Kiosk (PWA)"
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                <span className="font-heading font-black">Offline Kiosk</span>
-                <span className="hidden md:inline-block text-[9px] px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-950 font-mono font-bold">
+                <span className="font-heading font-black">Kiosk</span>
+                <span className="hidden xl:inline-block text-[9px] px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-950 font-mono font-bold">
                   PWA
                 </span>
               </button>
@@ -283,26 +300,26 @@ export const Navbar: React.FC = () => {
               {isAuthenticated ? (
                 <button
                   onClick={() => setIsProfileModalOpen(true)}
-                  className="flex items-center space-x-2 p-1 sm:p-1.5 sm:pr-2.5 rounded-xl bg-white hover:bg-stone-50 border border-[#E8DFD1] transition-all shadow-xs"
+                  className="flex items-center space-x-1.5 p-1 sm:p-1.5 sm:pr-2.5 rounded-xl bg-white hover:bg-stone-50 border border-[#E8DFD1] transition-all shadow-xs"
                 >
                   <img
                     src={userProfile?.avatar || CHEF_PROFILE.avatar}
                     alt={userProfile?.name || 'User'}
                     className="w-7 h-7 rounded-lg object-cover border border-emerald-300 shrink-0"
                   />
-                  <div className="hidden md:block text-left leading-tight">
-                    <div className="text-xs font-heading font-bold text-stone-900 truncate max-w-[100px]">
+                  <div className="hidden xl:block text-left leading-tight">
+                    <div className="text-xs font-heading font-bold text-stone-900 truncate max-w-[90px]">
                       {userProfile?.name}
                     </div>
                     <div className="text-[9px] font-mono text-emerald-700 font-semibold">
-                      {userPersona === 'chef' ? '👨‍🍳 Chef' : '👤 Home Cook'}
+                      {userPersona === 'chef' ? '👨‍🍳 Chef' : '👤 Home'}
                     </div>
                   </div>
                   <ChevronDown className="w-3 h-3 text-stone-400 hidden sm:block" />
                 </button>
               ) : (
                 /* If Logged Out: Show Normal Sign In & Register Buttons */
-                <div className="flex items-center space-x-1.5">
+                <div className="flex items-center space-x-1 sm:space-x-1.5">
                   <button
                     onClick={() => openAuthModal('signin')}
                     className="flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white hover:bg-stone-50 border border-[#E8DFD1] text-stone-800 font-heading font-bold text-xs shadow-xs transition-all"
@@ -313,7 +330,7 @@ export const Navbar: React.FC = () => {
 
                   <button
                     onClick={() => openAuthModal('register')}
-                    className="hidden sm:flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-heading font-bold text-xs shadow-xs transition-all"
+                    className="hidden sm:flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-heading font-bold text-xs shadow-xs transition-all"
                   >
                     <UserPlus className="w-3.5 h-3.5 shrink-0" />
                     <span>Register</span>
@@ -348,33 +365,54 @@ export const Navbar: React.FC = () => {
                 )}
               </button>
 
-              {/* Mobile Role / Section Switcher Select (hidden on xl screens) */}
-              <div className="xl:hidden">
+              {/* Mobile Role / Section Switcher Select (visible on mobile / tablet < lg) */}
+              <div className="lg:hidden">
                 {!isAuthenticated ? (
                   <select
-                    value={currentRole === 'community_kiosk' ? 'community_kiosk' : activeLandingSection}
+                    value={
+                      currentRole === 'community_kiosk' 
+                        ? 'community_kiosk' 
+                        : currentRole === 'user_recipes' 
+                        ? 'recipes' 
+                        : currentRole === 'prep' 
+                        ? 'prep' 
+                        : currentRole === 'analytics' 
+                        ? 'impact' 
+                        : activeLandingSection === 'how-it-works' 
+                        ? 'how-it-works' 
+                        : 'overview'
+                    }
                     onChange={(e) => {
-                      if (e.target.value === 'community_kiosk') {
+                      const val = e.target.value;
+                      if (val === 'community_kiosk') {
                         setRole('community_kiosk');
+                      } else if (val === 'recipes') {
+                        setRole('user_recipes');
+                      } else if (val === 'prep') {
+                        setRole('prep');
+                      } else if (val === 'impact') {
+                        setRole('analytics');
+                      } else if (val === 'how-it-works') {
+                        setActiveLandingSection('how-it-works');
                       } else {
                         setRole('dashboard');
-                        setActiveLandingSection(e.target.value);
+                        setActiveLandingSection('overview');
                       }
                     }}
-                    className="bg-white text-[#1C1917] text-xs font-semibold py-1.5 px-2 rounded-xl border border-[#E8DFD1] shadow-xs focus:outline-none focus:border-emerald-500 max-w-[110px] truncate"
+                    className="bg-white text-[#1C1917] text-xs font-semibold py-1.5 px-2 rounded-xl border border-[#E8DFD1] shadow-xs focus:outline-none focus:border-emerald-500 max-w-[115px] truncate"
                   >
-                    {outsideSections.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.label}
-                      </option>
-                    ))}
+                    <option value="overview">🏠 Overview</option>
+                    <option value="recipes">🍳 Recipes & Dishes</option>
+                    <option value="prep">🌱 Scrap Intake</option>
+                    <option value="impact">📊 Food Saved</option>
+                    <option value="how-it-works">⚡ How It Works</option>
                     <option value="community_kiosk">🌱 Offline Kiosk</option>
                   </select>
                 ) : (
                   <select
                     value={currentRole}
                     onChange={(e) => setRole(e.target.value as Role)}
-                    className="bg-white text-[#1C1917] text-xs font-semibold py-1.5 px-2 rounded-xl border border-[#E8DFD1] shadow-xs focus:outline-none focus:border-emerald-500 max-w-[110px] truncate"
+                    className="bg-white text-[#1C1917] text-xs font-semibold py-1.5 px-2 rounded-xl border border-[#E8DFD1] shadow-xs focus:outline-none focus:border-emerald-500 max-w-[115px] truncate"
                   >
                     {loggedInRolesList.map((r) => (
                       <option key={r.id} value={r.id}>
