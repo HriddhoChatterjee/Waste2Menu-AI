@@ -108,6 +108,16 @@ export const Navbar: React.FC = () => {
       isActive: currentRole === 'dashboard' && activeLandingSection === 'how-it-works'
     },
     {
+      id: 'community_kiosk',
+      label: 'Offline Kiosk',
+      shortLabel: 'Offline Kiosk',
+      icon: <Smartphone className="w-3.5 h-3.5 text-emerald-600 shrink-0" />,
+      action: () => {
+        setRole('community_kiosk');
+      },
+      isActive: currentRole === 'community_kiosk'
+    },
+    {
       id: 'business-model',
       label: 'Business Model',
       shortLabel: 'ROI Model',
@@ -120,61 +130,83 @@ export const Navbar: React.FC = () => {
   ];
 
   // Professional Chef navigation station tabs (displayed ONLY after Chef login)
-  const chefRoles: { id: Role; label: string; icon: React.ReactNode; badge?: string }[] = [
+  const chefRoles: { id: Role; label: string; shortLabel?: string; icon: React.ReactNode; badge?: string }[] = [
     {
       id: 'dashboard',
       label: 'Dashboard',
+      shortLabel: 'Dash',
       icon: <LayoutDashboard className="w-3.5 h-3.5 shrink-0" />
     },
     { 
       id: 'prep', 
       label: 'Prep & Scraps', 
+      shortLabel: 'Prep',
       icon: <UtensilsCrossed className="w-3.5 h-3.5 shrink-0" /> 
     },
     { 
       id: 'recipes', 
       label: 'Recipe Studio', 
+      shortLabel: 'Recipes',
       icon: <ChefHat className="w-3.5 h-3.5 shrink-0" />
     },
     { 
       id: 'pos', 
       label: 'POS Specials', 
+      shortLabel: 'POS',
       icon: <CreditCard className="w-3.5 h-3.5 shrink-0" />,
       badge: activeSpecialsCount > 0 ? `${activeSpecialsCount}` : undefined
     },
     { 
       id: 'ngo', 
       label: 'NGO Surplus', 
+      shortLabel: 'NGO',
       icon: <HeartHandshake className="w-3.5 h-3.5 shrink-0" />
     },
     { 
       id: 'analytics', 
       label: 'Analytics', 
+      shortLabel: 'Impact',
       icon: <BarChart3 className="w-3.5 h-3.5 shrink-0" /> 
+    },
+    {
+      id: 'community_kiosk',
+      label: 'Offline Kiosk',
+      shortLabel: 'Offline Kiosk',
+      icon: <Smartphone className="w-3.5 h-3.5 shrink-0" />
     }
   ];
 
   // Normal user / Home cook navigation station tabs (displayed ONLY after Normal User login)
-  const normalUserRoles: { id: Role; label: string; icon: React.ReactNode; badge?: string }[] = [
+  const normalUserRoles: { id: Role; label: string; shortLabel?: string; icon: React.ReactNode; badge?: string }[] = [
     {
       id: 'dashboard',
       label: 'Dashboard',
+      shortLabel: 'Dash',
       icon: <LayoutDashboard className="w-3.5 h-3.5 shrink-0" />
     },
     {
       id: 'prep',
       label: 'Upload Scraps',
+      shortLabel: 'Scraps',
       icon: <UploadCloud className="w-3.5 h-3.5 shrink-0" />
     },
     {
       id: 'user_recipes',
       label: 'Chef Recipes',
+      shortLabel: 'Recipes',
       icon: <ChefHat className="w-3.5 h-3.5 shrink-0" />
     },
     {
       id: 'analytics',
       label: 'My Waste Impact',
+      shortLabel: 'Impact',
       icon: <BarChart3 className="w-3.5 h-3.5 shrink-0" />
+    },
+    {
+      id: 'community_kiosk',
+      label: 'Offline Kiosk',
+      shortLabel: 'Offline Kiosk',
+      icon: <Smartphone className="w-3.5 h-3.5 shrink-0" />
     }
   ];
 
@@ -266,7 +298,8 @@ export const Navbar: React.FC = () => {
                         }`}
                       >
                         {role.icon}
-                        <span className="whitespace-nowrap">{role.label}</span>
+                        <span className="whitespace-nowrap hidden xl:inline">{role.label}</span>
+                        <span className="whitespace-nowrap xl:hidden">{role.shortLabel || role.label}</span>
                         {role.badge && (
                           <span
                             className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
@@ -287,24 +320,6 @@ export const Navbar: React.FC = () => {
 
             {/* Column 3 (Right): User Utilities & Actions (Never overlaps center column) */}
             <div className="flex items-center justify-end space-x-1.5 sm:space-x-2 shrink-0">
-              
-              {/* Dedicated Offline Community Kiosk Button (PWA) */}
-              <button
-                onClick={() => setRole('community_kiosk')}
-                className={`flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all border shadow-xs ${
-                  currentRole === 'community_kiosk'
-                    ? 'bg-emerald-800 text-white border-emerald-950 ring-2 ring-emerald-600/30'
-                    : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border-emerald-300'
-                }`}
-                title="Zero-Cost Community Nutrition & Offline Kiosk (PWA)"
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                <span className="font-heading font-black hidden sm:inline">Offline Kiosk</span>
-                <span className="font-heading font-black sm:hidden">Kiosk</span>
-                <span className="hidden xl:inline-block text-[9px] px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-950 font-mono font-bold">
-                  PWA
-                </span>
-              </button>
 
               {/* If Logged In: Show Profile Pill */}
               {isAuthenticated ? (
@@ -420,8 +435,8 @@ export const Navbar: React.FC = () => {
                     <option value="prep">🌱 Scrap Intake</option>
                     <option value="impact">📊 Food Saved</option>
                     <option value="how-it-works">⚡ How It Works</option>
+                    <option value="community_kiosk">📱 Offline Kiosk</option>
                     <option value="business_model">💰 Business Model</option>
-                    <option value="community_kiosk">🌱 Offline Kiosk</option>
                   </select>
                 ) : (
                   <select
@@ -434,7 +449,6 @@ export const Navbar: React.FC = () => {
                         {r.label}
                       </option>
                     ))}
-                    <option value="community_kiosk">🌱 Offline Kiosk</option>
                   </select>
                 )}
               </div>
@@ -518,6 +532,41 @@ export const Navbar: React.FC = () => {
               <p className="text-[11px] text-stone-500 font-sans leading-relaxed">
                 You are securely logged into this account. To switch to a different workspace (such as {userPersona === 'chef' ? 'Home Cook' : 'Professional Chef'}), please sign out first.
               </p>
+            </div>
+
+            {/* Quick Station Navigation inside Profile */}
+            <div className="p-2 space-y-1 bg-stone-50 rounded-2xl border border-stone-200">
+              <button
+                onClick={() => {
+                  setIsProfileModalOpen(false);
+                  setIsBusinessModalOpen(true);
+                }}
+                className="w-full flex items-center justify-between px-3 py-2 text-xs font-bold text-stone-700 hover:text-emerald-800 hover:bg-white rounded-xl transition-all"
+              >
+                <span className="flex items-center space-x-2">
+                  <Coins className="w-3.5 h-3.5 text-amber-600" />
+                  <span>View B2B Business Model & ROI Tiers</span>
+                </span>
+                <span className="text-[9px] font-mono font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-200">
+                  Enterprise
+                </span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsProfileModalOpen(false);
+                  setRole('community_kiosk');
+                }}
+                className="w-full flex items-center justify-between px-3 py-2 text-xs font-bold text-stone-700 hover:text-emerald-800 hover:bg-white rounded-xl transition-all"
+              >
+                <span className="flex items-center space-x-2">
+                  <Smartphone className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Launch Offline Community Kiosk</span>
+                </span>
+                <span className="text-[9px] font-mono font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded border border-emerald-200">
+                  PWA
+                </span>
+              </button>
             </div>
 
             {/* Action Buttons: Sign Out */}
