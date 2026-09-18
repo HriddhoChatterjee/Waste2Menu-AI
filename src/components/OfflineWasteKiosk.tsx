@@ -40,8 +40,15 @@ import {
   AlertCircle,
   HelpCircle,
   PhoneCall,
-  X
+  X,
+  Volume2,
+  VolumeX,
+  Users
 } from 'lucide-react';
+import { 
+  generateDynamicCommunitySteps, 
+  DynamicCommunityStep 
+} from '../utils/communityRecipeGenerator';
 
 type LanguageKey = 'en' | 'hi' | 'ta' | 'bn';
 
@@ -96,7 +103,25 @@ const UI_TRANSLATIONS: Record<LanguageKey, Record<string, string>> = {
     comboVeggies: '🥕 Veggie Peels',
     comboStaples: '🍚 Grains & Dal',
     comboAromatics: '🌿 Aromatics',
-    tapToToggle: 'Tap multiple scraps to combine'
+    tapToToggle: 'Tap multiple scraps to combine',
+    zeroCostMode: '₹0 Zero-Cost Street Mode',
+    standardMode: 'Standard Pantry Mode',
+    zeroCostDesc: 'Zero-Cost Relief Mode: Uses ₹0 extra spices/oil. Cooked with clean water, ration salt & trapped steam.',
+    hungerImpact: 'Hunger Relief & Satiety Impact',
+    feedsAdults: 'Feeds {n} Hungry Adults',
+    orChildren: 'or {n} Children',
+    fuelSaverBadge: '🔥 Single-Pot Chulha & Fuel Saver',
+    fuelSaverNote: 'One-pot cooking saves wash water. 3-minute steam retention with flame extinguished saves 40% firewood or gas.',
+    foodSafetyTitle: '🛡️ Food Safety & Hygiene Protocol (Needy Relief)',
+    foodSafety1: '1. Warm Salt Soak: Soak scraps 3 min to strip grit & street dust.',
+    foodSafety2: '2. Rolling Boil (>75°C): Kills airborne bacteria for child health.',
+    foodSafety3: '3. Mold Inspection: Check bread/rotis; discard green/black spots.',
+    foodSafety4: '4. Hot Distribution: Serve steaming within 2h; never store overnight.',
+    voiceGuide: 'Read Cooking Steps Aloud (Voice Guide)',
+    stopVoice: 'Stop Audio',
+    speakingStep: 'Speaking Step',
+    allScrapsIncluded: 'Includes All {n} Selected Scraps',
+    zeroCostPerPortion: '₹0.0 / serving (Street Method)'
   },
   hi: {
     kioskTitle: 'सामुदायिक पोषण कियोस्क',
@@ -135,7 +160,25 @@ const UI_TRANSLATIONS: Record<LanguageKey, Record<string, string>> = {
     comboVeggies: '🥕 सब्जी के छिलके',
     comboStaples: '🍚 चावल व दाल',
     comboAromatics: '🌿 मसाले व पत्तियां',
-    tapToToggle: 'एकाधिक सामग्री जोड़ें'
+    tapToToggle: 'एकाधिक सामग्री जोड़ें',
+    zeroCostMode: '₹0 शून्य-लागत स्ट्रीट मोड',
+    standardMode: 'सामान्य मसाला मोड',
+    zeroCostDesc: 'शून्य-लागत राहत मोड: किसी अतिरिक्त मसाले या तेल की जरूरत नहीं। केवल पानी, राशन नमक व भाप से तैयार।',
+    hungerImpact: 'भुखमरी राहत व तृप्ति प्रभाव',
+    feedsAdults: '{n} भूखे वयस्कों का आहार',
+    orChildren: 'या {n} बच्चों के लिए भरपेट',
+    fuelSaverBadge: '🔥 चूल्हा व एक-बर्तन ईंधन बचत',
+    fuelSaverNote: 'एक ही बर्तन में पकाने से पानी बचता है। आंच बंद कर 3 मिनट ढक्कन की भाप में पकाने से 40% लकड़ी/गैस बचती है।',
+    foodSafetyTitle: '🛡️ खाद्य सुरक्षा व स्वच्छता नियम (गरीब व जरूरतमंदों हेतु)',
+    foodSafety1: '१. नमक-पानी से धोना: छिलकों को 3 मिनट गर्म नमक पानी में भिगोएं।',
+    foodSafety2: '२. तेज उबाल (>७५°C): बच्चों की सुरक्षा हेतु कीटाणु नष्ट करें।',
+    foodSafety3: '३. फफूंद जांच: बासी रोटी या ब्रेड पर फफूंद हो तो हटा दें।',
+    foodSafety4: '४. गरम परोसें: २ घंटे के भीतर गरम परोसें; रात भर खुला न छोड़ें।',
+    voiceGuide: 'रेसिपी बोलकर सुनें (ऑफ़लाइन आवाज)',
+    stopVoice: 'आवाज बंद करें',
+    speakingStep: 'निर्देश पढ़ रहे हैं',
+    allScrapsIncluded: 'सभी {n} चुनी गई सामग्रियां शामिल',
+    zeroCostPerPortion: '₹०.० / प्रति प्लेट (मुफ्त राहत)'
   },
   ta: {
     kioskTitle: 'சமூக ஊட்டச்சத்து கியோஸ்க்',
@@ -174,7 +217,25 @@ const UI_TRANSLATIONS: Record<LanguageKey, Record<string, string>> = {
     comboVeggies: '🥕 காய்கறி தோல்',
     comboStaples: '🍚 சாதம் & பருப்பு',
     comboAromatics: '🌿 மூலிகைகள்',
-    tapToToggle: 'பல்வேறு கழிவுகளைச் சேர்க்கவும்'
+    tapToToggle: 'பல்வேறு கழிவுகளைச் சேர்க்கவும்',
+    zeroCostMode: '₹0 இலவச முறை (எண்ணெய் இன்றி)',
+    standardMode: 'வழக்கமான முறை',
+    zeroCostDesc: 'இலவச முறை: எண்ணெய் மற்றும் மசாலா செலவு இல்லை. தண்ணீர், உப்பு மற்றும் நீராவியால் சமைக்கப்படுகிறது.',
+    hungerImpact: 'பசி நிவாரணம் மற்றும் உணவு தாக்கம்',
+    feedsAdults: '{n} பெரியவர்களுக்கு வயிறார உணவு',
+    orChildren: 'அல்லது {n} குழந்தைகளுக்கு',
+    fuelSaverBadge: '🔥 ஒற்றைப் பாத்திரம் எரிபொருள் சேமிப்பு',
+    fuelSaverNote: 'ஒரே பாத்திரத்தில் சமைப்பதால் தண்ணீர் மிச்சம். மூடிய நீராவியில் 3 நிமிடம் வெந்து 40% விறகு சேமிக்கும்.',
+    foodSafetyTitle: '🛡️ உணவுப் பாதுகாப்பு & சுகாதார வழிகாட்டுதல்',
+    foodSafety1: '1. வெதுவெதுப்பான உப்பு நீர்: தூசிகளை அகற்ற 3 நிமிடம் ஊறவைக்கவும்.',
+    foodSafety2: '2. நன்கு கொதிக்க வைத்தல் (>75°C): கிருமிகள் அழிய வேகவைக்கவும்.',
+    foodSafety3: '3. பூஞ்சை சோதனை: ரொட்டியில் பூஞ்சை இருந்தால் நீக்கிவிடவும்.',
+    foodSafety4: '4. உடனே பரிமாறுதல்: தயாரித்த 2 மணி நேரத்திற்குள் சூடாக வழங்கவும்.',
+    voiceGuide: 'செய்முறையைக் கேளுங்கள் (ஆஃப்லைன் குரல்)',
+    stopVoice: 'குரலை நிறுத்து',
+    speakingStep: 'படி வாசிக்கப்படுகிறது',
+    allScrapsIncluded: 'அனைத்து {n} கழிவுகளும் சேர்க்கப்பட்டுள்ளன',
+    zeroCostPerPortion: '₹0.0 / ஒரு பங்குக்கு (இலவசம்)'
   },
   bn: {
     kioskTitle: 'কমিউনিটি পুষ্টি কিয়স্ক',
@@ -213,7 +274,25 @@ const UI_TRANSLATIONS: Record<LanguageKey, Record<string, string>> = {
     comboVeggies: '🥕 সবজির খোসা',
     comboStaples: '🍚 ভাত ও ডাল',
     comboAromatics: '🌿 মশলা ও পাতা',
-    tapToToggle: 'একাধিক উপাদান যোগ করতে ট্যাপ করুন'
+    tapToToggle: 'একাধিক উপাদান যোগ করতে ট্যাপ করুন',
+    zeroCostMode: '₹০ শূন্য-খরচ পথ মোড',
+    standardMode: 'সাধারণ মশলা মোড',
+    zeroCostDesc: 'শূন্য-খরচ ত্রাণ পদ্ধতি: কোনো কেনা মশলা বা তেলের খরচ নেই। শুধু জল, নুন ও ভাপেই রান্না সম্পন্ন।',
+    hungerImpact: 'ক্ষুধা নিবারণ ও তৃপ্তির প্রভাব',
+    feedsAdults: '{n} জন ক্ষুধার্ত মানুষের খাবার',
+    orChildren: 'বা {n} জন শিশুর ভরপেট আহার',
+    fuelSaverBadge: '🔥 এক-হাঁড়ি রান্না ও জ্বালানি সাশ্রয়',
+    fuelSaverNote: 'একটি পাত্রে রান্নায় ধোয়ার জল বাঁচে। আঁচ নিভিয়ে ৩ মিনিট ঢাকনার ভাপে সেদ্ধ করলে ৪০% জ্বালানি সাশ্রয় হয়।',
+    foodSafetyTitle: '🛡️ খাদ্য সুরক্ষা ও পরিচ্ছন্নতা নির্দেশিকা',
+    foodSafety1: '১. গরম নুন-জলে ধোয়া: ধুলোবালি দূর করতে ৩ মিনিট ভিজিয়ে রাখুন।',
+    foodSafety2: '২. ভালো করে ফোটানো (>৭৫°C): শিশুদের নিরাপত্তার জন্য জীবাণু ধ্বংস করুন।',
+    foodSafety3: '৩. ছত্রাক পরীক্ষা: বাসি রুটির সবুজ বা কালো দাগ ফেলে দিন।',
+    foodSafety4: '৪. গরম গরম পরিবেশন: তৈরির ২ ঘণ্টার মধ্যে পরিবেশন করুন।',
+    voiceGuide: 'রেসিপি শুনে রান্না করুন (অফলাইন কণ্ঠস্বর)',
+    stopVoice: 'কণ্ঠ থামান',
+    speakingStep: 'ধাপ পড়া হচ্ছে',
+    allScrapsIncluded: 'সবগুলি {n} নির্বাচিত উপাদান অন্তর্ভুক্ত',
+    zeroCostPerPortion: '₹০.০ / প্রতি প্লেট (বিনামূল্যে)'
   }
 };
 
@@ -229,6 +308,11 @@ export const OfflineWasteKiosk: React.FC = () => {
   });
   const [focusedCategory, setFocusedCategory] = useState<OfflineScrapCategory>('ridge_gourd_peels');
   const [activeRecipeId, setActiveRecipeId] = useState<string>('rec-ridge-gourd-thogayal');
+  
+  // Humanitarian Relief Mode & Offline Audio Voice Guide States
+  const [isZeroCostMode, setIsZeroCostMode] = useState<boolean>(false);
+  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+  const [activeSpeakingStepIndex, setActiveSpeakingStepIndex] = useState<number | null>(null);
   
   // Surplus Alert Modal State
   const [isSurplusModalOpen, setIsSurplusModalOpen] = useState<boolean>(false);
@@ -292,6 +376,86 @@ export const OfflineWasteKiosk: React.FC = () => {
     const found = matchedResults.find(r => r.recipe.id === activeRecipeId);
     return found || matchedResults[0];
   }, [matchedResults, activeRecipeId]);
+
+  // Dynamic community steps synthesizing ALL selected ingredients
+  const dynamicSteps: DynamicCommunityStep[] = useMemo(() => {
+    if (!activeResult) return [];
+    return generateDynamicCommunitySteps({
+      recipe: activeResult.recipe,
+      selectedScraps,
+      language: selectedLanguage,
+      isZeroCostMode,
+      portions: activeResult.feasiblePortions
+    });
+  }, [activeResult, selectedScraps, selectedLanguage, isZeroCostMode]);
+
+  // 100% Offline Speech Synthesis Voice Reader
+  const handleToggleVoiceGuide = (steps: DynamicCommunityStep[]) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      alert('Text-to-speech audio is not supported in this browser.');
+      return;
+    }
+
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      setActiveSpeakingStepIndex(null);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    setIsSpeaking(true);
+
+    const langCodeMap: Record<LanguageKey, string> = {
+      en: 'en-IN',
+      hi: 'hi-IN',
+      ta: 'ta-IN',
+      bn: 'bn-IN'
+    };
+    const targetLang = langCodeMap[selectedLanguage] || 'en-IN';
+
+    let currentStepIdx = 0;
+
+    const speakNext = () => {
+      if (currentStepIdx >= steps.length) {
+        setIsSpeaking(false);
+        setActiveSpeakingStepIndex(null);
+        return;
+      }
+
+      const s = steps[currentStepIdx];
+      setActiveSpeakingStepIndex(s.stepIndex);
+
+      const utterance = new SpeechSynthesisUtterance(`${s.title}. ${s.instruction}`);
+      utterance.lang = targetLang;
+      utterance.rate = 0.9;
+
+      utterance.onend = () => {
+        currentStepIdx++;
+        speakNext();
+      };
+
+      utterance.onerror = () => {
+        setIsSpeaking(false);
+        setActiveSpeakingStepIndex(null);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    };
+
+    speakNext();
+  };
+
+  // Cancel speech synthesis on language/recipe change or unmount
+  useEffect(() => {
+    return () => {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+        setActiveSpeakingStepIndex(null);
+      }
+    };
+  }, [activeRecipeId, selectedLanguage]);
 
   // Toggle category on/off (Multi-Select)
   const toggleCategory = (catKey: OfflineScrapCategory) => {
@@ -904,15 +1068,100 @@ export const OfflineWasteKiosk: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* Pantry Cost Badge */}
-                    <div className="text-center px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-300">
-                      <span className="block text-xl font-mono font-black text-amber-900">
-                        ₹{activeResult.costPerPortionINR.toFixed(1)}
+                    {/* Pantry Cost Badge (Dynamic to Zero-Cost Mode) */}
+                    <div className={`text-center px-3 py-1.5 rounded-lg border ${
+                      isZeroCostMode 
+                        ? 'bg-emerald-50 border-emerald-400' 
+                        : 'bg-amber-50 border-amber-300'
+                    }`}>
+                      <span className={`block text-xl font-mono font-black ${
+                        isZeroCostMode ? 'text-emerald-950' : 'text-amber-900'
+                      }`}>
+                        {isZeroCostMode ? '₹0.0' : `₹${activeResult.costPerPortionINR.toFixed(1)}`}
                       </span>
-                      <span className="block text-[9px] font-mono uppercase font-bold text-amber-800">
-                        {t.perPortion}
+                      <span className={`block text-[9px] font-mono uppercase font-bold ${
+                        isZeroCostMode ? 'text-emerald-800' : 'text-amber-800'
+                      }`}>
+                        {isZeroCostMode ? t.zeroCostPerPortion : t.perPortion}
                       </span>
                     </div>
+                  </div>
+                </div>
+
+                {/* Hunger Relief & Satiety Impact Card for Poor & Needy */}
+                <div className="bg-stone-900 text-white p-4 rounded-xl shadow-xs border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-1">
+                    <div className="flex items-center space-x-2 flex-wrap">
+                      <span className="text-base">🍲</span>
+                      <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-black">
+                        {t.hungerImpact}
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono border border-emerald-400/30">
+                        {t.allScrapsIncluded.replace('{n}', String(selectedCount))}
+                      </span>
+                    </div>
+                    <div className="text-base sm:text-lg font-heading font-black text-white flex items-center space-x-2 flex-wrap">
+                      <span>{t.feedsAdults.replace('{n}', String(activeResult.feasiblePortions))}</span>
+                      <span className="text-emerald-400 text-sm font-normal">
+                        {t.orChildren.replace('{n}', String(Math.round(activeResult.feasiblePortions * 1.4)))}
+                      </span>
+                    </div>
+                    <p className="text-xs text-stone-300">
+                      {isZeroCostMode ? t.zeroCostDesc : 'Clean, zero-waste salvaged ingredients providing high-fiber satiety.'}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center space-x-2 self-start sm:self-center shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setIsZeroCostMode(!isZeroCostMode)}
+                      className={`px-3 py-2 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 ${
+                        isZeroCostMode
+                          ? 'bg-emerald-400 text-emerald-950 border-emerald-300 font-black shadow-xs ring-2 ring-emerald-300/40'
+                          : 'bg-white/10 hover:bg-white/20 text-white border-white/20'
+                      }`}
+                      title="Toggle Zero-Cost Street Cooking Mode"
+                    >
+                      <Coins className="w-3.5 h-3.5" />
+                      <span>{isZeroCostMode ? t.zeroCostMode : t.standardMode}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 100% Offline Audio Voice Cooking Assistant Bar */}
+                <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-stone-100 rounded-xl border border-stone-300">
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-3 h-3 rounded-full ${isSpeaking ? 'bg-emerald-500 animate-ping' : 'bg-stone-400'}`} />
+                    <span className="text-xs font-heading font-black text-stone-800">
+                      {isSpeaking ? `${t.speakingStep} ${activeSpeakingStepIndex || 1}` : t.voiceGuide}
+                    </span>
+                    <span className="hidden sm:inline text-[10px] font-mono text-stone-600 bg-white px-1.5 py-0.5 rounded border border-stone-200 font-bold">
+                      100% Offline Audio
+                    </span>
+                  </div>
+
+                  <div className="flex items-center space-x-1.5">
+                    <button
+                      type="button"
+                      onClick={() => handleToggleVoiceGuide(dynamicSteps)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 transition-all shadow-xs ${
+                        isSpeaking
+                          ? 'bg-rose-600 hover:bg-rose-700 text-white'
+                          : 'bg-emerald-700 hover:bg-emerald-800 text-white'
+                      }`}
+                    >
+                      {isSpeaking ? (
+                        <>
+                          <VolumeX className="w-3.5 h-3.5" />
+                          <span>{t.stopVoice}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Volume2 className="w-3.5 h-3.5" />
+                          <span>{t.voiceGuide}</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
 
@@ -955,44 +1204,125 @@ export const OfflineWasteKiosk: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Pantry Staples Needed */}
-                <div className="bg-stone-50 p-3.5 rounded-xl border border-stone-200 space-y-1.5">
-                  <span className="text-xs font-heading font-black text-stone-900 block uppercase tracking-wide">
-                    🧂 {t.spicesNeeded} (₹{activeResult.totalPantryCostINR.toFixed(2)} Total):
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {activeResult.recipe.stapleSpicesNeeded.map((spice, idx) => (
-                      <span 
-                        key={idx}
-                        className="px-2 py-0.5 rounded-md bg-white border border-stone-300 text-stone-800 text-[11px] font-medium"
-                      >
-                        {spice}
-                      </span>
-                    ))}
+                {/* Pantry Staples Needed / Zero-Cost Alternative */}
+                {isZeroCostMode ? (
+                  <div className="bg-emerald-50/80 p-3.5 rounded-xl border border-emerald-300 space-y-1">
+                    <span className="text-xs font-heading font-black text-emerald-950 block uppercase tracking-wide">
+                      🧂 {t.zeroCostMode} (₹0.00 Total Expense):
+                    </span>
+                    <p className="text-[11px] text-emerald-900 font-medium leading-relaxed">
+                      {t.zeroCostDesc}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="bg-stone-50 p-3.5 rounded-xl border border-stone-200 space-y-1.5">
+                    <span className="text-xs font-heading font-black text-stone-900 block uppercase tracking-wide">
+                      🧂 {t.spicesNeeded} (₹{activeResult.totalPantryCostINR.toFixed(2)} Total):
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {activeResult.recipe.stapleSpicesNeeded.map((spice, idx) => (
+                        <span 
+                          key={idx}
+                          className="px-2 py-0.5 rounded-md bg-white border border-stone-300 text-stone-800 text-[11px] font-medium"
+                        >
+                          {spice}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Step-by-Step Instructions Dynamically Incorporating All Selected Scraps */}
+                <div className="space-y-2 pt-1">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-heading font-black uppercase tracking-wider text-stone-900 flex items-center space-x-1.5">
+                      <ChefHat className="w-3.5 h-3.5 text-emerald-700" />
+                      <span>{t.instructions} ({dynamicSteps.length} {selectedLanguage === 'hi' ? 'चरण' : 'Steps'}):</span>
+                    </h4>
+                    <span className="text-[11px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      {t.allScrapsIncluded.replace('{n}', String(selectedCount))}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    {dynamicSteps.map((step) => {
+                      const isBeingSpoken = isSpeaking && activeSpeakingStepIndex === step.stepIndex;
+                      return (
+                        <div 
+                          key={step.stepIndex}
+                          className={`p-3 rounded-xl border transition-all text-xs space-y-1.5 ${
+                            isBeingSpoken 
+                              ? 'bg-emerald-50 border-emerald-600 ring-2 ring-emerald-500/40 shadow-sm' 
+                              : 'bg-white border-stone-200 text-stone-800 hover:border-stone-300'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center space-x-2">
+                              <span className={`w-5 h-5 rounded-full font-mono font-bold text-[11px] flex items-center justify-center shrink-0 ${
+                                isBeingSpoken ? 'bg-emerald-800 text-white animate-pulse' : 'bg-stone-900 text-white'
+                              }`}>
+                                {step.stepIndex}
+                              </span>
+                              <span className="font-heading font-black text-stone-900 text-xs">
+                                {step.title}
+                              </span>
+                            </div>
+
+                            {step.badge && (
+                              <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md border ${step.badgeColor || 'bg-stone-100 text-stone-700 border-stone-300'}`}>
+                                {step.badge}
+                              </span>
+                            )}
+                          </div>
+
+                          <p className="leading-relaxed font-medium pl-7 text-stone-700">
+                            {step.instruction}
+                          </p>
+
+                          {step.ingredientsInvolved && step.ingredientsInvolved.length > 0 && (
+                            <div className="pl-7 flex flex-wrap items-center gap-1 pt-0.5">
+                              <span className="text-[10px] font-mono text-stone-500 font-bold">Scraps used:</span>
+                              {step.ingredientsInvolved.map((ing, iIdx) => (
+                                <span key={iIdx} className="px-1.5 py-0.5 rounded bg-stone-100 text-stone-800 text-[10px] font-mono border border-stone-200">
+                                  {ing}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
-                {/* Step-by-Step Instructions */}
-                <div className="space-y-2 pt-1">
-                  <h4 className="text-xs font-heading font-black uppercase tracking-wider text-stone-900 flex items-center space-x-1.5">
-                    <ChefHat className="w-3.5 h-3.5 text-emerald-700" />
-                    <span>{t.instructions}:</span>
-                  </h4>
+                {/* Salvaged Food Safety & Hygiene Protocol Callout */}
+                <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-300 text-xs space-y-2">
+                  <div className="flex items-center space-x-1.5 text-emerald-950 font-black">
+                    <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                    <span>{t.foodSafetyTitle}</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-stone-700 text-[11px]">
+                    <div className="p-2 bg-white/90 rounded-lg border border-emerald-200">
+                      <span className="font-bold text-stone-900 block">{t.foodSafety1}</span>
+                    </div>
+                    <div className="p-2 bg-white/90 rounded-lg border border-emerald-200">
+                      <span className="font-bold text-stone-900 block">{t.foodSafety2}</span>
+                    </div>
+                    <div className="p-2 bg-white/90 rounded-lg border border-emerald-200">
+                      <span className="font-bold text-stone-900 block">{t.foodSafety3}</span>
+                    </div>
+                    <div className="p-2 bg-white/90 rounded-lg border border-emerald-200">
+                      <span className="font-bold text-stone-900 block">{t.foodSafety4}</span>
+                    </div>
+                  </div>
+                </div>
 
-                  <div className="space-y-2">
-                    {(activeResult.recipe.instructions[selectedLanguage] || activeResult.recipe.instructions.en).map((step, sIdx) => (
-                      <div 
-                        key={sIdx}
-                        className="flex items-start space-x-2.5 p-2.5 rounded-xl bg-white border border-stone-200 text-xs text-stone-800"
-                      >
-                        <span className="w-5 h-5 rounded-full bg-emerald-700 text-white font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">
-                          {sIdx + 1}
-                        </span>
-                        <span className="leading-relaxed font-medium">
-                          {step}
-                        </span>
-                      </div>
-                    ))}
+                {/* 1-Pot Chulha Fuel Saver Callout */}
+                <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 flex items-start space-x-2.5">
+                  <Flame className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                  <div className="space-y-0.5">
+                    <span className="font-heading font-black text-amber-950 block">{t.fuelSaverBadge}</span>
+                    <span className="text-[11px] text-amber-900">{t.fuelSaverNote}</span>
                   </div>
                 </div>
 
@@ -1004,6 +1334,7 @@ export const OfflineWasteKiosk: React.FC = () => {
                     <span>{activeResult.recipe.culinaryTip}</span>
                   </div>
                 </div>
+
 
               </div>
             )}
