@@ -207,11 +207,11 @@ export const Navbar: React.FC = () => {
       <header className="fixed top-0 left-0 right-0 z-40 w-full bg-white/95 backdrop-blur-xl border-b border-[#E8DFD1] shadow-xs">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           
-          {/* Relative flex container with left-biased center navigation for perfect clearance */}
-          <div className="relative flex items-center justify-between h-16 w-full">
+          {/* Centered Unified Navigation: All elements brought close together & centered */}
+          <div className="flex items-center justify-between lg:justify-center lg:gap-3 xl:gap-5 h-16 w-full">
             
             {/* 1. Left (Logo & Live Sync Pill) */}
-            <div className="flex items-center justify-start shrink-0 z-20">
+            <div className="flex items-center shrink-0">
               <div 
                 onClick={() => {
                   setRole('dashboard');
@@ -250,16 +250,16 @@ export const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* 2. Center: OPTIMAL LEFT-BIASED CENTER (46%) TO GUARANTEE VAST BREATHING ROOM FROM GET STARTED */}
-            <div className="hidden lg:flex absolute left-[46%] top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
-              <nav className="pointer-events-auto flex items-center space-x-0.5 xl:space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs">
+            {/* 2. Center (Station Tabs) — Brought close to logo & actions, perfectly centered together */}
+            <div className="hidden lg:flex items-center shrink-0">
+              <nav className="flex items-center space-x-0.5 xl:space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs">
                 {!isAuthenticated ? (
                   /* Public Navigation Tabs */
                   publicNavTabs.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={tab.action}
-                      className={`relative flex items-center space-x-1.5 px-2 xl:px-3 py-1.5 rounded-xl text-xs transition-all duration-150 ${
+                      className={`relative flex items-center space-x-1.5 px-2 xl:px-2.5 py-1.5 rounded-xl text-xs transition-all duration-150 ${
                         tab.isActive
                           ? 'bg-emerald-700 text-white shadow-xs font-bold'
                           : 'text-[#5C5549] hover:text-[#1C1917] hover:bg-white/80 font-medium'
@@ -279,7 +279,7 @@ export const Navbar: React.FC = () => {
                         key={role.id}
                         id={`nav-role-${role.id}`}
                         onClick={() => setRole(role.id)}
-                        className={`relative flex items-center space-x-1.5 px-2 xl:px-3 py-1.5 rounded-xl text-xs transition-all duration-150 ${
+                        className={`relative flex items-center space-x-1.5 px-2 xl:px-2.5 py-1.5 rounded-xl text-xs transition-all duration-150 ${
                           isActive
                             ? 'bg-emerald-700 text-white shadow-xs font-bold'
                             : 'text-[#5C5549] hover:text-[#1C1917] hover:bg-white/80 font-medium'
@@ -306,8 +306,8 @@ export const Navbar: React.FC = () => {
               </nav>
             </div>
 
-            {/* 3. Right: User Utilities & Actions */}
-            <div className="flex items-center justify-end space-x-1.5 sm:space-x-2 shrink-0 z-20">
+            {/* 3. Right: User Utilities & Actions — Brought close to tabs */}
+            <div className="flex items-center justify-end space-x-1.5 sm:space-x-2 shrink-0">
 
               {/* If Logged In: Show Profile Pill */}
               {isAuthenticated ? (
