@@ -79,7 +79,7 @@ export const Navbar: React.FC = () => {
     },
     {
       id: 'prep',
-      label: 'Scrap Intake',
+      label: 'Scraps',
       shortLabel: 'Scraps',
       icon: <UploadCloud className="w-3.5 h-3.5 shrink-0" />,
       action: () => {
@@ -89,7 +89,7 @@ export const Navbar: React.FC = () => {
     },
     {
       id: 'impact',
-      label: 'Food Saved',
+      label: 'Impact',
       shortLabel: 'Impact',
       icon: <BarChart3 className="w-3.5 h-3.5 shrink-0" />,
       action: () => {
@@ -207,7 +207,7 @@ export const Navbar: React.FC = () => {
       <header className="fixed top-0 left-0 right-0 z-40 w-full bg-white/95 backdrop-blur-xl border-b border-[#E8DFD1] shadow-xs">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           
-          {/* Relative flex container with absolute center navigation */}
+          {/* Relative flex container with left-biased center navigation for perfect clearance */}
           <div className="relative flex items-center justify-between h-16 w-full">
             
             {/* 1. Left (Logo & Live Sync Pill) */}
@@ -250,8 +250,8 @@ export const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* 2. Center: MATHEMATICALLY ABSOLUTE DEAD-CENTER ON ENTIRE NAVBAR */}
-            <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
+            {/* 2. Center: OPTIMAL LEFT-BIASED CENTER (46%) TO GUARANTEE VAST BREATHING ROOM FROM GET STARTED */}
+            <div className="hidden lg:flex absolute left-[46%] top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
               <nav className="pointer-events-auto flex items-center space-x-0.5 xl:space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs">
                 {!isAuthenticated ? (
                   /* Public Navigation Tabs */
@@ -331,24 +331,15 @@ export const Navbar: React.FC = () => {
                   <ChevronDown className="w-3 h-3 text-stone-400 hidden sm:block" />
                 </button>
               ) : (
-                /* If Logged Out: Show Normal Sign In & Register Buttons */
-                <div className="flex items-center space-x-1 sm:space-x-1.5">
-                  <button
-                    onClick={() => openAuthModal('signin')}
-                    className="flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white hover:bg-stone-50 border border-[#E8DFD1] text-stone-800 font-heading font-bold text-xs shadow-xs transition-all"
-                  >
-                    <LogIn className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                    <span>Sign In</span>
-                  </button>
-
-                  <button
-                    onClick={() => openAuthModal('register')}
-                    className="hidden sm:flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-heading font-bold text-xs shadow-xs transition-all"
-                  >
-                    <UserPlus className="w-3.5 h-3.5 shrink-0" />
-                    <span className="hidden xl:inline">Register</span>
-                  </button>
-                </div>
+                /* If Logged Out: Streamlined Single 'Get Started' Primary Action */
+                <button
+                  onClick={() => openAuthModal('signin')}
+                  className="flex items-center space-x-1.5 px-3 sm:px-3.5 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-heading font-bold text-xs shadow-xs transition-all active:scale-95 shrink-0"
+                  title="Sign In or Register to Access Kitchen Stations"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-200 shrink-0" />
+                  <span>Get Started</span>
+                </button>
               )}
 
               {/* Sound Toggle Button (uniform 36px) */}
