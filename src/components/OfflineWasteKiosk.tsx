@@ -7,7 +7,8 @@ import {
 import { 
   matchOfflineRecipes, 
   CATEGORY_VISUAL_REGISTRY, 
-  OFFLINE_SCRAP_RECIPES 
+  OFFLINE_SCRAP_RECIPES,
+  ScrapInputEntry
 } from '../utils/offlineMatcher';
 import { 
   enqueueSurplusAlert, 
@@ -38,7 +39,8 @@ import {
   Layers, 
   AlertCircle,
   HelpCircle,
-  PhoneCall
+  PhoneCall,
+  X
 } from 'lucide-react';
 
 type LanguageKey = 'en' | 'hi' | 'ta' | 'bn';
@@ -62,8 +64,8 @@ const UI_TRANSLATIONS: Record<LanguageKey, Record<string, string>> = {
     kioskSubtitle: 'Zero-Cost Kitchen Scrap Valorization & Low-Bandwidth Meal Generator',
     offlinePill: '100% Offline Ready',
     onlinePill: 'Connected to Network',
-    step1: '1. Select Kitchen Scrap',
-    step2: '2. Scrap Weight Available',
+    step1: '1. Select Kitchen Scraps (Multi-Select)',
+    step2: '2. Scrap Stockpile & Weights',
     step3: '3. Immediate High-Nutrition Meals',
     grams: 'grams',
     kg: 'kg',
@@ -85,15 +87,24 @@ const UI_TRANSLATIONS: Record<LanguageKey, Record<string, string>> = {
     customGrams: 'Custom Grams',
     pwaInstall: 'Install Kiosk App on Phone',
     tipLabel: 'Nutritional & Culinary Note',
-    noScrapWarning: 'Select an ingredient and enter weight to discover zero-cost meals.'
+    noScrapWarning: 'Select one or more kitchen scraps to discover zero-cost nutritious meals.',
+    selected: 'Selected',
+    quickCombos: 'Combos',
+    selectAll: 'All 12',
+    reset: 'Clear',
+    totalStockpile: 'Total Stockpile',
+    comboVeggies: '🥕 Veggie Peels',
+    comboStaples: '🍚 Grains & Dal',
+    comboAromatics: '🌿 Aromatics',
+    tapToToggle: 'Tap multiple scraps to combine'
   },
   hi: {
     kioskTitle: 'सामुदायिक पोषण कियोस्क',
     kioskSubtitle: 'किचन स्क्रैप से शून्य-लागत पौष्टिक भोजन निर्माण प्रणाली (ऑफ़लाइन)',
     offlinePill: '१००% ऑफ़लाइन सक्रिय',
     onlinePill: 'इंटरनेट से कनेक्टेड',
-    step1: '१. बचा हुआ सामान चुनें',
-    step2: '२. उपलब्ध वजन (ग्राम)',
+    step1: '१. बचा हुआ सामान चुनें (एकाधिक चयन)',
+    step2: '२. उपलब्ध स्क्रैप वजन व स्टॉक',
     step3: '३. तैयार होने वाले पौष्टिक व्यंजन',
     grams: 'ग्राम',
     kg: 'किलो',
@@ -115,15 +126,24 @@ const UI_TRANSLATIONS: Record<LanguageKey, Record<string, string>> = {
     customGrams: 'वजन दर्ज करें',
     pwaInstall: 'मोबाइल पर ऐप इंस्टॉल करें',
     tipLabel: 'स्वास्थ्य व पोषण लाभ',
-    noScrapWarning: 'सामग्री चुनें और वजन डालें ताकि मुफ्त पौष्टिक रेसिपी दिख सकें।'
+    noScrapWarning: 'एक या अधिक सामग्री चुनें ताकि मुफ्त पौष्टिक रेसिपी दिख सकें।',
+    selected: 'चयनित',
+    quickCombos: 'कॉम्बो',
+    selectAll: 'सभी १२',
+    reset: 'हटाएं',
+    totalStockpile: 'कुल उपलब्ध स्टॉक',
+    comboVeggies: '🥕 सब्जी के छिलके',
+    comboStaples: '🍚 चावल व दाल',
+    comboAromatics: '🌿 मसाले व पत्तियां',
+    tapToToggle: 'एकाधिक सामग्री जोड़ें'
   },
   ta: {
     kioskTitle: 'சமூக ஊட்டச்சத்து கியோஸ்க்',
     kioskSubtitle: 'கழிவற்ற சமையல் & ஆஃப்லைன் சத்துணவு உருவாக்கம்',
     offlinePill: '100% ஆஃப்லைனில் இயங்கும்',
     onlinePill: 'இணைய இணைப்பு உள்ளது',
-    step1: '1. சமையல் கழிவைத் தேர்ந்தெடுக்கவும்',
-    step2: '2. கழிவு எடை (கிராம்)',
+    step1: '1. சமையல் கழிவைத் தேர்ந்தெடுக்கவும் (பல்வகை)',
+    step2: '2. கழிவு எடை மற்றும் இருப்பு',
     step3: '3. தயாரிக்கக்கூடிய சத்துணவுகள்',
     grams: 'கிராம்',
     kg: 'கிலோ',
@@ -145,15 +165,24 @@ const UI_TRANSLATIONS: Record<LanguageKey, Record<string, string>> = {
     customGrams: 'எடை சேர்க்கவும்',
     pwaInstall: 'மொபைலில் செயலியை நிறுவவும்',
     tipLabel: 'ஊட்டச்சத்து குறிப்பு',
-    noScrapWarning: 'உணவு வகையைத் தேர்வு செய்து எடையை உள்ளிடவும்.'
+    noScrapWarning: 'உணவு வகைகளைத் தேர்வு செய்து எடையை உள்ளிடவும்.',
+    selected: 'தேர்ந்தெடுக்கப்பட்டது',
+    quickCombos: 'சேர்க்கைகள்',
+    selectAll: 'அனைத்தும்',
+    reset: 'அழி',
+    totalStockpile: 'மொத்த இருப்பு',
+    comboVeggies: '🥕 காய்கறி தோல்',
+    comboStaples: '🍚 சாதம் & பருப்பு',
+    comboAromatics: '🌿 மூலிகைகள்',
+    tapToToggle: 'பல்வேறு கழிவுகளைச் சேர்க்கவும்'
   },
   bn: {
     kioskTitle: 'কমিউনিটি পুষ্টি কিয়স্ক',
     kioskSubtitle: 'রান্নাঘরের ফেলে দেওয়া অংশ থেকে শূন্য খরচে পুষ্টিকর খাবার',
     offlinePill: '১০০% অফলাইনে চালু',
     onlinePill: 'ইন্টারনেট সংযুক্ত',
-    step1: '১. বেঁচে যাওয়া উপাদান বা খোসা বেছে নিন',
-    step2: '২. প্রাপ্ত ওজন (গ্রাম)',
+    step1: '১. ফেলে দেওয়া উপাদান বেছে নিন (একাধিক পছন্দ)',
+    step2: '২. উপাদানের ওজন ও মোট মজুত',
     step3: '৩. তৈরিযোগ্য পুষ্টিকর খাবার',
     grams: 'গ্রাম',
     kg: 'কেজি',
@@ -175,15 +204,30 @@ const UI_TRANSLATIONS: Record<LanguageKey, Record<string, string>> = {
     customGrams: 'ওজন লিখুন',
     pwaInstall: 'ফোনে অ্যাপ ইনস্টল করুন',
     tipLabel: 'পুষ্টি ও স্বাস্থ্য তথ্য',
-    noScrapWarning: 'উপাদান বেছে নিয়ে ওজন দিন যাতে তৈরিযোগ্য পদ দেখতে পান।'
+    noScrapWarning: 'এক বা একাধিক উপাদান বেছে নিয়ে ওজন দিন যাতে তৈরিযোগ্য পদ দেখতে পান।',
+    selected: 'নির্বাচিত',
+    quickCombos: 'কম্বো',
+    selectAll: 'সব ১২টি',
+    reset: 'মুছুন',
+    totalStockpile: 'মোট মজুত',
+    comboVeggies: '🥕 সবজির খোসা',
+    comboStaples: '🍚 ভাত ও ডাল',
+    comboAromatics: '🌿 মশলা ও পাতা',
+    tapToToggle: 'একাধিক উপাদান যোগ করতে ট্যাপ করুন'
   }
 };
 
 export const OfflineWasteKiosk: React.FC = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageKey>('en');
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
-  const [selectedCategory, setSelectedCategory] = useState<OfflineScrapCategory>('ridge_gourd_peels');
-  const [scrapWeightGrams, setScrapWeightGrams] = useState<number>(250);
+  
+  // Multi-Select Scrap Stockpile: Record of category -> grams
+  const [selectedScraps, setSelectedScraps] = useState<Partial<Record<OfflineScrapCategory, number>>>({
+    ridge_gourd_peels: 200,
+    vegetable_trimmings: 250,
+    leftover_rice: 300
+  });
+  const [focusedCategory, setFocusedCategory] = useState<OfflineScrapCategory>('ridge_gourd_peels');
   const [activeRecipeId, setActiveRecipeId] = useState<string>('rec-ridge-gourd-thogayal');
   
   // Surplus Alert Modal State
@@ -197,6 +241,15 @@ export const OfflineWasteKiosk: React.FC = () => {
   const [pwaPrompt, setPwaPrompt] = useState<any>(null);
 
   const t = UI_TRANSLATIONS[selectedLanguage];
+
+  // Total weight & scrap count
+  const totalWeightGrams = useMemo(() => {
+    return Object.values(selectedScraps).reduce((sum: number, w) => sum + (w || 0), 0);
+  }, [selectedScraps]);
+
+  const selectedCount = useMemo(() => {
+    return Object.keys(selectedScraps).length;
+  }, [selectedScraps]);
 
   // Online / Offline connectivity listener
   useEffect(() => {
@@ -223,12 +276,16 @@ export const OfflineWasteKiosk: React.FC = () => {
     };
   }, []);
 
-  // Compute matched recipes using the client-side greedy constraint solver
+  // Compute matched recipes across ALL selected scraps using constraint solver
   const matchedResults: OfflineYieldResult[] = useMemo(() => {
-    return matchOfflineRecipes([
-      { category: selectedCategory, weightGrams: scrapWeightGrams }
-    ]);
-  }, [selectedCategory, scrapWeightGrams]);
+    const inputs: ScrapInputEntry[] = (Object.entries(selectedScraps) as [OfflineScrapCategory, number | undefined][])
+      .filter(([_, weightGrams]) => typeof weightGrams === 'number' && weightGrams > 0)
+      .map(([category, weightGrams]) => ({
+        category,
+        weightGrams: weightGrams as number
+      }));
+    return matchOfflineRecipes(inputs);
+  }, [selectedScraps]);
 
   const activeResult = useMemo(() => {
     if (matchedResults.length === 0) return null;
@@ -236,14 +293,113 @@ export const OfflineWasteKiosk: React.FC = () => {
     return found || matchedResults[0];
   }, [matchedResults, activeRecipeId]);
 
-  // Adjust weight helper
-  const adjustWeight = (delta: number) => {
-    setScrapWeightGrams(prev => Math.max(50, prev + delta));
+  // Toggle category on/off (Multi-Select)
+  const toggleCategory = (catKey: OfflineScrapCategory) => {
+    setSelectedScraps(prev => {
+      const next = { ...prev };
+      if (next[catKey]) {
+        delete next[catKey];
+        const remainingKeys = Object.keys(next) as OfflineScrapCategory[];
+        if (focusedCategory === catKey && remainingKeys.length > 0) {
+          setFocusedCategory(remainingKeys[0]);
+        }
+      } else {
+        const defaultGrams = CATEGORY_VISUAL_REGISTRY[catKey]?.defaultServingGrams || 250;
+        next[catKey] = defaultGrams;
+        setFocusedCategory(catKey);
+      }
+      return next;
+    });
   };
 
-  // Set quick weight preset
+  // Adjust weight for the currently focused scrap
+  const adjustWeight = (delta: number) => {
+    let targetKey = focusedCategory;
+    if (!targetKey) {
+      const first = Object.keys(selectedScraps)[0] as OfflineScrapCategory;
+      targetKey = first || 'ridge_gourd_peels';
+      setFocusedCategory(targetKey);
+    }
+    setSelectedScraps(prev => {
+      const current = prev[targetKey] || CATEGORY_VISUAL_REGISTRY[targetKey]?.defaultServingGrams || 250;
+      return {
+        ...prev,
+        [targetKey]: Math.max(50, current + delta)
+      };
+    });
+  };
+
+  // Set weight preset for focused scrap
   const setWeightPreset = (grams: number) => {
-    setScrapWeightGrams(grams);
+    let targetKey = focusedCategory;
+    if (!targetKey) {
+      const first = Object.keys(selectedScraps)[0] as OfflineScrapCategory;
+      targetKey = first || 'ridge_gourd_peels';
+      setFocusedCategory(targetKey);
+    }
+    setSelectedScraps(prev => ({
+      ...prev,
+      [targetKey]: grams
+    }));
+  };
+
+  // Adjust specific scrap weight directly
+  const adjustSpecificScrapWeight = (catKey: OfflineScrapCategory, delta: number, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSelectedScraps(prev => ({
+      ...prev,
+      [catKey]: Math.max(50, (prev[catKey] || 250) + delta)
+    }));
+  };
+
+  // Remove specific scrap directly
+  const removeSpecificScrap = (catKey: OfflineScrapCategory, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSelectedScraps(prev => {
+      const next = { ...prev };
+      delete next[catKey];
+      const remainingKeys = Object.keys(next) as OfflineScrapCategory[];
+      if (focusedCategory === catKey && remainingKeys.length > 0) {
+        setFocusedCategory(remainingKeys[0]);
+      }
+      return next;
+    });
+  };
+
+  // Apply Quick Combos
+  const handleApplyCombo = (type: 'veggies' | 'staples' | 'aromatics' | 'all' | 'clear') => {
+    if (type === 'veggies') {
+      setSelectedScraps({
+        ridge_gourd_peels: 200,
+        vegetable_trimmings: 250,
+        potato_peels: 200,
+        cauliflower_stalks: 250
+      });
+      setFocusedCategory('ridge_gourd_peels');
+    } else if (type === 'staples') {
+      setSelectedScraps({
+        leftover_rice: 300,
+        stale_roti_bread: 200,
+        dal_water: 400
+      });
+      setFocusedCategory('leftover_rice');
+    } else if (type === 'aromatics') {
+      setSelectedScraps({
+        herb_stems: 100,
+        onion_skins: 150,
+        citrus_peels: 150
+      });
+      setFocusedCategory('herb_stems');
+    } else if (type === 'all') {
+      const all: Partial<Record<OfflineScrapCategory, number>> = {};
+      (Object.keys(CATEGORY_VISUAL_REGISTRY) as OfflineScrapCategory[]).forEach(k => {
+        all[k] = CATEGORY_VISUAL_REGISTRY[k].defaultServingGrams;
+      });
+      setSelectedScraps(all);
+      setFocusedCategory('ridge_gourd_peels');
+    } else if (type === 'clear') {
+      setSelectedScraps({});
+    }
   };
 
   // Trigger PWA Installation
@@ -292,6 +448,13 @@ export const OfflineWasteKiosk: React.FC = () => {
 
     setTimeout(() => setShareFeedback(null), 5000);
   };
+
+  const currentFocusedWeight = selectedScraps[focusedCategory] ?? (CATEGORY_VISUAL_REGISTRY[focusedCategory]?.defaultServingGrams || 250);
+  const focusedMeta = CATEGORY_VISUAL_REGISTRY[focusedCategory] || CATEGORY_VISUAL_REGISTRY['ridge_gourd_peels'];
+  const focusedLabel = 
+    selectedLanguage === 'hi' ? focusedMeta.labelHi :
+    selectedLanguage === 'ta' ? focusedMeta.labelTa :
+    selectedLanguage === 'bn' ? focusedMeta.labelBn : focusedMeta.labelEn;
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
@@ -380,21 +543,77 @@ export const OfflineWasteKiosk: React.FC = () => {
         {/* Left Column (5 cols): Visual Scrap Picker & Weight Calibration */}
         <div className="lg:col-span-5 space-y-6">
           
-          {/* Section 1: Visual Scrap Category Selector */}
+          {/* Section 1: Visual Scrap Category Selector (Multi-Select Enabled) */}
           <div className="bg-[#FFFDF9] rounded-2xl p-5 border-2 border-stone-800 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-heading font-black uppercase tracking-wide text-stone-900 flex items-center space-x-1.5">
                 <span className="w-5 h-5 rounded-full bg-emerald-600 text-white inline-flex items-center justify-center text-xs font-bold">1</span>
                 <span>{t.step1}</span>
               </h2>
-              <span className="text-[11px] font-mono font-bold text-stone-500">12 Types Pre-loaded</span>
+              <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300">
+                {selectedCount} {t.selected}
+              </span>
             </div>
 
-            {/* Accessible Visual Grid of 12 Byproduct Categories */}
+            {/* Quick 1-Tap Combo Presets */}
+            <div className="space-y-1.5 pt-0.5">
+              <div className="flex items-center justify-between text-[11px] font-bold text-stone-600">
+                <span className="flex items-center space-x-1">
+                  <Layers className="w-3 h-3 text-stone-500" />
+                  <span>{t.quickCombos}:</span>
+                </span>
+                <span className="text-[10px] text-stone-600 font-mono">
+                  {t.tapToToggle}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => handleApplyCombo('veggies')}
+                  className="px-2.5 py-1 text-xs font-bold rounded-lg border border-stone-300 bg-white hover:bg-stone-50 text-stone-800 transition-all active:scale-95"
+                >
+                  {t.comboVeggies}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleApplyCombo('staples')}
+                  className="px-2.5 py-1 text-xs font-bold rounded-lg border border-stone-300 bg-white hover:bg-stone-50 text-stone-800 transition-all active:scale-95"
+                >
+                  {t.comboStaples}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleApplyCombo('aromatics')}
+                  className="px-2.5 py-1 text-xs font-bold rounded-lg border border-stone-300 bg-white hover:bg-stone-50 text-stone-800 transition-all active:scale-95"
+                >
+                  {t.comboAromatics}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleApplyCombo('all')}
+                  className="px-2.5 py-1 text-xs font-bold rounded-lg border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 transition-all active:scale-95"
+                >
+                  {t.selectAll}
+                </button>
+                {selectedCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => handleApplyCombo('clear')}
+                    className="px-2.5 py-1 text-xs font-bold rounded-lg border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 transition-all active:scale-95"
+                  >
+                    {t.reset}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Accessible Visual Grid of 12 Byproduct Categories (Multi-select) */}
             <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 gap-2 pt-1">
               {(Object.keys(CATEGORY_VISUAL_REGISTRY) as OfflineScrapCategory[]).map((catKey) => {
                 const meta = CATEGORY_VISUAL_REGISTRY[catKey];
-                const isSelected = selectedCategory === catKey;
+                const isSelected = Boolean(selectedScraps[catKey]);
+                const weight = selectedScraps[catKey];
+                const isFocused = focusedCategory === catKey && isSelected;
 
                 // Multilingual label
                 const label = 
@@ -405,18 +624,24 @@ export const OfflineWasteKiosk: React.FC = () => {
                 return (
                   <button
                     key={catKey}
-                    onClick={() => {
-                      setSelectedCategory(catKey);
-                      setScrapWeightGrams(meta.defaultServingGrams);
-                    }}
-                    className={`p-2.5 rounded-xl border-2 text-left flex flex-col items-center justify-center transition-all ${
+                    type="button"
+                    onClick={() => toggleCategory(catKey)}
+                    className={`relative p-2.5 rounded-xl border-2 text-left flex flex-col items-center justify-center transition-all ${
                       isSelected 
-                        ? 'border-emerald-700 bg-emerald-100/70 shadow-sm ring-2 ring-emerald-600/30' 
-                        : 'border-stone-200 bg-white hover:border-stone-400'
+                        ? isFocused
+                          ? 'border-emerald-700 bg-emerald-100/90 shadow-sm ring-2 ring-emerald-600'
+                          : 'border-emerald-600 bg-emerald-50/80 shadow-xs' 
+                        : 'border-stone-200 bg-white hover:border-stone-400 opacity-80 hover:opacity-100'
                     }`}
                   >
+                    {isSelected && (
+                      <div className="absolute top-1.5 right-1.5 flex items-center space-x-0.5 px-1 py-0.5 rounded bg-emerald-700 text-white text-[9px] font-mono font-bold leading-none shadow-xs">
+                        <CheckCircle2 className="w-2.5 h-2.5" />
+                        <span>{weight}g</span>
+                      </div>
+                    )}
                     <span className="text-2xl sm:text-3xl mb-1">{meta.iconSvg}</span>
-                    <span className="text-[11px] font-bold text-stone-900 text-center leading-tight line-clamp-2">
+                    <span className={`text-[11px] font-bold text-center leading-tight line-clamp-2 ${isSelected ? 'text-emerald-950 font-black' : 'text-stone-900'}`}>
                       {label}
                     </span>
                   </button>
@@ -425,7 +650,7 @@ export const OfflineWasteKiosk: React.FC = () => {
             </div>
           </div>
 
-          {/* Section 2: Weight Stepper & Tactile Presets */}
+          {/* Section 2: Scrap Stockpile & Focused Calibration */}
           <div className="bg-[#FFFDF9] rounded-2xl p-5 border-2 border-stone-800 shadow-xs space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-heading font-black uppercase tracking-wide text-stone-900 flex items-center space-x-1.5">
@@ -433,71 +658,162 @@ export const OfflineWasteKiosk: React.FC = () => {
                 <span>{t.step2}</span>
               </h2>
               <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                {(scrapWeightGrams / 1000).toFixed(2)} {t.kg}
+                {t.totalStockpile}: {(totalWeightGrams / 1000).toFixed(2)} {t.kg} ({totalWeightGrams}g)
               </span>
             </div>
 
-            {/* Stepper Display */}
-            <div className="flex items-center justify-between bg-stone-100 p-2 rounded-xl border border-stone-300">
-              <div className="flex items-center space-x-1.5">
-                <button
-                  onClick={() => adjustWeight(-100)}
-                  className="w-10 h-10 rounded-lg bg-white border border-stone-300 font-black text-stone-800 hover:bg-stone-50 active:scale-95 flex items-center justify-center shadow-xs"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => adjustWeight(-50)}
-                  className="px-2 h-10 rounded-lg bg-white border border-stone-300 font-mono text-xs font-bold text-stone-800 hover:bg-stone-50 active:scale-95"
-                >
-                  -50g
-                </button>
-              </div>
+            {/* Selected Scraps Stockpile Chips with inline controls */}
+            {selectedCount > 0 ? (
+              <div className="space-y-2">
+                <span className="text-[11px] font-mono text-stone-600 font-bold block">
+                  Active Stockpile ({selectedCount} items — click to fine-tune):
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {(Object.keys(selectedScraps) as OfflineScrapCategory[]).map((catKey) => {
+                    const scrapMeta = CATEGORY_VISUAL_REGISTRY[catKey];
+                    const weight = selectedScraps[catKey];
+                    const isFocused = focusedCategory === catKey;
+                    const catLabel = 
+                      selectedLanguage === 'hi' ? scrapMeta.labelHi :
+                      selectedLanguage === 'ta' ? scrapMeta.labelTa :
+                      selectedLanguage === 'bn' ? scrapMeta.labelBn : scrapMeta.labelEn;
 
-              <div className="text-center px-3">
-                <div className="text-2xl font-mono font-black text-stone-900">
-                  {scrapWeightGrams}
+                    return (
+                      <div
+                        key={catKey}
+                        onClick={() => setFocusedCategory(catKey)}
+                        className={`cursor-pointer inline-flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl border text-xs transition-all ${
+                          isFocused
+                            ? 'bg-emerald-100 border-emerald-600 text-emerald-950 font-bold ring-2 ring-emerald-500/40 shadow-xs'
+                            : 'bg-white border-stone-300 text-stone-800 hover:border-stone-400'
+                        }`}
+                      >
+                        <span>{scrapMeta.iconSvg}</span>
+                        <span className="font-bold truncate max-w-[110px]">{catLabel}</span>
+                        <span className="font-mono text-[11px] bg-white/80 px-1 py-0.5 rounded border border-stone-200 font-bold">
+                          {weight}g
+                        </span>
+                        
+                        {/* Quick +/- and remove buttons */}
+                        <div className="inline-flex items-center space-x-0.5 ml-1 border-l border-stone-300/80 pl-1">
+                          <button
+                            type="button"
+                            onClick={(e) => adjustSpecificScrapWeight(catKey, -50, e)}
+                            className="w-4 h-4 rounded bg-stone-200 hover:bg-stone-300 text-stone-800 inline-flex items-center justify-center text-[10px] font-mono font-bold"
+                            title="-50g"
+                          >
+                            -
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => adjustSpecificScrapWeight(catKey, 50, e)}
+                            className="w-4 h-4 rounded bg-stone-200 hover:bg-stone-300 text-stone-800 inline-flex items-center justify-center text-[10px] font-mono font-bold"
+                            title="+50g"
+                          >
+                            +
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => removeSpecificScrap(catKey, e)}
+                            className="w-4 h-4 rounded hover:bg-rose-100 text-rose-600 inline-flex items-center justify-center"
+                            title="Remove scrap"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-                <div className="text-[10px] font-mono uppercase tracking-wider text-stone-500 font-bold">
-                  {t.grams}
+              </div>
+            ) : (
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-center space-x-2">
+                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>Tap any category cards above to add scraps to your inventory.</span>
+              </div>
+            )}
+
+            {/* Stepper Display for Focused Scrap */}
+            <div className="bg-stone-100 p-3 rounded-xl border border-stone-300 space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold text-stone-800">
+                <span className="flex items-center space-x-1.5">
+                  <span className="text-base">{focusedMeta.iconSvg}</span>
+                  <span>{focusedLabel}</span>
+                </span>
+                <span className="text-[11px] font-mono text-stone-500">
+                  {selectedScraps[focusedCategory] ? 'Calibrating scrap weight' : 'Tap +/- to add to stockpile'}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between bg-white p-2 rounded-xl border border-stone-300">
+                <div className="flex items-center space-x-1.5">
+                  <button
+                    type="button"
+                    onClick={() => adjustWeight(-100)}
+                    className="w-10 h-10 rounded-lg bg-stone-50 border border-stone-300 font-black text-stone-800 hover:bg-stone-100 active:scale-95 flex items-center justify-center shadow-xs"
+                    title="-100g"
+                  >
+                    <Minus className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => adjustWeight(-50)}
+                    className="px-2 h-10 rounded-lg bg-stone-50 border border-stone-300 font-mono text-xs font-bold text-stone-800 hover:bg-stone-100 active:scale-95"
+                  >
+                    -50g
+                  </button>
+                </div>
+
+                <div className="text-center px-3">
+                  <div className="text-2xl font-mono font-black text-stone-900">
+                    {currentFocusedWeight}
+                  </div>
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-stone-500 font-bold">
+                    {t.grams}
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-1.5">
+                  <button
+                    type="button"
+                    onClick={() => adjustWeight(50)}
+                    className="px-2 h-10 rounded-lg bg-stone-50 border border-stone-300 font-mono text-xs font-bold text-stone-800 hover:bg-stone-100 active:scale-95"
+                  >
+                    +50g
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => adjustWeight(100)}
+                    className="w-10 h-10 rounded-lg bg-stone-50 border border-stone-300 font-black text-stone-800 hover:bg-stone-100 active:scale-95 flex items-center justify-center shadow-xs"
+                    title="+100g"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-1.5">
-                <button
-                  onClick={() => adjustWeight(50)}
-                  className="px-2 h-10 rounded-lg bg-white border border-stone-300 font-mono text-xs font-bold text-stone-800 hover:bg-stone-50 active:scale-95"
-                >
-                  +50g
-                </button>
-                <button
-                  onClick={() => adjustWeight(100)}
-                  className="w-10 h-10 rounded-lg bg-white border border-stone-300 font-black text-stone-800 hover:bg-stone-50 active:scale-95 flex items-center justify-center shadow-xs"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
+              {/* Quick Tactile Weight Presets */}
+              <div className="grid grid-cols-5 gap-1.5 pt-1">
+                {[100, 250, 500, 1000, 2000].map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => setWeightPreset(preset)}
+                    className={`py-1.5 rounded-lg text-xs font-mono font-bold transition-all border ${
+                      currentFocusedWeight === preset && selectedScraps[focusedCategory]
+                        ? 'bg-stone-900 text-white border-stone-900 shadow-xs'
+                        : 'bg-white text-stone-700 border-stone-300 hover:bg-stone-50'
+                    }`}
+                  >
+                    {preset >= 1000 ? `${preset / 1000}kg` : `${preset}g`}
+                  </button>
+                ))}
               </div>
-            </div>
-
-            {/* Quick Tactile Weight Presets for Street Vendors */}
-            <div className="grid grid-cols-5 gap-1.5">
-              {[100, 250, 500, 1000, 2000].map((preset) => (
-                <button
-                  key={preset}
-                  onClick={() => setWeightPreset(preset)}
-                  className={`py-1.5 rounded-lg text-xs font-mono font-bold transition-all border ${
-                    scrapWeightGrams === preset
-                      ? 'bg-stone-900 text-white border-stone-900 shadow-xs'
-                      : 'bg-white text-stone-700 border-stone-300 hover:bg-stone-100'
-                  }`}
-                >
-                  {preset >= 1000 ? `${preset / 1000}kg` : `${preset}g`}
-                </button>
-              ))}
             </div>
 
             {/* 1-Tap Shelter Surplus Trigger Button */}
             <button
+              type="button"
               onClick={() => {
                 setGeneratedOtp(generateHandoverOtp());
                 setIsSurplusModalOpen(true);
@@ -568,8 +884,12 @@ export const OfflineWasteKiosk: React.FC = () => {
                     <h3 className="text-lg font-heading font-black text-stone-900">
                       {activeResult.recipe.nameTranslations[selectedLanguage] || activeResult.recipe.name}
                     </h3>
-                    <p className="text-xs text-stone-500 font-mono mt-0.5">
-                      Input: {activeResult.recipe.scrapName} • {activeResult.recipe.minScrapGramsPerPortion}g / meal
+                    <p className="text-xs text-stone-500 font-mono mt-1 flex flex-wrap items-center gap-1.5">
+                      <span>Input: <strong className="text-stone-800">{activeResult.recipe.scrapName}</strong></span>
+                      <span>•</span>
+                      <span>Stockpile: <strong className="text-emerald-700">{selectedScraps[activeResult.recipe.primaryScrapCategory] || 0}g</strong></span>
+                      <span>•</span>
+                      <span>{activeResult.recipe.minScrapGramsPerPortion}g / meal</span>
                     </p>
                   </div>
 
