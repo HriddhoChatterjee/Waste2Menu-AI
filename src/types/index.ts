@@ -1,4 +1,4 @@
-export type Role = 'dashboard' | 'prep' | 'recipes' | 'pos' | 'ngo' | 'analytics' | 'user_recipes';
+export type Role = 'dashboard' | 'prep' | 'recipes' | 'pos' | 'ngo' | 'analytics' | 'user_recipes' | 'community_kiosk';
 
 export type UserPersona = 'chef' | 'normal_user';
 
@@ -189,4 +189,74 @@ export interface AppNotification {
   timestamp: string;
   roleTarget: Role | 'all';
   read: boolean;
+}
+
+export type OfflineScrapCategory = 
+  | 'ridge_gourd_peels'
+  | 'vegetable_trimmings'
+  | 'stale_roti_bread'
+  | 'leftover_rice'
+  | 'cauliflower_stalks'
+  | 'watermelon_rind'
+  | 'potato_peels'
+  | 'dal_water'
+  | 'herb_stems'
+  | 'poultry_bones'
+  | 'citrus_peels'
+  | 'onion_skins';
+
+export interface OfflineScrapRecipe {
+  id: string;
+  name: string;
+  nameTranslations: {
+    en: string;
+    hi: string;
+    ta: string;
+    bn: string;
+  };
+  primaryScrapCategory: OfflineScrapCategory;
+  scrapName: string;
+  minScrapGramsPerPortion: number;
+  pantryCostINR: number;
+  prepTimeMinutes: number;
+  difficulty: 'Very Easy' | 'Easy' | 'Moderate';
+  nutritionPerServing: {
+    calories: number;
+    proteinGrams: number;
+    fiberGrams: number;
+    ironMg?: number;
+    vitaminCMg?: number;
+    calciumMg?: number;
+  };
+  stapleSpicesNeeded: string[];
+  instructions: {
+    en: string[];
+    hi: string[];
+    ta: string[];
+    bn: string[];
+  };
+  culinaryTip: string;
+}
+
+export interface OfflineYieldResult {
+  recipe: OfflineScrapRecipe;
+  feasiblePortions: number;
+  totalPantryCostINR: number;
+  costPerPortionINR: number;
+  surplusGramsLeftover: number;
+  totalCalories: number;
+  totalProteinGrams: number;
+  totalFiberGrams: number;
+  suitabilityScore: number; // 0-100 based on matching yield
+}
+
+export interface SurplusAlertPayload {
+  id: string;
+  itemName: string;
+  portions: number;
+  kitchenName: string;
+  locationPin: string;
+  otp: string;
+  timestamp: string;
+  status: 'queued' | 'shared_sms' | 'shared_whatsapp' | 'synced_online';
 }

@@ -1,0 +1,640 @@
+[
+  {
+    "id": "rec-ridge-gourd-thogayal",
+    "name": "Ridge Gourd Peel Thogayal / Chutney",
+    "nameTranslations": {
+      "en": "Ridge Gourd Peel Chutney",
+      "hi": "तोरई के छिलके की पौष्टिक चटनी",
+      "ta": "பீர்க்கங்காய் தோல் துவையல்",
+      "bn": "ঝিঙে খোসার পুষ্টিকর ভর্তা"
+    },
+    "primaryScrapCategory": "ridge_gourd_peels",
+    "scrapName": "Ridge Gourd Peels & Tops",
+    "minScrapGramsPerPortion": 60,
+    "pantryCostINR": 4.5,
+    "prepTimeMinutes": 10,
+    "difficulty": "Very Easy",
+    "nutritionPerServing": {
+      "calories": 65,
+      "proteinGrams": 2.8,
+      "fiberGrams": 4.2,
+      "ironMg": 2.4,
+      "vitaminCMg": 14
+    },
+    "stapleSpicesNeeded": [
+      "Mustard Seeds",
+      "Urad Dal",
+      "Dry Red Chili",
+      "Tamarind Piece",
+      "Oil (1 tsp)",
+      "Salt"
+    ],
+    "instructions": {
+      "en": [
+        "Thoroughly wash ridge gourd peels and chop coarsely.",
+        "In a kadai, heat 1 tsp oil, roast urad dal, mustard seeds, and dry red chili until golden.",
+        "Add the chopped peels and sauté for 4-5 minutes until tender. Let cool and grind with tamarind and salt."
+      ],
+      "hi": [
+        "तोरई के छिलकों को धोकर बारीक काट लें।",
+        "कड़ाही में 1 चम्मच तेल गरम करें, उड़द दाल, राई और सूखी लाल मिर्च भूनें।",
+        "कटे हुए छिलके डालकर 4-5 मिनट भूनें। ठंडा करके नमक व इमली के साथ पीस लें।"
+      ],
+      "ta": [
+        "பீர்க்கங்காய் தோலை நன்றாகக் கழுவி நறுக்கிக் கொள்ளவும்.",
+        "வாணலியில் எண்ணெய் ஊற்றி உளுத்தம் பருப்பு, கடுகு, காய்ந்த மிளகாய் வறுக்கவும்.",
+        "தோலைச் சேர்த்து 5 நிமிடம் வதக்கி, புளி மற்றும் உப்பு சேர்த்து அரைக்கவும்."
+      ],
+      "bn": [
+        "ঝিঙের খোসা ভালো করে ধুয়ে কুচিয়ে নিন।",
+        "কড়াইতে সামান্য তেল গরম করে বিউলির ডাল, সর্ষে ও শুকনো লঙ্কা ভাজুন।",
+        "খোসা কুচি দিয়ে ৪-৫ মিনিট ভাজুন। ঠান্ডা হলে তেঁতুল ও নুন দিয়ে বেটে নিন।"
+      ]
+    },
+    "culinaryTip": "Rich in dietary fiber and chlorophyll; pairs wonderfully with hot rice, leftover idli, or roti."
+  },
+  {
+    "id": "rec-veg-trim-sambar-rasam",
+    "name": "Vegetable Trimming Sambar / Rasam Base",
+    "nameTranslations": {
+      "en": "Vegetable Trimming Sambar Base",
+      "hi": "सब्जी के छिलकों का पौष्टिक सांबर बेस",
+      "ta": "காய்கறி கழிவு ரசம் / சாம்பார் பேஸ்",
+      "bn": "সবজির খোসা ও বোঁটার সম্বর বেস"
+    },
+    "primaryScrapCategory": "vegetable_trimmings",
+    "scrapName": "Carrot/Gourd Peels, Tomato Tops & Stems",
+    "minScrapGramsPerPortion": 80,
+    "pantryCostINR": 5.0,
+    "prepTimeMinutes": 15,
+    "difficulty": "Easy",
+    "nutritionPerServing": {
+      "calories": 48,
+      "proteinGrams": 2.1,
+      "fiberGrams": 3.6,
+      "ironMg": 1.8,
+      "vitaminCMg": 18
+    },
+    "stapleSpicesNeeded": [
+      "Sambar/Rasam Powder",
+      "Turmeric",
+      "Crushed Garlic",
+      "Mustard Seeds",
+      "Curry Leaves",
+      "Salt"
+    ],
+    "instructions": {
+      "en": [
+        "Boil washed trimmings (carrot peels, bottle gourd scraps, tomato tops) with 2 cups water, turmeric, and salt for 10 mins.",
+        "Mash or strain the aromatic stock into a pot, adding 1 tsp sambar or rasam powder and crushed garlic.",
+        "Temper with mustard seeds and curry leaves. Simmer for 3 minutes for a restorative broth."
+      ],
+      "hi": [
+        "सब्जियों के छिलके (गाजर, लौकी, टमाटर के ऊपरी भाग) को हल्दी व नमक डालकर 10 मिनट उबालें।",
+        "छानकर सूप अलग करें, उसमें सांबर/रसम पाउडर और कुटा हुआ लहसुन मिलाएं।",
+        "राई और करी पत्ते का तड़का लगाकर 3 मिनट उबालें।"
+      ],
+      "ta": [
+        "காய்கறி கழிவுகளை மஞ்சள், உப்பு சேர்த்து 2 கப் தண்ணீரில் 10 நிமிடம் வேகவைக்கவும்.",
+        "வடிகட்டி சாம்பார்/ரசம் பொடி மற்றும் பூண்டு சேர்க்கவும்.",
+        "கடுகு, கருவேப்பிலை தாளித்து 3 நிமிடம் கொதிக்க வைக்கவும்."
+      ],
+      "bn": [
+        "গাজর, লাউয়ের খোসা ও টমেটোর অংশ হলুদ-নুন জলে ১০ মিনিট সেদ্ধ করুন।",
+        "ছেঁকে জলটা নিন, তাতে সম্বর বা রসম মশলা ও রসুন বাটা মেশান।",
+        "সর্ষে ও কারিপাতার ফোড়ন দিয়ে ৩ মিনিট ফুটিয়ে নিন।"
+      ]
+    },
+    "culinaryTip": "Extracts water-soluble vitamins B & C that are usually discarded; serves as a mineral-rich soup base."
+  },
+  {
+    "id": "rec-stale-roti-upma",
+    "name": "Stale Roti / Bread Spiced Upma",
+    "nameTranslations": {
+      "en": "Spiced Stale Roti Upma",
+      "hi": "बची हुई बासी रोटी का बघार उपमा",
+      "ta": "பழைய சப்பாத்தி / ரொட்டி உப்புமா",
+      "bn": "বাসি রুটির মশলাদার সুস্বাদু উপমা"
+    },
+    "primaryScrapCategory": "stale_roti_bread",
+    "scrapName": "Day-Old Roti / Bread Crusts",
+    "minScrapGramsPerPortion": 75,
+    "pantryCostINR": 6.0,
+    "prepTimeMinutes": 10,
+    "difficulty": "Very Easy",
+    "nutritionPerServing": {
+      "calories": 195,
+      "proteinGrams": 5.2,
+      "fiberGrams": 4.1,
+      "ironMg": 2.1,
+      "calciumMg": 32
+    },
+    "stapleSpicesNeeded": [
+      "Onion (1/2 chopped)",
+      "Green Chili",
+      "Turmeric Powder",
+      "Mustard Seeds",
+      "Curry Leaves",
+      "Oil (1 tsp)",
+      "Salt"
+    ],
+    "instructions": {
+      "en": [
+        "Shred or pulse leftover chapati/roti crusts into coarse bite-sized flakes. Sprinkle 2 tbsp water to soften.",
+        "Heat oil in a pan, add mustard seeds, slit green chili, chopped onion, and curry leaves. Sauté until onion turns translucent.",
+        "Add turmeric, salt, and roti flakes. Toss well on medium heat for 3 minutes until warmed through."
+      ],
+      "hi": [
+        "बासी रोटी के छोटे-छोटे टुकड़े कर लें या मिक्सी में दरदरा पीसें। 2 चम्मच पानी छिड़कें।",
+        "कड़ाही में तेल गरम करें, राई, हरी मिर्च, प्याज और करी पत्ता भूनें।",
+        "हल्दी, नमक और रोटी के टुकड़े डालकर 3 मिनट अच्छे से मिलाते हुए पकाएं।"
+      ],
+      "ta": [
+        "பழைய ரொட்டியைச் சிறு துண்டுகளாகப் பிய்த்துக் கொள்ளவும். 2 ஸ்பூன் தண்ணீர் தெளிக்கவும்.",
+        "எண்ணெயில் கடுகு, பச்சை மிளகாய், வெங்காயம், கருவேப்பிலை சேர்த்து வதக்கவும்.",
+        "மஞ்சள் தூள், உப்பு, ரொட்டித் துண்டுகள் சேர்த்து 3 நிமிடம் கிளறி இறக்கவும்."
+      ],
+      "bn": [
+        "বাসি রুটি হাত দিয়ে ছোট টুকরো করুন অথবা মিক্সিতে একবার ঘুরিয়ে নিন। সামান্য জল ছিটোন।",
+        "কড়াইতে তেল গরম করে সর্ষে, কাঁচালঙ্কা, পেঁয়াজ ও কারিপাতা ভাজুন।",
+        "হলুদ, নুন ও রুটির টুকরো দিয়ে ৩ মিনিট নেড়েচেড়ে গরম গরম পরিবেশন করুন।"
+      ]
+    },
+    "culinaryTip": "Transforms dry carbs into a hearty breakfast; complex carbohydrates sustain morning energy for manual workers."
+  },
+  {
+    "id": "rec-fermented-rice-kanji",
+    "name": "Fermented Rice Kanji / Pazhaya Sadam",
+    "nameTranslations": {
+      "en": "Fermented Probiotic Rice Kanji",
+      "hi": "बासी चावल की पाचक कांजी / पखाल",
+      "ta": "பழைய சோறு நீர் மோர் கஞ்சி",
+      "bn": "গাঁজানো পান্তা ভাতের কাঞ্জি"
+    },
+    "primaryScrapCategory": "leftover_rice",
+    "scrapName": "Leftover Cooked Rice",
+    "minScrapGramsPerPortion": 100,
+    "pantryCostINR": 3.0,
+    "prepTimeMinutes": 5,
+    "difficulty": "Very Easy",
+    "nutritionPerServing": {
+      "calories": 165,
+      "proteinGrams": 3.4,
+      "fiberGrams": 1.8,
+      "ironMg": 3.8,
+      "calciumMg": 45
+    },
+    "stapleSpicesNeeded": [
+      "Salt",
+      "Green Chili",
+      "Shallots/Raw Onion (1 small)",
+      "Curd/Buttermilk (1 tbsp)"
+    ],
+    "instructions": {
+      "en": [
+        "Submerge leftover cooked rice in water in a clay pot or steel vessel overnight (8-12 hours) at ambient temperature.",
+        "In the morning, lightly mash with fingers, adding salt and 1 tbsp curd or buttermilk.",
+        "Serve with crushed shallot and a bite of green chili for an ancient probiotic gut-shield meal."
+      ],
+      "hi": [
+        "बचे हुए पके चावल को रातभर पानी में भिगोकर ढककर रख दें (8-12 घंटे)।",
+        "सुबह हाथ से हल्का मसलें, नमक और एक चम्मच छाछ/दही मिलाएं।",
+        "कच्चे प्याज और हरी मिर्च के साथ सेवन करें। यह प्राकृतिक प्रोबायोटिक है।"
+      ],
+      "ta": [
+        "மீதமான சாதத்தை இரவு முழுவதும் தண்ணீரில் ஊறவைக்கவும்.",
+        "காலையில் கையால் பிசைந்து, உப்பு மற்றும் 1 ஸ்பூன் மோர் சேர்க்கவும்.",
+        "சின்ன வெங்காயம், பச்சை மிளகாயுடன் உட்கொள்ளவும். சிறந்த குடல் ஆரோக்கிய உணவு."
+      ],
+      "bn": [
+        "রাতের বেঁচে যাওয়া ভাত জলে ভিজিয়ে সারা রাত রেখে দিন।",
+        "সকালে হাত দিয়ে সামান্য মেখে নুন ও এক চামচ ঘোল বা দই মেশান।",
+        "কাঁচা পেঁয়াজ ও কাঁচালঙ্কা সহযোগে খান। প্রাকৃতিক প্রোবায়োটিক ভরপুর।"
+      ]
+    },
+    "culinaryTip": "Fermentation multiplies bioavailable Iron by up to 300% and creates cooling natural electrolytes for hot climates."
+  },
+  {
+    "id": "rec-cauliflower-stalk-bhaji",
+    "name": "Cauliflower Stalk & Rib Bhaji",
+    "nameTranslations": {
+      "en": "Spiced Cauliflower Stalk Stir-Fry",
+      "hi": "फूलगोभी के डंठल और पत्तों की भुर्जी",
+      "ta": "காலிஃபிளவர் தண்டு பொரியல்",
+      "bn": "ফুলকপির ডাঁটা ও পাতার চচ্চড়ি"
+    },
+    "primaryScrapCategory": "cauliflower_stalks",
+    "scrapName": "Cauliflower Stalks, Ribs & Green Leaves",
+    "minScrapGramsPerPortion": 90,
+    "pantryCostINR": 5.5,
+    "prepTimeMinutes": 12,
+    "difficulty": "Easy",
+    "nutritionPerServing": {
+      "calories": 82,
+      "proteinGrams": 4.1,
+      "fiberGrams": 5.4,
+      "ironMg": 2.8,
+      "calciumMg": 68
+    },
+    "stapleSpicesNeeded": [
+      "Cumin Seeds",
+      "Turmeric Powder",
+      "Red Chili Powder",
+      "Coriander Powder",
+      "Oil (1 tsp)",
+      "Salt"
+    ],
+    "instructions": {
+      "en": [
+        "Peel tough outer skin off cauliflower central stem; slice the tender core and green leaves into thin strips.",
+        "Heat 1 tsp oil in a pan, splutter cumin seeds, then add turmeric, chili powder, and sliced stalks.",
+        "Sprinkle 2 tbsp water, cover with lid, and cook on low heat for 7-8 minutes until crisp-tender. Season with salt."
+      ],
+      "hi": [
+        "फूलगोभी के मोटे डंठल की सख्त परत छील लें, अंदर का मुलायम भाग और हरी पत्तियां पतली काटें।",
+        "पैन में तेल गरम करें, जीरा तड़काएं, फिर हल्दी, मिर्च और कटे डंठल डालें।",
+        "2 चम्मच पानी छिड़ककर ढकें और धीमी आंच पर 7-8 मिनट पकाएं। नमक मिलाएं।"
+      ],
+      "ta": [
+        "காலிஃபிளவர் தண்டின் கடினமான பகுதியை நீக்கி, மெல்லியதாக நறுக்கவும்.",
+        "எண்ணெயில் சீரகம், மஞ்சள் தூள், மிளகாய் தூள் மற்றும் தண்டுத் துண்டுகளைச் சேர்க்கவும்.",
+        "சிறிது தண்ணீர் தெளித்து மூடி வைத்து 8 நிமிடம் வேகவைத்து உப்பு சேர்க்கவும்."
+      ],
+      "bn": [
+        "ফুলকপির মোটা ডাঁটার বাইরের শক্ত ছাল ছাড়িয়ে ভেতরের অংশ ও পাতা কুচিয়ে নিন।",
+        "কড়াইতে তেল গরম করে জিরে ফোড়ন দিয়ে হলুদ, লঙ্কা গুঁড়ো ও ডাঁটা দিন।",
+        "সামান্য জল দিয়ে ঢাকা দিয়ে কম আঁচে ৭-৮ মিনিট সেদ্ধ করে নুন মেশান।"
+      ]
+    },
+    "culinaryTip": "Cauliflower stems contain more calcium and fiber than the florets themselves; crisp texture mimics bamboo shoots."
+  },
+  {
+    "id": "rec-watermelon-rind-curry",
+    "name": "Watermelon Rind Kootu / Subzi",
+    "nameTranslations": {
+      "en": "Watermelon White Rind Curry",
+      "hi": "तरबूज के सफेद छिलके की सूखी सब्जी",
+      "ta": "தர்பூசணி வெள்ளை தோல் கூட்டு",
+      "bn": "তরমুজের সাদা অংশের তরকারি"
+    },
+    "primaryScrapCategory": "watermelon_rind",
+    "scrapName": "Watermelon White Rind (Green Peel Removed)",
+    "minScrapGramsPerPortion": 100,
+    "pantryCostINR": 5.0,
+    "prepTimeMinutes": 12,
+    "difficulty": "Easy",
+    "nutritionPerServing": {
+      "calories": 68,
+      "proteinGrams": 2.4,
+      "fiberGrams": 3.8,
+      "vitaminCMg": 16
+    },
+    "stapleSpicesNeeded": [
+      "Mustard Seeds",
+      "Chana Dal (1 tsp)",
+      "Turmeric",
+      "Green Chili",
+      "Curry Leaves",
+      "Salt"
+    ],
+    "instructions": {
+      "en": [
+        "Shave off dark green outer wax skin; dice the succulent white rind into 1 cm cubes.",
+        "In a kadai, heat 1 tsp oil, add mustard seeds, chana dal, green chili, and curry leaves until fragrant.",
+        "Add diced rind, turmeric, and salt. Cover and cook in its own natural moisture for 6-7 minutes until translucent."
+      ],
+      "hi": [
+        "तरबूज का हरा छिलका हटा दें, केवल सफेद गूदेदार भाग को छोटे टुकड़ों में काटें।",
+        "कड़ाही में 1 चम्मच तेल में राई, चना दाल, हरी मिर्च और करी पत्ता तड़काएं।",
+        "कटा हुआ सफेद छिलका, हल्दी और नमक डालकर ढकें। 6-7 मिनट अपने ही रस में पकने दें।"
+      ],
+      "ta": [
+        "தர்பூசணியின் பச்சைத் தோலை நீக்கி, வெள்ளை பகுதியைச் சிறு துண்டுகளாக நறுக்கவும்.",
+        "எண்ணெயில் கடுகு, கடலைப்பருப்பு, பச்சை மிளகாய், கருவேப்பிலை தாளிக்கவும்.",
+        "நறுக்கிய வெள்ளை தோல், மஞ்சள், உப்பு சேர்த்து மூடி 7 நிமிடம் வேகவிடவும்."
+      ],
+      "bn": [
+        "তরমুজের সবুজ খোসা ফেলে দিয়ে সাদা অংশটি ছোট ছোট টুকরো করে কাটুন।",
+        "তেলে সর্ষে, ছোলার ডাল, কাঁচালঙ্কা ও কারিপাতার ফোড়ন দিন।",
+        "টুকরো করা তরমুজের সাদা অংশ, হলুদ ও নুন দিয়ে ঢেকে ৭ মিনিট রান্না করুন।"
+      ]
+    },
+    "culinaryTip": "High in citrulline amino acid (supports blood pressure regulation); cooks tender just like bottle gourd / lauki."
+  },
+  {
+    "id": "rec-potato-peel-crispy-fry",
+    "name": "Potato Peel Crispy Bhaja / Chips",
+    "nameTranslations": {
+      "en": "Crispy Spiced Potato Skin Fry",
+      "hi": "आलू के छिलकों का कुरकुरा भुना स्नैक",
+      "ta": "உருளைக்கிழங்கு தோல் வறுவல்",
+      "bn": "আলুর খোসা মুচমুচে ভাজা"
+    },
+    "primaryScrapCategory": "potato_peels",
+    "scrapName": "Scrubbed & Cleaned Potato Peels",
+    "minScrapGramsPerPortion": 70,
+    "pantryCostINR": 4.0,
+    "prepTimeMinutes": 8,
+    "difficulty": "Very Easy",
+    "nutritionPerServing": {
+      "calories": 115,
+      "proteinGrams": 2.2,
+      "fiberGrams": 4.8,
+      "ironMg": 1.9,
+      "calciumMg": 18
+    },
+    "stapleSpicesNeeded": [
+      "Oil (1.5 tsp)",
+      "Red Chili Powder",
+      "Chaat Masala / Amchur",
+      "Turmeric",
+      "Salt"
+    ],
+    "instructions": {
+      "en": [
+        "Thoroughly scrub potatoes before peeling; pat the peels completely dry with a cloth.",
+        "Heat 1.5 tsp oil in an iron skillet on medium-high heat. Add dried peels in a single layer.",
+        "Roast for 5-6 minutes until golden and crisp. Toss off heat with chili powder, chaat masala, and salt."
+      ],
+      "hi": [
+        "आलू को छीलने से पहले अच्छी तरह धोएं, छिलकों को कपड़े से सुखा लें।",
+        "तवे पर 1.5 चम्मच तेल गरम करें, सूखे छिलके डालकर तेज आंच पर फैलाएं।",
+        "5-6 मिनट कुरकुरा होने तक भूनें। गैस बंद कर लाल मिर्च, चाट मसाला और नमक मिलाएं।"
+      ],
+      "ta": [
+        "உருளைக்கிழங்கு தோலை நன்றாகக் கழுவி, துணியால் துடைத்து உலர்த்தவும்.",
+        "தவாவில் எண்ணெய் சூடாக்கி தோலைச் சேர்த்து நன்கு வறுக்கவும்.",
+        "பொன்னிறமாக மொறுமொறுப்பானதும் மிளகாய் தூள், சாட் மசாலா, உப்பு சேர்த்துப் பரிமாறவும்."
+      ],
+      "bn": [
+        "আলু ভালো করে ধুয়ে খোসা ছাড়ান, খোসাগুলো শুকনো কাপড় দিয়ে মুছে নিন।",
+        "তাওয়ায় দেড় চামচ তেল গরম করে খোসাগুলো দিন।",
+        "৫-৬ মিনিট মুচমুচে করে ভাজুন। আঁচ বন্ধ করে লঙ্কাগুঁড়ো, চাট মশলা ও নুন ছড়ান।"
+      ]
+    },
+    "culinaryTip": "The skin contains 50% of the potato's total fiber and potassium; delicious zero-cost street crunch."
+  },
+  {
+    "id": "rec-dal-water-rasam",
+    "name": "Dal Water Nutrient Rasam / Shorba",
+    "nameTranslations": {
+      "en": "Nourishing Dal Water Rasam",
+      "hi": "दाल के पानी का पाचक रसम / शोरबा",
+      "ta": "பருப்பு தண்ணீர் ரசம்",
+      "bn": "ডাল সেদ্ধ জলের পাঁচক রসম"
+    },
+    "primaryScrapCategory": "dal_water",
+    "scrapName": "Excess Decanted Dal Boiling Water",
+    "minScrapGramsPerPortion": 150,
+    "pantryCostINR": 4.0,
+    "prepTimeMinutes": 8,
+    "difficulty": "Very Easy",
+    "nutritionPerServing": {
+      "calories": 52,
+      "proteinGrams": 3.2,
+      "fiberGrams": 1.4,
+      "ironMg": 1.5,
+      "calciumMg": 22
+    },
+    "stapleSpicesNeeded": [
+      "Cracked Black Pepper",
+      "Cumin Seeds",
+      "Crushed Garlic (2 cloves)",
+      "Hing (Pinch)",
+      "Mustard Seeds",
+      "Salt"
+    ],
+    "instructions": {
+      "en": [
+        "Collect the nutrient-rich yellow broth poured off when boiling toor or moong dal.",
+        "Add crushed black pepper, cumin, crushed garlic cloves, and a pinch of hing directly to the broth.",
+        "Bring to a rolling boil for 3 minutes, then temper with mustard seeds in half tsp oil."
+      ],
+      "hi": [
+        "दाल उबालने के बाद ऊपर का बचा हुआ गाढ़ा पीला पानी इकट्ठा करें।",
+        "काली मिर्च, जीरा, कुटा लहसुन और हींग दाल के पानी में मिलाएं।",
+        "3 मिनट उबालें और आधा चम्मच तेल में राई का तड़का लगाएं।"
+      ],
+      "ta": [
+        "பருப்பு வேகவைத்த நீரை வடிகட்டி எடுத்துக் கொள்ளவும்.",
+        "மிளகு, சீரகம், தட்டிய பூண்டு, பெருங்காயம் சேர்க்கவும்.",
+        "3 நிமிடம் கொதிக்க வைத்து, கடுகினால் தாளிக்கவும். சளி, இருமலுக்குச் சிறந்த மருந்து."
+      ],
+      "bn": [
+        "ডাল সেদ্ধ করার পর ওপরের পাতলা পুষ্টিকর জল আলাদা করে রাখুন।",
+        "গোলমরিচ গুঁড়ো, জিরে, থেঁতো করা রসুন ও হিং মেশান।",
+        "৩ মিনিট ফুটিয়ে সামান্য তেলে সর্ষে ফোড়ন দিন। সর্দি-কাশির উপশমে দারুণ উপকারী।"
+      ]
+    },
+    "culinaryTip": "Lentil boiling water is dense with soluble albumins and B-vitamins; gentle on sick stomachs and elderly digestion."
+  },
+  {
+    "id": "rec-herb-stem-seasoning-salt",
+    "name": "Herb Stem Spiced Finishing Salt",
+    "nameTranslations": {
+      "en": "Spiced Herb Stem Seasoning Salt",
+      "hi": "धनिया-पुदीना डंठल का मसालेदार पाचक नमक",
+      "ta": "கொத்தமல்லி தண்டு பொடி உப்பு",
+      "bn": "ধনেপাতা বোঁটার সুগন্ধি মশলা নুন"
+    },
+    "primaryScrapCategory": "herb_stems",
+    "scrapName": "Coriander, Mint & Curry Leaf Stems",
+    "minScrapGramsPerPortion": 40,
+    "pantryCostINR": 2.5,
+    "prepTimeMinutes": 6,
+    "difficulty": "Very Easy",
+    "nutritionPerServing": {
+      "calories": 18,
+      "proteinGrams": 0.8,
+      "fiberGrams": 1.2,
+      "ironMg": 1.1,
+      "vitaminCMg": 8
+    },
+    "stapleSpicesNeeded": [
+      "Coarse Rock Salt",
+      "Roasted Cumin",
+      "Black Pepper",
+      "Amchur / Dry Mango Powder"
+    ],
+    "instructions": {
+      "en": [
+        "Finely crush clean coriander, mint, or curry leaf stems in a mortar and pestle.",
+        "Dry-roast the mashed stems in a warm kadai for 2 minutes to remove moisture without burning.",
+        "Pound together with coarse salt, roasted cumin, and black pepper for a multi-use zesty seasoning."
+      ],
+      "hi": [
+        "धनिया, पुदीना या करी पत्ते के डंठल को ओखली में कूट लें।",
+        "कड़ाही में 2 मिनट सूखा भूनें ताकि नमी उड़ जाए।",
+        "मोटे नमक, भुना जीरा और काली मिर्च के साथ पीसकर रख लें।"
+      ],
+      "ta": [
+        "கொத்தமல்லி, புதினா தண்டுகளை உரலில் இடித்துக் கொள்ளவும்.",
+        "வாணலியில் 2 நிமிடம் வறுத்து ஈரப்பதத்தை நீக்கவும்.",
+        "கல் உப்பு, வறுத்த சீரகம், மிளகு சேர்த்து பொடி செய்து வைக்கவும்."
+      ],
+      "bn": [
+        "ধনেপাতা বা পুদিনার বোঁটা হামানদিস্তায় ভালো করে থেঁতো করুন।",
+        "কড়াইতে তেল ছাড়া ২ মিনিট নেড়ে জলীয় ভাব শুকিয়ে নিন।",
+        "সৈন্ধব নুন, ভাজা জিরে ও গোলমরিচের সাথে গুঁড়ো করে সংরক্ষণ করুন।"
+      ]
+    },
+    "culinaryTip": "Essential aromatic oils are concentrated in herb stems; seasons snacks, boiled potatoes, and street cutlets."
+  },
+  {
+    "id": "rec-roasted-bone-paya-broth",
+    "name": "Roasted Bone Collagen Soup / Paya Broth",
+    "nameTranslations": {
+      "en": "Bone Collagen Soup / Paya Broth",
+      "hi": "हड्डियों का गुणकारी शोरबा / पाया सूप",
+      "ta": "எலும்பு சூப் / கொலாஜன் குழம்பு",
+      "bn": "হাড়ের পুষ্টিকর শোরবা / পায়া স্যুপ"
+    },
+    "primaryScrapCategory": "poultry_bones",
+    "scrapName": "Poultry & Mutton Trim Bones / Joints",
+    "minScrapGramsPerPortion": 120,
+    "pantryCostINR": 7.0,
+    "prepTimeMinutes": 25,
+    "difficulty": "Easy",
+    "nutritionPerServing": {
+      "calories": 135,
+      "proteinGrams": 12.8,
+      "fiberGrams": 0.5,
+      "ironMg": 2.2,
+      "calciumMg": 180
+    },
+    "stapleSpicesNeeded": [
+      "Crushed Ginger-Garlic (1 tsp)",
+      "Turmeric",
+      "Cracked Black Pepper",
+      "Coriander Seeds",
+      "Salt"
+    ],
+    "instructions": {
+      "en": [
+        "Rinse leftover bones and crack joints with a heavy knife to expose the marrow.",
+        "Pressure cook bones with 3 cups water, 1 tsp ginger-garlic, turmeric, cracked pepper, and salt for 4-5 whistles.",
+        "Strain the deeply golden collagen broth into cups; season with extra black pepper."
+      ],
+      "hi": [
+        "हड्डियों को धोएं और बड़े जोड़ों को चाकू के पिछले भाग से तोड़ें ताकि मज्जा बाहर आ सके।",
+        "कुकर में 3 कप पानी, अदरक-लहसुन, हल्दी, काली मिर्च और नमक डालकर 4-5 सीटी लगाएं।",
+        "छानकर गरमा-गरम परोसें। जोड़ों के दर्द व कमजोरी में अचूक टॉनिक।"
+      ],
+      "ta": [
+        "எலும்புகளைக் கழுவி, மூட்டுகளை உடைத்துக் கொள்ளவும்.",
+        "குக்கரில் 3 கப் தண்ணீர், இஞ்சி-பூண்டு, மஞ்சள், மிளகு, உப்பு சேர்த்து 5 விசில் விடவும்.",
+        "வடிகட்டி சூடாகப் பருகவும். எலும்புகளுக்கு அபார வலிமை தரும்."
+      ],
+      "bn": [
+        "হাড়গুলো ধুয়ে বড় সন্ধিগুলো ভেঙে নিন যাতে মজ্জা বেরিয়ে আসে।",
+        "প্রেসার কুকারে ৩ কাপ জল, আদা-রসুন বাটা, হলুদ, গোলমরিচ ও নুন দিয়ে ৪-৫টি সিটি দিন।",
+        "ছেঁকে গরম গরম পরিবেশন করুন। হাড় ও জয়েন্টের জন্য অত্যন্ত পুষ্টিকর।"
+      ]
+    },
+    "culinaryTip": "Slow-extracted gelatin and calcium rebuild strength for malnourished children, manual laborers, and post-partum mothers."
+  },
+  {
+    "id": "rec-citrus-peel-pickle",
+    "name": "Citrus Peel Instant Digestive Pickle",
+    "nameTranslations": {
+      "en": "Citrus Peel Instant Pickle",
+      "hi": "नींबू-संतरे के छिलकों का पाचक अचार",
+      "ta": "எலுமிச்சை தோல் உடனடி ஊறுகாய்",
+      "bn": "লেবুর খোসার চটজলদি পাঁচক আচার"
+    },
+    "primaryScrapCategory": "citrus_peels",
+    "scrapName": "Squeezed Lemon & Orange Rinds",
+    "minScrapGramsPerPortion": 50,
+    "pantryCostINR": 4.5,
+    "prepTimeMinutes": 10,
+    "difficulty": "Very Easy",
+    "nutritionPerServing": {
+      "calories": 42,
+      "proteinGrams": 1.1,
+      "fiberGrams": 3.2,
+      "vitaminCMg": 24
+    },
+    "stapleSpicesNeeded": [
+      "Salt (1.5 tsp)",
+      "Red Chili Powder",
+      "Roasted Fenugreek Powder",
+      "Mustard Oil (1 tsp)",
+      "Hing"
+    ],
+    "instructions": {
+      "en": [
+        "Chop squeezed lemon or orange skins into small squares.",
+        "Boil in a cup of salted water for 3 minutes to reduce bitterness, then drain.",
+        "Toss warm rinds with mustard oil, red chili powder, roasted fenugreek powder, hing, and salt."
+      ],
+      "hi": [
+        "निचोड़े हुए नींबू के छिलकों को छोटे टुकड़ों में काट लें।",
+        "कड़वाहट कम करने के लिए 3 मिनट नमक के पानी में उबालें और छान लें।",
+        "सरसों का तेल, लाल मिर्च, भुनी मेथी का पाउडर, हींग और नमक मिलाकर जार में भरें।"
+      ],
+      "ta": [
+        "பிழிந்த எலுமிச்சை தோலைச் சிறு சதுரங்களாக நறுக்கவும்.",
+        "கசப்பைப் போக்க உப்பு நீரில் 3 நிமிடம் கொதிக்க வைத்து வடிகட்டவும்.",
+        "கடுகு எண்ணெய், மிளகாய் தூள், வறுத்த வெந்தயப் பொடி, பெருங்காயம், உப்பு சேர்த்துக் கலக்கவும்."
+      ],
+      "bn": [
+        "রস নিংড়ানো লেবুর খোসা ছোট ছোট টুকরো করে কেটে নিন।",
+        "তেতো ভাব কমাতে নুন জলে ৩ মিনিট ফুটিয়ে জল ঝরিয়ে নিন।",
+        "সর্ষের তেল, লঙ্কাগুঁড়ো, ভাজা মেথি গুঁড়ো, হিং ও নুন দিয়ে মেখে রাখুন।"
+      ]
+    },
+    "culinaryTip": "Citrus bioflavonoids stimulate saliva and digestive bile; keeps for 2 weeks without refrigeration."
+  },
+  {
+    "id": "rec-onion-skin-golden-broth",
+    "name": "Onion Skin Immunity Golden Broth",
+    "nameTranslations": {
+      "en": "Onion Skin & Scrap Golden Broth",
+      "hi": "प्याज के छिलकों का सुनहरा इम्यूनिटी काढ़ा",
+      "ta": "வெங்காயத் தோல் கோல்டன் சூப்",
+      "bn": "পেঁয়াজের লাল খোসার গোল্ডেন ব্রোথ"
+    },
+    "primaryScrapCategory": "onion_skins",
+    "scrapName": "Clean Papery Red Onion Skins & Root Knots",
+    "minScrapGramsPerPortion": 40,
+    "pantryCostINR": 3.0,
+    "prepTimeMinutes": 10,
+    "difficulty": "Very Easy",
+    "nutritionPerServing": {
+      "calories": 25,
+      "proteinGrams": 1.2,
+      "fiberGrams": 2.2,
+      "vitaminCMg": 10
+    },
+    "stapleSpicesNeeded": [
+      "Cracked Black Pepper",
+      "Cloves (2)",
+      "Turmeric Pinch",
+      "Ginger Slice",
+      "Salt"
+    ],
+    "instructions": {
+      "en": [
+        "Collect dry papery outer skins and root knots of red onions; rinse off surface dust.",
+        "Simmer in 2 cups of boiling water with ginger, turmeric, black pepper, and cloves for 8 minutes.",
+        "Strain the brilliant golden broth; season with salt and drink hot for respiratory comfort."
+      ],
+      "hi": [
+        "लाल प्याज के सूखे छिलके और जड़ वाले हिस्से को धो लें।",
+        "2 कप पानी में अदरक, हल्दी, काली मिर्च और लौंग डालकर 8 मिनट धीमी आंच पर उबालें।",
+        "छानकर सुनहरा काढ़ा गरमा-गरम पिएं। यह खांसी और गले की खराश में राहत देता है।"
+      ],
+      "ta": [
+        "வெங்காயத்தின் மேல் தோல் மற்றும் வேர்ப்பகுதியைக் கழுவி எடுக்கவும்.",
+        "2 கப் தண்ணீரில் இஞ்சி, மஞ்சள், மிளகு, கிராம்பு சேர்த்து 8 நிமிடம் கொதிக்க வைக்கவும்.",
+        "வடிகட்டி உப்பு சேர்த்து சூடாகப் பருகவும். நோய் எதிர்ப்புச் சக்தி தரும்."
+      ],
+      "bn": [
+        "লাল পেঁয়াজের শুকনো লাল খোসা ও শিকড়ের অংশটি ধুয়ে নিন।",
+        "২ কাপ জলে আদা, হলুদ, গোলমরিচ ও লবঙ্গ দিয়ে ৮ মিনিট ফোটান।",
+        "ছেঁকে নুন মিশিয়ে গরম গরম পান করুন। রোগ প্রতিরোধ ক্ষমতা বাড়ায় ও গলা খুসখুস কমায়।"
+      ]
+    },
+    "culinaryTip": "Outer onion skins are packed with Quercetin, a potent anti-inflammatory antioxidant that strengthens respiratory immunity."
+  }
+]

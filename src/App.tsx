@@ -8,6 +8,7 @@ import { NormalUserRecipeView } from './components/recipes/NormalUserRecipeView'
 import { PosTerminal } from './components/pos/PosTerminal';
 import { NgoPortal } from './components/ngo/NgoPortal';
 import { AnalyticsDashboard } from './components/analytics/AnalyticsDashboard';
+import { OfflineWasteKiosk } from './components/OfflineWasteKiosk';
 
 export function App() {
   const { currentRole } = useAppStore();
@@ -43,6 +44,7 @@ export function App() {
         {currentRole === 'pos' && <PosTerminal />}
         {currentRole === 'ngo' && <NgoPortal />}
         {currentRole === 'analytics' && <AnalyticsDashboard />}
+        {currentRole === 'community_kiosk' && <OfflineWasteKiosk />}
       </main>
 
     </div>

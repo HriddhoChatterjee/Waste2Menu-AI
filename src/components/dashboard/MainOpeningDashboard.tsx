@@ -32,6 +32,8 @@ import {
 } from 'lucide-react';
 import { sounds } from '../../utils/soundEffects';
 import { ScrollReveal } from '../common/ScrollReveal';
+import { RecipeDetailModal } from '../recipes/RecipeDetailModal';
+import { BusinessModelModal } from '../business/BusinessModelModal';
 
 export const MainOpeningDashboard: React.FC = () => {
   const { 
@@ -53,6 +55,8 @@ export const MainOpeningDashboard: React.FC = () => {
   const [activePipelineStep, setActivePipelineStep] = useState<number>(0);
   // Quick Dish Inspector Modal state
   const [inspectingDish, setInspectingDish] = useState<RecipeDish | null>(null);
+  // Business Model Modal state
+  const [isBizModelOpen, setIsBizModelOpen] = useState<boolean>(false);
 
   const totalScrapDiverted = scraps.reduce((acc, s) => acc + s.weightKg, 0) + 128.5;
   const totalRevenue = completedOrders.reduce((acc, o) => acc + o.totalAmount, 0) + 42500;
@@ -223,11 +227,11 @@ export const MainOpeningDashboard: React.FC = () => {
 
             {/* Mission Description */}
             <p className="text-base sm:text-lg text-stone-600 font-sans max-w-2xl mx-auto leading-relaxed">
-              Waste2Menu AI bridges commercial restaurant kitchens and everyday home cooks. Upload an image of food scraps, let our vision AI detect ingredients, enter precise weights, and instantly unlock master-crafted reverse recipes while tracking cumulative food waste diverted from landfills.
+              <span className="font-bold text-stone-900">Not a food delivery app</span> — Waste2Menu AI is an enterprise Circular KitchenOS and Zero-Waste Recipe Engine. Commercial kitchens cut wholesale food costs by 18.4% by transforming prep trimmings into high-margin daily specials, while home cooks select what leftovers they have to instantly unlock master-crafted step-by-step recipes.
             </p>
 
             {/* Action CTAs with Radiant Shimmer */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
               {isAuthenticated ? (
                 userPersona === 'chef' ? (
                   <>
@@ -259,24 +263,24 @@ export const MainOpeningDashboard: React.FC = () => {
                     <button
                       onClick={() => {
                         sounds.playTap();
-                        setRole('prep');
+                        setRole('user_recipes');
                       }}
                       className="btn-shimmer w-full sm:w-auto px-7 py-4 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-heading font-black text-sm shadow-md hover:shadow-xl transition-all transform active:scale-95 flex items-center justify-center space-x-2"
                     >
-                      <UploadCloud className="w-4 h-4 text-emerald-200" />
-                      <span>Upload Leftovers & Enter Weights</span>
+                      <ChefHat className="w-4 h-4 text-emerald-200" />
+                      <span>Interactive Ingredient Matcher & Recipes</span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
 
                     <button
                       onClick={() => {
                         sounds.playTap();
-                        setRole('user_recipes');
+                        setRole('prep');
                       }}
                       className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white hover:bg-stone-50 text-stone-800 border border-[#E8DFD1] font-heading font-bold text-sm shadow-xs hover:border-emerald-400 transition-all flex items-center justify-center space-x-2"
                     >
-                      <ChefHat className="w-4 h-4 text-emerald-700" />
-                      <span>Explore Chef-Crafted Recipes</span>
+                      <UploadCloud className="w-4 h-4 text-emerald-700" />
+                      <span>Camera Scan Leftovers</span>
                     </button>
                   </>
                 )
@@ -285,24 +289,35 @@ export const MainOpeningDashboard: React.FC = () => {
                   <button
                     onClick={() => {
                       sounds.playTap();
-                      openAuthModal('signin');
+                      setRole('user_recipes');
                     }}
-                    className="btn-shimmer w-full sm:w-auto px-7 py-4 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-heading font-black text-sm shadow-md hover:shadow-xl transition-all transform active:scale-95 flex items-center justify-center space-x-2"
+                    className="btn-shimmer w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-heading font-black text-sm shadow-md hover:shadow-xl transition-all transform active:scale-95 flex items-center justify-center space-x-2"
                   >
-                    <LogIn className="w-4 h-4 text-emerald-200" />
-                    <span>Sign In to Your Workspace</span>
+                    <Sparkles className="w-4 h-4 text-emerald-200" />
+                    <span>Try Ingredient Selector & Recipes</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
 
                   <button
                     onClick={() => {
                       sounds.playTap();
-                      openAuthModal('register');
+                      setIsBizModelOpen(true);
                     }}
-                    className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white hover:bg-stone-50 text-stone-800 border border-[#E8DFD1] font-heading font-bold text-sm shadow-xs hover:border-emerald-400 transition-all flex items-center justify-center space-x-2"
+                    className="w-full sm:w-auto px-5 py-3.5 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 font-heading font-bold text-xs shadow-xs transition-all flex items-center justify-center space-x-1.5"
                   >
-                    <Users className="w-4 h-4 text-emerald-700" />
-                    <span>Create Account (Chef or Home Cook)</span>
+                    <Coins className="w-4 h-4 text-amber-700" />
+                    <span>Commercial Business Model & ROI</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      sounds.playTap();
+                      openAuthModal('signin');
+                    }}
+                    className="w-full sm:w-auto px-5 py-3.5 rounded-2xl bg-white hover:bg-stone-50 text-stone-800 border border-[#E8DFD1] font-heading font-bold text-xs shadow-xs hover:border-emerald-400 transition-all flex items-center justify-center space-x-1.5"
+                  >
+                    <LogIn className="w-4 h-4 text-emerald-700" />
+                    <span>Sign In</span>
                   </button>
                 </>
               )}
@@ -820,6 +835,81 @@ export const MainOpeningDashboard: React.FC = () => {
         </ScrollReveal>
       </section>
 
+      {/* 5.5 Commercial B2B Business Model & Monetization Engine Section */}
+      <ScrollReveal direction="up" distance={24}>
+        <section className="bg-gradient-to-br from-white via-[#FFFDF9] to-[#FAF7F2] border border-[#E8DFD1] p-6 sm:p-10 rounded-3xl shadow-xs space-y-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E8DFD1] pb-5">
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-mono font-bold">
+                <Coins className="w-3.5 h-3.5 text-amber-700" />
+                <span>B2B Commercial Architecture & Revenue Model</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-heading font-black text-stone-900">
+                Not a Food Delivery App — A Circular Kitchen Profit Engine
+              </h2>
+              <p className="text-xs sm:text-sm text-stone-600 font-sans max-w-2xl leading-relaxed">
+                Hospitality kitchens throw away 18%–25% of all purchased food. Waste2Menu empowers chefs to monetize prep trimmings into high-margin daily specials, claim CSR tax deductions, and automate ESG compliance.
+              </p>
+            </div>
+
+            <button
+              onClick={() => {
+                sounds.playTap();
+                setIsBizModelOpen(true);
+              }}
+              className="btn-shimmer px-5 py-3.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-heading font-black text-xs shadow-md transition-all flex items-center space-x-2 shrink-0 active:scale-95"
+            >
+              <Coins className="w-4 h-4 text-emerald-200" />
+              <span>Inspect B2B Unit Economics & SaaS Tiers</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* 4 Pillars of Commercial Monetization */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-white p-5 rounded-2xl border border-[#E8DFD1] shadow-xs space-y-2 card-3d-hover">
+              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-sm">
+                18%
+              </div>
+              <h4 className="font-heading font-bold text-stone-900 text-sm">Food Procurement Savings</h4>
+              <p className="text-xs text-stone-600 leading-relaxed font-sans">
+                Commercial kitchens stop purchasing pre-made vegetable stocks, soup bases, and glazes by upcycling on-premise scraps.
+              </p>
+            </div>
+
+            <div className="bg-white p-5 rounded-2xl border border-[#E8DFD1] shadow-xs space-y-2 card-3d-hover">
+              <div className="w-9 h-9 rounded-xl bg-violet-100 text-violet-800 flex items-center justify-center font-bold text-sm">
+                92%
+              </div>
+              <h4 className="font-heading font-bold text-stone-900 text-sm">Daily Special Margins</h4>
+              <p className="text-xs text-stone-600 leading-relaxed font-sans">
+                Byproducts carry zero raw acquisition cost. Daily specials deployed to the POS generate pure gross revenue.
+              </p>
+            </div>
+
+            <div className="bg-white p-5 rounded-2xl border border-[#E8DFD1] shadow-xs space-y-2 card-3d-hover">
+              <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-sm">
+                80G
+              </div>
+              <h4 className="font-heading font-bold text-stone-900 text-sm">Automated CSR Tax Credits</h4>
+              <p className="text-xs text-stone-600 leading-relaxed font-sans">
+                Unsold portions at shift end automatically dispatch to partner shelters, generating tamper-proof 80G tax receipts.
+              </p>
+            </div>
+
+            <div className="bg-white p-5 rounded-2xl border border-[#E8DFD1] shadow-xs space-y-2 card-3d-hover">
+              <div className="w-9 h-9 rounded-xl bg-sky-100 text-sky-800 flex items-center justify-center font-bold text-sm">
+                ESG
+              </div>
+              <h4 className="font-heading font-bold text-stone-900 text-sm">Scope 3 Emission Certs</h4>
+              <p className="text-xs text-stone-600 leading-relaxed font-sans">
+                Full compliance with ISO 14001 and UN SDG 12.3 audits, positioning enterprise restaurant chains for sustainability incentives.
+              </p>
+            </div>
+          </div>
+        </section>
+      </ScrollReveal>
+
       {/* 6. Kitchen & Home Suites Comparison Section (#suites) */}
       <section id="suites" className="space-y-6 scroll-mt-24">
         <ScrollReveal direction="up" distance={20}>
@@ -1055,136 +1145,18 @@ export const MainOpeningDashboard: React.FC = () => {
 
       </section>
 
-      {/* 7. Quick Recipe Inspector Modal (from Marquee Click) */}
-      {inspectingDish && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 backdrop-blur-sm flex justify-center items-start p-4 pt-24 sm:pt-28 pb-16 animate-in fade-in zoom-in-95 duration-200">
-          <div className="bg-[#FFFDF9] border border-[#E8DFD1] rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative space-y-5">
-            
-            {/* Close button */}
-            <button
-              onClick={() => setInspectingDish(null)}
-              className="absolute top-5 right-5 p-2 rounded-xl text-stone-400 hover:text-stone-800 hover:bg-stone-100 transition-colors z-10"
-            >
-              <X className="w-5 h-5" />
-            </button>
+      {/* 7. Masterclass Step-by-Step Recipe Detail Modal */}
+      <RecipeDetailModal
+        recipe={inspectingDish}
+        isOpen={!!inspectingDish}
+        onClose={() => setInspectingDish(null)}
+      />
 
-            {/* Dish Photo Banner */}
-            {inspectingDish.imageUrl && (
-              <div className="relative w-full h-52 sm:h-64 rounded-2xl overflow-hidden border border-[#E8DFD1] bg-stone-100 shadow-sm">
-                <img 
-                  src={inspectingDish.imageUrl} 
-                  alt={inspectingDish.title} 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white">
-                  <span className="px-3 py-1 rounded-xl bg-emerald-700/90 text-xs font-mono font-bold backdrop-blur-xs">
-                    {inspectingDish.category}
-                  </span>
-                  <span className="px-3 py-1 rounded-xl bg-black/60 text-xs font-mono font-bold backdrop-blur-xs">
-                    ₹{inspectingDish.suggestedPrice.toFixed(0)} / portion
-                  </span>
-                </div>
-              </div>
-            )}
-
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-violet-100 text-violet-800 border border-violet-200">
-                  {inspectingDish.marginPercent}% Upcycled Profit Margin
-                </span>
-                {inspectingDish.author && (
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1">
-                    <ChefHat className="w-3 h-3" />
-                    <span>{inspectingDish.author}</span>
-                  </span>
-                )}
-              </div>
-
-              <h2 className="text-2xl font-heading font-black text-stone-900 mt-1">
-                {inspectingDish.title}
-              </h2>
-              <p className="text-xs sm:text-sm text-stone-600 font-sans mt-1 leading-relaxed">
-                {inspectingDish.description}
-              </p>
-            </div>
-
-            {/* Metrics */}
-            <div className="grid grid-cols-3 gap-3 bg-[#FAF7F2] p-3.5 rounded-2xl border border-[#E8DFD1] text-xs font-mono">
-              <div>
-                <span className="text-[10px] text-stone-400 uppercase font-semibold block">Scrap Needed</span>
-                <strong className="text-stone-800 text-sm font-bold">
-                  {inspectingDish.scrapWeightNeededKg} kg
-                </strong>
-                <span className="text-[10px] text-stone-500 block">({inspectingDish.scrapTypeNeeded.replace('_', ' ')})</span>
-              </div>
-
-              <div>
-                <span className="text-[10px] text-stone-400 uppercase font-semibold block">Yield</span>
-                <strong className="text-stone-800 text-sm font-bold">
-                  {inspectingDish.yieldPortions} portions
-                </strong>
-                <span className="text-[10px] text-stone-500 block">high table turn</span>
-              </div>
-
-              <div>
-                <span className="text-[10px] text-stone-400 uppercase font-semibold block">Prep Time</span>
-                <strong className="text-emerald-700 text-sm font-bold">
-                  {inspectingDish.prepTimeMins} mins
-                </strong>
-                <span className="text-[10px] text-stone-500 block">ready to cook</span>
-              </div>
-            </div>
-
-            {/* Numbered Steps */}
-            <div className="space-y-2">
-              <span className="text-xs font-mono font-bold uppercase text-stone-700 block">
-                Master Culinary Instructions
-              </span>
-              <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-                {inspectingDish.instructions.map((step, idx) => (
-                  <div key={idx} className="flex items-start space-x-2.5 p-2.5 rounded-xl bg-white border border-[#E8DFD1] text-xs">
-                    <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-mono font-bold text-[10px] uppercase shrink-0 mt-0.5">
-                      Step {idx + 1}
-                    </span>
-                    <span className="text-stone-700 font-sans leading-relaxed">
-                      {step}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Modal Action Buttons */}
-            <div className="flex items-center space-x-3 pt-3 border-t border-[#E8DFD1]">
-              <button
-                type="button"
-                onClick={() => setInspectingDish(null)}
-                className="flex-1 py-3 rounded-xl bg-white hover:bg-stone-100 text-stone-700 border border-[#E8DFD1] text-xs font-bold transition-all shadow-xs"
-              >
-                Close Preview
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setInspectingDish(null);
-                  if (isAuthenticated) {
-                    setRole(userPersona === 'chef' ? 'recipes' : 'user_recipes');
-                  } else {
-                    openAuthModal('signin');
-                  }
-                }}
-                className="btn-shimmer flex-2 flex-grow py-3 px-5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-heading font-black shadow-md transition-all flex items-center justify-center space-x-1.5"
-              >
-                <Sparkles className="w-4 h-4 text-emerald-200" />
-                <span>{isAuthenticated ? 'Cook This Dish in Studio' : 'Sign In to Cook & Save Recipes'}</span>
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
+      {/* Commercial Business Model & ROI Architecture Modal */}
+      <BusinessModelModal
+        isOpen={isBizModelOpen}
+        onClose={() => setIsBizModelOpen(false)}
+      />
 
       {/* 8. Luxury Culinary Executive Footer */}
       <ScrollReveal direction="up" distance={24}>
