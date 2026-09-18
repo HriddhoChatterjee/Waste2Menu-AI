@@ -1,0 +1,28 @@
+{
+  "short_name": "Waste2Menu Kiosk",
+  "name": "Waste2Menu Community Kiosk \u2014 Zero-Cost Nutrition",
+  "description": "Offline-first kitchen scrap valorization and low-bandwidth community nutrition system.",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "./",
+  "display": "standalone",
+  "theme_color": "#059669",
+  "background_color": "#FAF7F2",
+  "orientation": "portrait-primary",
+  "categories": [
+    "food",
+    "utilities",
+    "social_impact"
+  ]
+}
