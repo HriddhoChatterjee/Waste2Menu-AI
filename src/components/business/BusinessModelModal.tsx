@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   X, 
   TrendingUp, 
@@ -14,6 +14,7 @@ import {
   Zap
 } from 'lucide-react';
 import { sounds } from '../../utils/soundEffects';
+import { PlanDetailPopup, PlanTierId } from './PlanDetailPopup';
 
 interface BusinessModelModalProps {
   isOpen: boolean;
@@ -21,10 +22,28 @@ interface BusinessModelModalProps {
 }
 
 export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({ isOpen, onClose }) => {
+  const [selectedTierId, setSelectedTierId] = useState<PlanTierId | null>(null);
+
   if (!isOpen) return null;
 
-  const tiers = [
+  const handleMainClose = () => {
+    sounds.playTap();
+    setSelectedTierId(null);
+    onClose();
+  };
+
+  const tiers: {
+    id: PlanTierId;
+    name: string;
+    target: string;
+    price: string;
+    usdPrice: string;
+    popular: boolean;
+    badge?: string;
+    features: string[];
+  }[] = [
     {
+      id: 'starter',
       name: 'KitchenOS Starter',
       target: 'Bistros, Cafés & Cloud Kitchens',
       price: '₹4,999 / mo',
@@ -39,6 +58,7 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({ isOpen, 
       ]
     },
     {
+      id: 'enterprise',
       name: 'Commercial Enterprise',
       target: 'Hotels, Banquets & Restaurant Chains',
       price: '₹14,999 / mo',
@@ -55,6 +75,7 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({ isOpen, 
       ]
     },
     {
+      id: 'global',
       name: 'Institutional & Global',
       target: 'Hospitality Groups & Corporate Campuses',
       price: 'Custom Pricing',
@@ -71,15 +92,13 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({ isOpen, 
   ];
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 backdrop-blur-sm flex justify-center items-start p-4 pt-16 sm:pt-20 pb-16 animate-in fade-in zoom-in-95 duration-200">
+    <>
+      <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 backdrop-blur-sm flex justify-center items-start p-4 pt-16 sm:pt-20 pb-16 animate-in fade-in zoom-in-95 duration-200">
       <div className="bg-[#FFFDF9] border border-[#E8DFD1] rounded-3xl max-w-4xl w-full p-6 sm:p-10 shadow-2xl relative space-y-8">
         
         {/* Close button */}
         <button
-          onClick={() => {
-            sounds.playTap();
-            onClose();
-          }}
+          onClick={handleMainClose}
           className="absolute top-5 right-5 p-2 rounded-xl text-stone-400 hover:text-stone-800 hover:bg-stone-100 transition-colors z-10"
         >
           <X className="w-5 h-5" />
@@ -222,17 +241,18 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({ isOpen, 
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => {
                     sounds.playTap();
-                    onClose();
+                    setSelectedTierId(tier.id);
                   }}
                   className={`w-full py-2.5 rounded-xl font-heading font-bold text-xs shadow-xs transition-all flex items-center justify-center space-x-1.5 ${
                     tier.popular
-                      ? 'bg-emerald-700 hover:bg-emerald-800 text-white'
+                      ? 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm'
                       : 'bg-white hover:bg-stone-50 text-stone-800 border border-[#E8DFD1]'
                   }`}
                 >
-                  <span>Explore Plan</span>
+                  <span>Explore Plan Details</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -252,10 +272,8 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({ isOpen, 
             </div>
           </div>
           <button
-            onClick={() => {
-              sounds.playTap();
-              onClose();
-            }}
+            type="button"
+            onClick={handleMainClose}
             className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shrink-0 shadow-xs"
           >
             Got It
@@ -264,5 +282,14 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({ isOpen, 
 
       </div>
     </div>
+
+    {/* Plan Detail Popup Modal for the Selected Tier */}
+    <PlanDetailPopup
+      isOpen={!!selectedTierId}
+      tierId={selectedTierId || 'starter'}
+      onClose={() => setSelectedTierId(null)}
+      onSelectTier={(id) => setSelectedTierId(id)}
+    />
+  </>
   );
 };
