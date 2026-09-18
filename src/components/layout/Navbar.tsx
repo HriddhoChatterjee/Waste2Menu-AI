@@ -69,7 +69,7 @@ export const Navbar: React.FC = () => {
     },
     {
       id: 'recipes',
-      label: 'Recipes & Dishes',
+      label: 'Recipes',
       shortLabel: 'Recipes',
       icon: <ChefHat className="w-3.5 h-3.5 shrink-0" />,
       action: () => {
@@ -98,19 +98,9 @@ export const Navbar: React.FC = () => {
       isActive: currentRole === 'analytics'
     },
     {
-      id: 'how-it-works',
-      label: 'How It Works',
-      shortLabel: 'Pipeline',
-      icon: <Sparkles className="w-3.5 h-3.5 shrink-0" />,
-      action: () => {
-        setActiveLandingSection('how-it-works');
-      },
-      isActive: currentRole === 'dashboard' && activeLandingSection === 'how-it-works'
-    },
-    {
       id: 'community_kiosk',
       label: 'Offline Kiosk',
-      shortLabel: 'Offline Kiosk',
+      shortLabel: 'Kiosk',
       icon: <Smartphone className="w-3.5 h-3.5 text-emerald-600 shrink-0" />,
       action: () => {
         setRole('community_kiosk');
@@ -130,7 +120,7 @@ export const Navbar: React.FC = () => {
   ];
 
   // Professional Chef navigation station tabs (displayed ONLY after Chef login)
-  const chefRoles: { id: Role; label: string; shortLabel?: string; icon: React.ReactNode; badge?: string }[] = [
+  const chefRoles: { id: Role; label: string; shortLabel: string; icon: React.ReactNode; badge?: string }[] = [
     {
       id: 'dashboard',
       label: 'Dashboard',
@@ -171,13 +161,13 @@ export const Navbar: React.FC = () => {
     {
       id: 'community_kiosk',
       label: 'Offline Kiosk',
-      shortLabel: 'Offline Kiosk',
+      shortLabel: 'Kiosk',
       icon: <Smartphone className="w-3.5 h-3.5 shrink-0" />
     }
   ];
 
   // Normal user / Home cook navigation station tabs (displayed ONLY after Normal User login)
-  const normalUserRoles: { id: Role; label: string; shortLabel?: string; icon: React.ReactNode; badge?: string }[] = [
+  const normalUserRoles: { id: Role; label: string; shortLabel: string; icon: React.ReactNode; badge?: string }[] = [
     {
       id: 'dashboard',
       label: 'Dashboard',
@@ -205,7 +195,7 @@ export const Navbar: React.FC = () => {
     {
       id: 'community_kiosk',
       label: 'Offline Kiosk',
-      shortLabel: 'Offline Kiosk',
+      shortLabel: 'Kiosk',
       icon: <Smartphone className="w-3.5 h-3.5 shrink-0" />
     }
   ];
@@ -217,11 +207,11 @@ export const Navbar: React.FC = () => {
       <header className="fixed top-0 left-0 right-0 z-40 w-full bg-white/95 backdrop-blur-xl border-b border-[#E8DFD1] shadow-xs">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           
-          {/* 3-Column Symmetric Grid: Left (1fr), Center (auto, perfectly centered), Right (1fr, aligned right) */}
-          <div className="grid grid-cols-[auto_1fr] lg:grid-cols-[1fr_auto_1fr] items-center h-16 w-full gap-2">
+          {/* Relative flex container with absolute center navigation */}
+          <div className="relative flex items-center justify-between h-16 w-full">
             
-            {/* Column 1 (Left): Logo & Live Sync Pill */}
-            <div className="flex items-center justify-start shrink-0">
+            {/* 1. Left (Logo & Live Sync Pill) */}
+            <div className="flex items-center justify-start shrink-0 z-20">
               <div 
                 onClick={() => {
                   setRole('dashboard');
@@ -260,12 +250,12 @@ export const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* Column 2 (Center): Navigation Station Tabs — MATHEMATICALLY CENTERED VIA CSS GRID (NO COLLISION!) */}
-            <div className="hidden lg:flex items-center justify-center min-w-0">
-              {!isAuthenticated ? (
-                /* Public Navigation Tabs (Every tab opens its respective station!) */
-                <nav className="flex items-center space-x-0.5 xl:space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs shrink-0">
-                  {publicNavTabs.map((tab) => (
+            {/* 2. Center: MATHEMATICALLY ABSOLUTE DEAD-CENTER ON ENTIRE NAVBAR */}
+            <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
+              <nav className="pointer-events-auto flex items-center space-x-0.5 xl:space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs">
+                {!isAuthenticated ? (
+                  /* Public Navigation Tabs */
+                  publicNavTabs.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={tab.action}
@@ -279,12 +269,10 @@ export const Navbar: React.FC = () => {
                       <span className="whitespace-nowrap hidden xl:inline">{tab.label}</span>
                       <span className="whitespace-nowrap xl:hidden">{tab.shortLabel}</span>
                     </button>
-                  ))}
-                </nav>
-              ) : (
-                /* Authenticated Station Tabs */
-                <nav className="flex items-center space-x-0.5 xl:space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs shrink-0">
-                  {loggedInRolesList.map((role) => {
+                  ))
+                ) : (
+                  /* Authenticated Station Tabs */
+                  loggedInRolesList.map((role) => {
                     const isActive = currentRole === role.id;
                     return (
                       <button
@@ -313,13 +301,13 @@ export const Navbar: React.FC = () => {
                         )}
                       </button>
                     );
-                  })}
-                </nav>
-              )}
+                  })
+                )}
+              </nav>
             </div>
 
-            {/* Column 3 (Right): User Utilities & Actions (Never overlaps center column) */}
-            <div className="flex items-center justify-end space-x-1.5 sm:space-x-2 shrink-0">
+            {/* 3. Right: User Utilities & Actions */}
+            <div className="flex items-center justify-end space-x-1.5 sm:space-x-2 shrink-0 z-20">
 
               {/* If Logged In: Show Profile Pill */}
               {isAuthenticated ? (

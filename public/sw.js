@@ -4,7 +4,7 @@
  * and Background Synchronization for offline surplus logs.
  */
 
-const CACHE_NAME = 'waste2menu-kiosk-v2';
+const CACHE_NAME = 'waste2menu-kiosk-v3';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
@@ -18,7 +18,7 @@ const PRECACHE_ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[ServiceWorker] Pre-caching offline app shell');
+      console.log('[ServiceWorker] Pre-caching offline app shell v3');
       return cache.addAll(PRECACHE_ASSETS);
     }).then(() => self.skipWaiting())
   );
@@ -40,12 +40,17 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch Event: Network-First for HTML/Navigation, Cache-First for static hashed assets
+// Fetch Event: Network-First for HTML/Navigation & Assets when online; Cache fallback when offline
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   const requestUrl = new URL(event.request.url);
   if (!requestUrl.protocol.startsWith('http')) return;
+
+  // In local development, always fetch fresh from network to never serve stale dev builds
+  if (requestUrl.hostname === 'localhost' || requestUrl.hostname === '127.0.0.1') {
+    return;
+  }
 
   const isNavigation = event.request.mode === 'navigate' || 
     (event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html'));
@@ -67,7 +72,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-First for static assets (fonts, images, scripts)
+  // Network-First for static assets when online, cache fallback when offline
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
