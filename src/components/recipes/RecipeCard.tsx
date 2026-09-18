@@ -14,7 +14,8 @@ import {
   ArrowRight,
   ShieldAlert,
   ChefHat,
-  Check
+  Check,
+  Lock
 } from 'lucide-react';
 import { PushToPosModal } from './PushToPosModal';
 
@@ -23,7 +24,7 @@ interface RecipeCardProps {
 }
 
 export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
-  const { scraps, togglePantryIngredient } = useAppStore();
+  const { scraps, togglePantryIngredient, isAuthenticated, openAuthModal } = useAppStore();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isPushModalOpen, setIsPushModalOpen] = useState(false);
 
@@ -240,18 +241,37 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
             {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
           </button>
 
-          {/* Approve and Push to POS Button */}
+          {/* Approve and Push to POS Button (Requires Login/Register) */}
           <button
-            onClick={() => setIsPushModalOpen(true)}
-            disabled={!hasEnoughScrap}
+            type="button"
+            onClick={() => {
+              if (!isAuthenticated) {
+                openAuthModal('signin');
+                return;
+              }
+              setIsPushModalOpen(true);
+            }}
+            disabled={isAuthenticated && !hasEnoughScrap}
             className={`flex items-center space-x-2 py-2.5 px-4 rounded-xl font-heading font-black text-xs shadow-md transition-all transform active:scale-95 ${
-              hasEnoughScrap
+              !isAuthenticated
+                ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm'
+                : hasEnoughScrap
                 ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white shadow-glow-emerald'
                 : 'bg-white text-[#6B6358] border border-[#E8DFD1] cursor-not-allowed opacity-60'
             }`}
           >
-            <Sparkles className="w-4 h-4" />
-            <span>{hasEnoughScrap ? 'Approve & Push to POS' : `Need +${(recipe.scrapWeightNeededKg - availableScrapWeight).toFixed(1)}kg Scrap`}</span>
+            {!isAuthenticated ? (
+              <Lock className="w-3.5 h-3.5 text-amber-200" />
+            ) : (
+              <Sparkles className="w-4 h-4" />
+            )}
+            <span>
+              {!isAuthenticated
+                ? 'Sign in to Push to POS'
+                : hasEnoughScrap
+                ? 'Approve & Push to POS'
+                : `Need +${(recipe.scrapWeightNeededKg - availableScrapWeight).toFixed(1)}kg Scrap`}
+            </span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>

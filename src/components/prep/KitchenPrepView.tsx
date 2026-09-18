@@ -2,12 +2,11 @@ import React from 'react';
 import { VisionIngestor } from './VisionIngestor';
 import { ManualScaleEntry } from './ManualScaleEntry';
 import { ScrapReservoirGrid } from './ScrapReservoirGrid';
-import { Sparkles, UtensilsCrossed, ArrowRight } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import { ScrollReveal } from '../common/ScrollReveal';
 
 export const KitchenPrepView: React.FC = () => {
-  const { scraps, setRole } = useAppStore();
+  const { scraps } = useAppStore();
   const totalScrapsKg = scraps.reduce((acc, s) => acc + s.weightKg, 0);
 
   return (
@@ -39,14 +38,13 @@ export const KitchenPrepView: React.FC = () => {
                 {totalScrapsKg.toFixed(1)} <span className="text-xs font-normal text-[#6B6358]">kg</span>
               </div>
             </div>
-            <button
-              onClick={() => setRole('recipes')}
-              className="flex items-center space-x-2 px-4 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white font-heading font-black text-xs shadow-glow-emerald transition-all transform active:scale-95"
-            >
-              <Sparkles className="w-4 h-4 text-emerald-200" />
-              <span>Generate Specials</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+
+            <div className="bg-white border border-[#E8DFD1] p-3.5 rounded-xl text-right shadow-sm">
+              <div className="text-[11px] font-mono text-[#6B6358] uppercase font-bold">Logged Items</div>
+              <div className="text-xl font-heading font-black text-stone-900">
+                {scraps.length} <span className="text-xs font-normal text-[#6B6358]">scraps</span>
+              </div>
+            </div>
           </div>
         </div>
       </ScrollReveal>

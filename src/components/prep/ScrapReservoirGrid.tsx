@@ -14,12 +14,13 @@ import {
   ArrowRight,
   TrendingUp,
   ShieldCheck,
-  AlertCircle
+  AlertCircle,
+  Lock
 } from 'lucide-react';
 import { ScrollReveal } from '../common/ScrollReveal';
 
 export const ScrapReservoirGrid: React.FC = () => {
-  const { scraps, removeScrap, setRole } = useAppStore();
+  const { scraps, removeScrap, setRole, isAuthenticated, openAuthModal } = useAppStore();
   const [activeFilter, setActiveFilter] = useState<'all' | ScrapCategory>('all');
   
   // Real-time ticking clock simulation for perishability countdown
@@ -97,13 +98,23 @@ export const ScrapReservoirGrid: React.FC = () => {
           </div>
         </div>
 
-        {/* Shortcut to Recipe Matcher */}
+        {/* Shortcut to Recipe Matcher (Protected for Authenticated Kitchen Users) */}
         <button
-          onClick={() => setRole('recipes')}
+          onClick={() => {
+            if (!isAuthenticated) {
+              openAuthModal('signin');
+              return;
+            }
+            setRole('recipes');
+          }}
           className="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-500 hover:to-violet-600 text-white font-bold text-xs shadow-glow-violet transition-all transform active:scale-95"
         >
-          <Sparkles className="w-4 h-4 text-violet-200" />
-          <span>Match Reverse Recipes</span>
+          {!isAuthenticated ? (
+            <Lock className="w-3.5 h-3.5 text-amber-300" />
+          ) : (
+            <Sparkles className="w-4 h-4 text-violet-200" />
+          )}
+          <span>{isAuthenticated ? 'Match Reverse Recipes' : 'Sign in to Match Recipes'}</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>

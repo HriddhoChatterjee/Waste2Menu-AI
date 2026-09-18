@@ -11,12 +11,13 @@ import {
   Layers, 
   Clock, 
   CheckCircle2,
-  Plus
+  Plus,
+  Lock
 } from 'lucide-react';
 import { ScrollReveal } from '../common/ScrollReveal';
 
 export const ReverseRecipeView: React.FC = () => {
-  const { recipes, scraps, userProfile } = useAppStore();
+  const { recipes, scraps, userProfile, isAuthenticated, openAuthModal } = useAppStore();
   const [activeTab, setActiveTab] = useState<'all' | 'my_authored' | 'feasible'>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -92,11 +93,18 @@ export const ReverseRecipeView: React.FC = () => {
           {/* Quick Stats & Actions */}
           <div className="flex items-center space-x-3 shrink-0">
             <button
-              onClick={() => setIsCreateModalOpen(true)}
+              type="button"
+              onClick={() => {
+                if (!isAuthenticated) {
+                  openAuthModal('signin');
+                  return;
+                }
+                setIsCreateModalOpen(true);
+              }}
               className="flex items-center space-x-2 px-4 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-heading font-bold text-xs shadow-sm transition-all active:scale-95"
             >
-              <Plus className="w-4 h-4" />
-              <span>+ Author New Recipe</span>
+              {!isAuthenticated ? <Lock className="w-4 h-4 text-amber-300" /> : <Plus className="w-4 h-4" />}
+              <span>{isAuthenticated ? '+ Author New Recipe' : '+ Author Recipe (Sign In)'}</span>
             </button>
 
             <div className="bg-white border border-[#E8DFD1] p-3 rounded-xl text-right shadow-xs">
@@ -202,7 +210,39 @@ export const ReverseRecipeView: React.FC = () => {
       </ScrollReveal>
 
       {/* Grid of Matched Recipes or Empty State */}
-      {filteredRecipes.length > 0 ? (
+      {activeTab === 'my_authored' && !isAuthenticated ? (
+        <ScrollReveal direction="up" distance={20}>
+          <div className="text-center py-12 px-6 rounded-3xl bg-amber-50/70 border border-amber-200 space-y-4 max-w-xl mx-auto shadow-xs">
+            <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center mx-auto border border-amber-300 shadow-xs">
+              <Lock className="w-6 h-6 text-amber-700" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-heading font-black text-stone-900 text-lg">
+                Kitchen Account Sign In Required
+              </h3>
+              <p className="text-xs text-stone-600 leading-relaxed font-sans">
+                Saving, authoring, and managing custom kitchen specials are commercial features available after signing in or registering your kitchen.
+              </p>
+            </div>
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => openAuthModal('signin')}
+                className="px-5 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-heading font-bold shadow-xs transition-transform active:scale-95"
+              >
+                Sign In to Kitchen
+              </button>
+              <button
+                type="button"
+                onClick={() => openAuthModal('register')}
+                className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-heading font-bold shadow-xs transition-transform active:scale-95"
+              >
+                Register Account
+              </button>
+            </div>
+          </div>
+        </ScrollReveal>
+      ) : filteredRecipes.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredRecipes.map((recipe, idx) => (
             <ScrollReveal key={recipe.id} delay={idx * 0.06} direction="up" distance={24}>
