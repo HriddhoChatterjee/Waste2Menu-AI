@@ -59,6 +59,7 @@ export const Navbar: React.FC = () => {
     {
       id: 'overview',
       label: 'Overview',
+      shortLabel: 'Overview',
       icon: <LayoutDashboard className="w-3.5 h-3.5 shrink-0" />,
       action: () => {
         setRole('dashboard');
@@ -69,6 +70,7 @@ export const Navbar: React.FC = () => {
     {
       id: 'recipes',
       label: 'Recipes & Dishes',
+      shortLabel: 'Recipes',
       icon: <ChefHat className="w-3.5 h-3.5 shrink-0" />,
       action: () => {
         setRole('user_recipes');
@@ -78,6 +80,7 @@ export const Navbar: React.FC = () => {
     {
       id: 'prep',
       label: 'Scrap Intake',
+      shortLabel: 'Scraps',
       icon: <UploadCloud className="w-3.5 h-3.5 shrink-0" />,
       action: () => {
         setRole('prep');
@@ -87,6 +90,7 @@ export const Navbar: React.FC = () => {
     {
       id: 'impact',
       label: 'Food Saved',
+      shortLabel: 'Impact',
       icon: <BarChart3 className="w-3.5 h-3.5 shrink-0" />,
       action: () => {
         setRole('analytics');
@@ -96,11 +100,22 @@ export const Navbar: React.FC = () => {
     {
       id: 'how-it-works',
       label: 'How It Works',
+      shortLabel: 'Pipeline',
       icon: <Sparkles className="w-3.5 h-3.5 shrink-0" />,
       action: () => {
         setActiveLandingSection('how-it-works');
       },
       isActive: currentRole === 'dashboard' && activeLandingSection === 'how-it-works'
+    },
+    {
+      id: 'business-model',
+      label: 'Business Model',
+      shortLabel: 'ROI Model',
+      icon: <Coins className="w-3.5 h-3.5 text-amber-600 shrink-0" />,
+      action: () => {
+        setIsBusinessModalOpen(true);
+      },
+      isActive: isBusinessModalOpen
     }
   ];
 
@@ -168,70 +183,75 @@ export const Navbar: React.FC = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-40 w-full bg-white/95 backdrop-blur-xl border-b border-[#E8DFD1] shadow-xs">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative">
-          <div className="flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          
+          {/* 3-Column Symmetric Grid: Left (1fr), Center (auto, perfectly centered), Right (1fr, aligned right) */}
+          <div className="grid grid-cols-[auto_1fr] lg:grid-cols-[1fr_auto_1fr] items-center h-16 w-full gap-2">
             
-            {/* Left: Logo & Live Sync Pill */}
-            <div 
-              onClick={() => {
-                setRole('dashboard');
-                if (!isAuthenticated) setActiveLandingSection('overview');
-              }}
-              className="flex items-center space-x-2.5 cursor-pointer group shrink-0 z-20"
-            >
-              <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500/15 to-violet-500/15 border border-emerald-500/30 shadow-xs group-hover:scale-105 transition-transform">
-                <Sparkles className="w-4 h-4 text-emerald-600 animate-pulse" />
-              </div>
-              <div className="leading-tight">
-                <div className="flex items-center space-x-1.5">
-                  <span className="font-heading font-black text-base sm:text-lg tracking-tight text-[#1C1917]">
-                    Waste<span className="text-emerald-600">2</span>Menu
-                  </span>
-                  {isAuthenticated ? (
-                    <span className="px-1.5 py-0.2 text-[8px] font-mono font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200 rounded">
-                      {userPersona === 'chef' ? 'Chef' : 'Home'}
-                    </span>
-                  ) : (
-                    <span className="px-1.5 py-0.2 text-[8px] font-mono font-bold uppercase tracking-wider bg-stone-100 text-stone-600 border border-stone-200 rounded hidden sm:inline-block">
-                      Public
-                    </span>
-                  )}
+            {/* Column 1 (Left): Logo & Live Sync Pill */}
+            <div className="flex items-center justify-start shrink-0">
+              <div 
+                onClick={() => {
+                  setRole('dashboard');
+                  if (!isAuthenticated) setActiveLandingSection('overview');
+                }}
+                className="flex items-center space-x-2.5 cursor-pointer group"
+              >
+                <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500/15 to-violet-500/15 border border-emerald-500/30 shadow-xs group-hover:scale-105 transition-transform">
+                  <Sparkles className="w-4 h-4 text-emerald-600 animate-pulse" />
                 </div>
-                <div className="hidden sm:flex items-center space-x-1.5 text-[10px] text-[#6B6358]">
-                  <span className="flex h-1.5 w-1.5 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-600"></span>
-                  </span>
-                  <span className="font-mono text-emerald-700 font-semibold text-[9px]">LIVE SYNC</span>
-                  <span className="text-[#D4C6B2]">•</span>
-                  <span className="text-[9px]">Zero-Waste</span>
+                <div className="leading-tight">
+                  <div className="flex items-center space-x-1.5">
+                    <span className="font-heading font-black text-base sm:text-lg tracking-tight text-[#1C1917]">
+                      Waste<span className="text-emerald-600">2</span>Menu
+                    </span>
+                    {isAuthenticated ? (
+                      <span className="px-1.5 py-0.2 text-[8px] font-mono font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200 rounded">
+                        {userPersona === 'chef' ? 'Chef' : 'Home'}
+                      </span>
+                    ) : (
+                      <span className="px-1.5 py-0.2 text-[8px] font-mono font-bold uppercase tracking-wider bg-stone-100 text-stone-600 border border-stone-200 rounded hidden sm:inline-block">
+                        Public
+                      </span>
+                    )}
+                  </div>
+                  <div className="hidden sm:flex items-center space-x-1.5 text-[10px] text-[#6B6358]">
+                    <span className="flex h-1.5 w-1.5 relative">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-600"></span>
+                    </span>
+                    <span className="font-mono text-emerald-700 font-semibold text-[9px]">LIVE SYNC</span>
+                    <span className="text-[#D4C6B2]">•</span>
+                    <span className="text-[9px]">Zero-Waste</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Center: Dynamic Navigation Tabs - EXACTLY in the middle of the navbar */}
-            <div className="hidden lg:flex items-center justify-center absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 pointer-events-auto">
+            {/* Column 2 (Center): Navigation Station Tabs — MATHEMATICALLY CENTERED VIA CSS GRID (NO COLLISION!) */}
+            <div className="hidden lg:flex items-center justify-center min-w-0">
               {!isAuthenticated ? (
-                /* OUTSIDE DASHBOARD (LOGGED OUT) -> Public Nav Tabs (Every tab OPENS a view!) */
-                <nav className="flex items-center space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs">
+                /* Public Navigation Tabs (Every tab opens its respective station!) */
+                <nav className="flex items-center space-x-0.5 xl:space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs shrink-0">
                   {publicNavTabs.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={tab.action}
-                      className={`relative flex items-center space-x-1.5 px-2.5 xl:px-3 py-1.5 rounded-xl text-xs transition-all duration-150 ${
+                      className={`relative flex items-center space-x-1.5 px-2 xl:px-3 py-1.5 rounded-xl text-xs transition-all duration-150 ${
                         tab.isActive
                           ? 'bg-emerald-700 text-white shadow-xs font-bold'
                           : 'text-[#5C5549] hover:text-[#1C1917] hover:bg-white/80 font-medium'
                       }`}
                     >
                       {tab.icon}
-                      <span className="whitespace-nowrap">{tab.label}</span>
+                      <span className="whitespace-nowrap hidden xl:inline">{tab.label}</span>
+                      <span className="whitespace-nowrap xl:hidden">{tab.shortLabel}</span>
                     </button>
                   ))}
                 </nav>
               ) : (
-                /* LOGGED IN -> Station Tabs According to Role */
-                <nav className="flex items-center space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs">
+                /* Authenticated Station Tabs */
+                <nav className="flex items-center space-x-0.5 xl:space-x-1 bg-[#F4EFEA] p-1 rounded-2xl border border-[#E8DFD1] shadow-xs shrink-0">
                   {loggedInRolesList.map((role) => {
                     const isActive = currentRole === role.id;
                     return (
@@ -239,7 +259,7 @@ export const Navbar: React.FC = () => {
                         key={role.id}
                         id={`nav-role-${role.id}`}
                         onClick={() => setRole(role.id)}
-                        className={`relative flex items-center space-x-1.5 px-2.5 xl:px-3 py-1.5 rounded-xl text-xs transition-all duration-150 ${
+                        className={`relative flex items-center space-x-1.5 px-2 xl:px-3 py-1.5 rounded-xl text-xs transition-all duration-150 ${
                           isActive
                             ? 'bg-emerald-700 text-white shadow-xs font-bold'
                             : 'text-[#5C5549] hover:text-[#1C1917] hover:bg-white/80 font-medium'
@@ -265,24 +285,13 @@ export const Navbar: React.FC = () => {
               )}
             </div>
 
-            {/* Right Action Controls Group */}
-            <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0 z-20">
+            {/* Column 3 (Right): User Utilities & Actions (Never overlaps center column) */}
+            <div className="flex items-center justify-end space-x-1.5 sm:space-x-2 shrink-0">
               
-              {/* Business Model & ROI Architecture Trigger Button */}
-              <button
-                onClick={() => setIsBusinessModalOpen(true)}
-                className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all border shadow-xs bg-amber-50 hover:bg-amber-100 text-amber-950 border-amber-300 active:scale-95"
-                title="View Commercial Business Model, Unit Economics & Pricing"
-              >
-                <Coins className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-                <span className="hidden xl:inline font-heading font-black">Business Model</span>
-                <span className="xl:hidden font-heading font-black">ROI</span>
-              </button>
-
               {/* Dedicated Offline Community Kiosk Button (PWA) */}
               <button
                 onClick={() => setRole('community_kiosk')}
-                className={`flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all border shadow-xs ${
+                className={`flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all border shadow-xs ${
                   currentRole === 'community_kiosk'
                     ? 'bg-emerald-800 text-white border-emerald-950 ring-2 ring-emerald-600/30'
                     : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border-emerald-300'
@@ -290,7 +299,8 @@ export const Navbar: React.FC = () => {
                 title="Zero-Cost Community Nutrition & Offline Kiosk (PWA)"
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                <span className="font-heading font-black">Kiosk</span>
+                <span className="font-heading font-black hidden sm:inline">Offline Kiosk</span>
+                <span className="font-heading font-black sm:hidden">Kiosk</span>
                 <span className="hidden xl:inline-block text-[9px] px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-950 font-mono font-bold">
                   PWA
                 </span>
@@ -333,7 +343,7 @@ export const Navbar: React.FC = () => {
                     className="hidden sm:flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-heading font-bold text-xs shadow-xs transition-all"
                   >
                     <UserPlus className="w-3.5 h-3.5 shrink-0" />
-                    <span>Register</span>
+                    <span className="hidden xl:inline">Register</span>
                   </button>
                 </div>
               )}
@@ -378,6 +388,8 @@ export const Navbar: React.FC = () => {
                         ? 'prep' 
                         : currentRole === 'analytics' 
                         ? 'impact' 
+                        : isBusinessModalOpen
+                        ? 'business_model'
                         : activeLandingSection === 'how-it-works' 
                         ? 'how-it-works' 
                         : 'overview'
@@ -392,6 +404,8 @@ export const Navbar: React.FC = () => {
                         setRole('prep');
                       } else if (val === 'impact') {
                         setRole('analytics');
+                      } else if (val === 'business_model') {
+                        setIsBusinessModalOpen(true);
                       } else if (val === 'how-it-works') {
                         setActiveLandingSection('how-it-works');
                       } else {
@@ -402,10 +416,11 @@ export const Navbar: React.FC = () => {
                     className="bg-white text-[#1C1917] text-xs font-semibold py-1.5 px-2 rounded-xl border border-[#E8DFD1] shadow-xs focus:outline-none focus:border-emerald-500 max-w-[115px] truncate"
                   >
                     <option value="overview">🏠 Overview</option>
-                    <option value="recipes">🍳 Recipes & Dishes</option>
+                    <option value="recipes">🍳 Recipes</option>
                     <option value="prep">🌱 Scrap Intake</option>
                     <option value="impact">📊 Food Saved</option>
                     <option value="how-it-works">⚡ How It Works</option>
+                    <option value="business_model">💰 Business Model</option>
                     <option value="community_kiosk">🌱 Offline Kiosk</option>
                   </select>
                 ) : (
