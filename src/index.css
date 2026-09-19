@@ -337,3 +337,77 @@ code, .font-mono {
   box-shadow: 0 0 25px -3px rgba(124, 58, 237, 0.2);
 }
 
+/* Quote Card Breathing Aura & Shimmer Animations */
+@keyframes quoteAura {
+  0%, 100% {
+    box-shadow: 0 4px 25px -4px rgba(5, 150, 105, 0.15), 0 2px 10px -2px rgba(217, 119, 6, 0.1);
+    border-color: rgba(5, 150, 105, 0.3);
+  }
+  50% {
+    box-shadow: 0 10px 35px -2px rgba(5, 150, 105, 0.3), 0 4px 15px -1px rgba(217, 119, 6, 0.2);
+    border-color: rgba(5, 150, 105, 0.6);
+  }
+}
+
+.animate-quote-aura {
+  animation: quoteAura 5s ease-in-out infinite;
+}
+
+@keyframes quoteShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-quote-shimmer {
+  background: linear-gradient(
+    90deg,
+    #047857 0%,
+    #059669 25%,
+    #d97706 50%,
+    #059669 75%,
+    #047857 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: quoteShimmer 6s linear infinite;
+}
+
+@keyframes leafSway {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-8deg) scale(1.05);
+  }
+  75% {
+    transform: rotate(8deg) scale(0.95);
+  }
+}
+
+.animate-leaf-sway {
+  display: inline-block;
+  animation: leafSway 4s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+@keyframes pulseGlowSoft {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+.animate-pulse-glow-soft {
+  animation: pulseGlowSoft 3s ease-in-out infinite;
+}
+

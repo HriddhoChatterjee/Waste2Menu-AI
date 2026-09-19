@@ -666,6 +666,12 @@ export const OfflineWasteKiosk: React.FC = () => {
             <p className="text-xs sm:text-sm text-stone-600 max-w-2xl">
               Turn common kitchen byproducts into filling, high-protein meals for <span className="font-bold text-emerald-800">₹3 to ₹7</span> per portion. No internet required.
             </p>
+            {/* Philosophical Zero-Waste Quote */}
+            <div className="pt-1.5 flex items-center space-x-2 text-xs font-heading italic text-stone-800 font-bold">
+              <span className="text-sm animate-leaf-sway">🌱</span>
+              <span className="animate-quote-shimmer text-xs sm:text-sm font-black">“In nature, nothing is lost, everything is transformed.”</span>
+              <span className="text-[10px] font-mono not-italic text-stone-500 font-semibold hidden sm:inline">— Antoine Lavoisier</span>
+            </div>
           </div>
 
           {/* Right Controls: Multilingual Selector & PWA Install */}

@@ -208,6 +208,17 @@ export const MainOpeningDashboard: React.FC = () => {
 
           <div className="max-w-4xl mx-auto text-center space-y-6 relative z-10">
             
+            {/* Opening Philosophical Quote - In the Beginning */}
+            <div className="inline-flex items-center space-x-2.5 px-5 py-2 rounded-full bg-gradient-to-r from-emerald-50 via-amber-50 to-emerald-50 border border-emerald-300/70 text-stone-800 shadow-xs backdrop-blur-md animate-float transition-all hover:scale-105 group cursor-default">
+              <span className="text-base animate-leaf-sway">🌱</span>
+              <span className="font-heading italic font-black text-xs sm:text-sm text-stone-900 tracking-wide">
+                “In nature, nothing is lost, everything is transformed.”
+              </span>
+              <span className="text-[10px] font-mono font-bold text-emerald-800 uppercase tracking-wider bg-emerald-100/90 px-2.5 py-0.5 rounded-full border border-emerald-300/80 shadow-xs">
+                Antoine Lavoisier
+              </span>
+            </div>
+
             {/* Live Ecosystem Pulsing Badge */}
             <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-emerald-50/90 border border-emerald-200 text-emerald-800 text-xs font-mono font-bold shadow-xs">
               <span className="relative flex h-2.5 w-2.5">
@@ -229,6 +240,54 @@ export const MainOpeningDashboard: React.FC = () => {
             <p className="text-base sm:text-lg text-stone-600 font-sans max-w-2xl mx-auto leading-relaxed">
               <span className="font-bold text-stone-900">Not a food delivery app</span> — Waste2Menu AI is an enterprise Circular KitchenOS and Zero-Waste Recipe Engine. Commercial kitchens cut wholesale food costs by 18.4% by transforming prep trimmings into high-margin daily specials, while home cooks select what leftovers they have to instantly unlock master-crafted step-by-step recipes.
             </p>
+
+            {/* Featured Quote Showcase - After Description with Beautiful Ambient Animation */}
+            <div className="max-w-2xl mx-auto my-6 relative group">
+              {/* Background ambient glow effect */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400/20 via-amber-400/25 to-emerald-400/20 rounded-3xl blur-md opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse-glow-soft"></div>
+              
+              <div className="relative px-6 py-5 sm:px-8 sm:py-6 bg-white/95 backdrop-blur-md rounded-2xl border-2 border-emerald-500/30 animate-quote-aura shadow-sm text-center transition-all duration-300 group-hover:border-emerald-500/60 group-hover:-translate-y-0.5">
+                
+                {/* Decorative Quotation Marks */}
+                <div className="absolute -top-3 left-6 px-2 bg-[#FFFDF9] text-emerald-600 text-2xl font-serif leading-none select-none">
+                  “
+                </div>
+                <div className="absolute -bottom-4 right-6 px-2 bg-[#FFFDF9] text-amber-600 text-2xl font-serif leading-none select-none">
+                  ”
+                </div>
+
+                <div className="space-y-2">
+                  <p className="font-heading italic font-black text-lg sm:text-2xl text-stone-900 tracking-tight leading-snug animate-quote-shimmer">
+                    “In nature, nothing is lost, everything is transformed.”
+                  </p>
+
+                  <div className="flex items-center justify-center space-x-2 text-xs text-stone-600 font-mono">
+                    <span className="h-px w-6 bg-emerald-400/60"></span>
+                    <span className="font-bold text-stone-800 tracking-wider uppercase text-[11px]">Antoine Lavoisier</span>
+                    <span className="text-stone-400">•</span>
+                    <span className="text-emerald-700 font-sans italic text-xs">Law of Conservation of Mass & Circular Gastronomy</span>
+                    <span className="h-px w-6 bg-emerald-400/60"></span>
+                  </div>
+                </div>
+
+                {/* Sub-pills: Micro-impact reflection */}
+                <div className="flex flex-wrap items-center justify-center gap-1.5 pt-3 mt-1 border-t border-stone-200/60">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center space-x-1">
+                    <span>🔄</span>
+                    <span>100% Upcycled Biomass</span>
+                  </span>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 flex items-center space-x-1">
+                    <span>⚡</span>
+                    <span>Zero Landfill Waste</span>
+                  </span>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-violet-50 text-violet-800 border border-violet-200 flex items-center space-x-1">
+                    <span>⚖️</span>
+                    <span>Culinary Energy Equilibrium</span>
+                  </span>
+                </div>
+
+              </div>
+            </div>
 
             {/* Action CTAs with Radiant Shimmer */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
