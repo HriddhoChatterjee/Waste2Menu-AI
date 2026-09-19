@@ -1235,10 +1235,6 @@ export const MainOpeningDashboard: React.FC = () => {
               <p className="text-xs text-stone-500 leading-relaxed max-w-md font-sans">
                 Enterprise circular gastronomy platform converting commercial and household kitchen byproducts into high-margin revenue streams, verified ESG impact certificates, and automated food rescue redistributions.
               </p>
-              <div className="flex items-center space-x-2 text-xs font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-xl w-fit">
-                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-                <span>YOLOv8 Neural Segmentation Engine • Live</span>
-              </div>
             </div>
 
             {/* Col 2: Navigation Links */}
