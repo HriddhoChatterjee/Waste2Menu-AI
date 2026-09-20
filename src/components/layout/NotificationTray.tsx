@@ -89,7 +89,7 @@ export const NotificationTray: React.FC<NotificationTrayProps> = ({ isOpen, onCl
               <div className="text-center py-16 text-stone-400">
                 <CheckCircle2 className="w-12 h-12 text-stone-300 mx-auto mb-3" />
                 <p className="text-sm font-medium text-stone-600">All caught up!</p>
-                <p className="text-xs text-stone-400 mt-1">Events from Kitchen, KDS, POS & NGO will stream here live.</p>
+                <p className="text-xs text-stone-400 mt-1">Events from Kitchen, Recipes, Kiosk & NGO will stream here live.</p>
               </div>
             ) : (
               notifications.map((notif) => (
@@ -124,7 +124,7 @@ export const NotificationTray: React.FC<NotificationTrayProps> = ({ isOpen, onCl
           {/* Footer note */}
           <div className="p-4 border-t border-[#E8DFD1] bg-[#FAF7F2] text-center">
             <span className="text-[11px] text-stone-500 font-mono">
-              Events are synced across Kitchen, KDS, POS, and NGO stations.
+              Events are synced across Kitchen, Recipes, Kiosk, and NGO stations.
             </span>
           </div>
 

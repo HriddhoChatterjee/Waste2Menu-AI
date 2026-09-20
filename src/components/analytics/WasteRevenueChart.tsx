@@ -27,10 +27,10 @@ export const WasteRevenueChart: React.FC = () => {
       <div className="flex items-center justify-between pb-3 border-b border-[#E8DFD1] mb-4">
         <div>
           <h3 className="font-heading font-bold text-stone-900 text-base">
-            Daily Prep Waste Diverted vs. Upcycled Recovered Revenue
+            Daily Prep Waste Diverted vs. Nutritious Meals Created
           </h3>
           <p className="text-xs text-stone-500 font-mono">
-            Comparing daily mass (kg) against dynamic special sales (₹)
+            Comparing daily scrap diverted (kg) against nutritious community meals prepared
           </p>
         </div>
         <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-full">
@@ -44,7 +44,7 @@ export const WasteRevenueChart: React.FC = () => {
             <CartesianGrid strokeDasharray="3 3" stroke="#E8DFD1" />
             <XAxis dataKey="day" stroke="#78716C" fontSize={11} />
             <YAxis yAxisId="left" stroke="#78716C" fontSize={11} unit="kg" />
-            <YAxis yAxisId="right" orientation="right" stroke="#059669" fontSize={11} unit="₹" />
+            <YAxis yAxisId="right" orientation="right" stroke="#059669" fontSize={11} />
             <Tooltip
               contentStyle={{
                 backgroundColor: '#FFFFFF',
@@ -68,8 +68,8 @@ export const WasteRevenueChart: React.FC = () => {
             <Line 
               yAxisId="right" 
               type="monotone" 
-              dataKey="revenue" 
-              name="Recovered Revenue (₹)" 
+              dataKey="meals" 
+              name="Meals Created" 
               stroke="#059669" 
               strokeWidth={3} 
               dot={{ fill: '#059669', r: 4 }}

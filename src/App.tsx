@@ -5,7 +5,6 @@ import { MainOpeningDashboard } from './components/dashboard/MainOpeningDashboar
 import { KitchenPrepView } from './components/prep/KitchenPrepView';
 import { ReverseRecipeView } from './components/recipes/ReverseRecipeView';
 import { NormalUserRecipeView } from './components/recipes/NormalUserRecipeView';
-import { PosTerminal } from './components/pos/PosTerminal';
 import { NgoPortal } from './components/ngo/NgoPortal';
 import { AnalyticsDashboard } from './components/analytics/AnalyticsDashboard';
 import { OfflineWasteKiosk } from './components/OfflineWasteKiosk';
@@ -41,7 +40,6 @@ export function App() {
         {currentRole === 'prep' && <KitchenPrepView />}
         {currentRole === 'recipes' && <ReverseRecipeView />}
         {currentRole === 'user_recipes' && <NormalUserRecipeView />}
-        {currentRole === 'pos' && <PosTerminal />}
         {currentRole === 'ngo' && <NgoPortal />}
         {currentRole === 'analytics' && <AnalyticsDashboard />}
         {currentRole === 'community_kiosk' && <OfflineWasteKiosk />}

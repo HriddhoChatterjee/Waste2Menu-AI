@@ -5,7 +5,6 @@ import { Role } from '../../types';
 import { 
   UtensilsCrossed, 
   ChefHat, 
-  CreditCard, 
   HeartHandshake, 
   BarChart3, 
   Bell, 
@@ -32,7 +31,6 @@ export const Navbar: React.FC = () => {
     soundEnabled, 
     toggleSound, 
     notifications, 
-    activeSpecials,
     userPersona,
     userProfile,
     isAuthenticated,
@@ -49,7 +47,6 @@ export const Navbar: React.FC = () => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
-  const activeSpecialsCount = activeSpecials.filter((s) => !s.isSoldOut && s.remainingPortions > 0).length;
 
   // Public Outside Navigation Station Tabs (displayed when NOT logged in)
   const publicNavTabs = [
@@ -125,13 +122,6 @@ export const Navbar: React.FC = () => {
       label: 'Recipe Studio', 
       shortLabel: 'Recipes',
       icon: <ChefHat className="w-3.5 h-3.5 shrink-0" />
-    },
-    { 
-      id: 'pos', 
-      label: 'POS Specials', 
-      shortLabel: 'POS',
-      icon: <CreditCard className="w-3.5 h-3.5 shrink-0" />,
-      badge: activeSpecialsCount > 0 ? `${activeSpecialsCount}` : undefined
     },
     { 
       id: 'ngo', 

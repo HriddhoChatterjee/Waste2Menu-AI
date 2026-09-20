@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { RecipeDish, ScrapCategory } from '../../types';
 import { useAppStore } from '../../store/useAppStore';
+import { sounds } from '../../utils/soundEffects';
+import confetti from 'canvas-confetti';
 import { 
   Sparkles, 
   Clock, 
@@ -9,24 +11,24 @@ import {
   XCircle, 
   ChevronDown, 
   ChevronUp, 
-  TrendingUp, 
+  Leaf, 
   Flame, 
   ArrowRight,
   ShieldAlert,
   ChefHat,
   Check,
-  Lock
+  Lock,
+  HeartHandshake
 } from 'lucide-react';
-import { PushToPosModal } from './PushToPosModal';
 
 interface RecipeCardProps {
   recipe: RecipeDish;
 }
 
 export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
-  const { scraps, togglePantryIngredient, isAuthenticated, openAuthModal } = useAppStore();
+  const { scraps, togglePantryIngredient, isAuthenticated, openAuthModal, decrementScrapStock, addNotification } = useAppStore();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isPushModalOpen, setIsPushModalOpen] = useState(false);
+  const [isCooked, setIsCooked] = useState(false);
 
   // Check how much scrap is available for this recipe
   const availableScrapWeight = scraps
@@ -37,10 +39,24 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
   const allPantryInStock = recipe.pantryIngredients.every((pi) => pi.inStock);
   const isReadyToPush = hasEnoughScrap && allPantryInStock;
 
-  // Potential Total Revenue and Profit from this batch
-  const totalBatchRevenue = recipe.yieldPortions * recipe.suggestedPrice;
-  const totalBatchCost = recipe.yieldPortions * (recipe.rawByproductCost + recipe.seasoningGasCost);
-  const totalBatchProfit = totalBatchRevenue - totalBatchCost;
+  const handleCookBatch = () => {
+    if (!isAuthenticated) {
+      openAuthModal('signin');
+      return;
+    }
+    if (!hasEnoughScrap) return;
+
+    sounds.playSuccessChime();
+    decrementScrapStock(recipe.scrapTypeNeeded, recipe.scrapWeightNeededKg);
+    setIsCooked(true);
+    confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+    addNotification({
+      type: 'recipe_unlocked',
+      title: `Batch Prepared: ${recipe.title}`,
+      message: `Successfully prepared ${recipe.yieldPortions} nutritious servings! Diverted ${recipe.scrapWeightNeededKg}kg scrap from landfill.`,
+      roleTarget: 'all'
+    });
+  };
 
   return (
     <>
@@ -76,13 +92,13 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
               </h3>
             </div>
 
-            {/* Margin badge */}
+            {/* Eco Sustainability badge */}
             <div className="text-right shrink-0">
               <span className="inline-block px-2.5 py-1 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 font-heading font-black text-sm shadow-sm">
-                {recipe.marginPercent}% Margin
+                Zero-Waste
               </span>
-              <span className="text-[10px] font-mono text-[#6B6358] block mt-0.5 font-bold uppercase">
-                Upcycled Profit
+              <span className="text-[10px] font-mono text-emerald-700 block mt-0.5 font-bold uppercase">
+                100% Upcycled
               </span>
             </div>
           </div>
@@ -102,7 +118,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
                   {recipe.scrapWeightNeededKg} kg {recipe.scrapTypeNeeded.replace('_', ' ')}
                 </span>
                 <span className="bg-emerald-600/90 backdrop-blur-xs px-2 py-0.5 rounded-md font-bold text-white shadow-xs">
-                  ₹{recipe.suggestedPrice.toFixed(0)}
+                  Nutritious Meal
                 </span>
               </div>
             </div>
@@ -125,7 +141,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 
             <div>
               <span className="text-[10px] font-mono text-[#6B6358] uppercase block flex items-center gap-1 font-semibold">
-                <Clock className="w-3 h-3 text-amber" /> Prep Time
+                <Clock className="w-3 h-3 text-amber-600" /> Prep Time
               </span>
               <span className="text-sm font-heading font-black text-[#1C1917]">
                 {recipe.prepTimeMins} <span className="text-[11px] font-normal text-[#6B6358]">mins</span>
@@ -142,25 +158,25 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
             </div>
           </div>
 
-          {/* Cost & Margin Breakdown Box */}
-          <div className="p-3.5 rounded-xl bg-white border border-[#E8DFD1] space-y-2 mb-4 shadow-sm">
-            <div className="flex items-center justify-between text-xs pb-2 border-b border-[#E8DFD1]">
-              <span className="font-mono text-[#6B6358] font-bold">Cost & Margin Breakdown (Per Portion)</span>
-              <span className="font-mono text-emerald-700 font-black">Suggested: ₹{recipe.suggestedPrice.toFixed(2)}</span>
+          {/* Eco Upcycling Impact Box */}
+          <div className="p-3 rounded-xl bg-white border border-[#E8DFD1] space-y-2 mb-4 shadow-sm">
+            <div className="flex items-center justify-between text-xs pb-1.5 border-b border-[#E8DFD1]">
+              <span className="font-mono text-[#6B6358] font-bold">Eco Upcycling Impact</span>
+              <span className="font-mono text-emerald-700 font-black">{recipe.yieldPortions} Meals Yielded</span>
             </div>
 
             <div className="grid grid-cols-3 gap-2 text-xs font-mono">
               <div className="bg-[#FDFBF7] p-2 rounded-lg border border-[#E8DFD1]">
-                <span className="text-[10px] text-[#6B6358] block">Raw Byproduct Cost</span>
-                <span className="font-black text-emerald-700">₹{recipe.rawByproductCost.toFixed(2)} (Free)</span>
+                <span className="text-[10px] text-[#6B6358] block">Food Rescued</span>
+                <span className="font-black text-emerald-700">{recipe.scrapWeightNeededKg} kg Scrap</span>
               </div>
               <div className="bg-[#FDFBF7] p-2 rounded-lg border border-[#E8DFD1]">
-                <span className="text-[10px] text-[#6B6358] block">Seasoning & Gas</span>
-                <span className="font-bold text-[#1C1917]">₹{recipe.seasoningGasCost.toFixed(2)}</span>
+                <span className="text-[10px] text-[#6B6358] block">CO₂e Avoided</span>
+                <span className="font-bold text-emerald-800">{(recipe.scrapWeightNeededKg * 2.5).toFixed(1)} kg</span>
               </div>
               <div className="bg-[#FDFBF7] p-2 rounded-lg border border-[#E8DFD1]">
-                <span className="text-[10px] text-[#6B6358] block">Batch Net Profit</span>
-                <span className="font-black text-emerald-700">+₹{totalBatchProfit.toFixed(0)}</span>
+                <span className="text-[10px] text-[#6B6358] block">Status</span>
+                <span className="font-black text-emerald-700">100% Edible</span>
               </div>
             </div>
           </div>
@@ -241,49 +257,43 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
             {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
           </button>
 
-          {/* Approve and Push to POS Button (Requires Login/Register) */}
-          <button
-            type="button"
-            onClick={() => {
-              if (!isAuthenticated) {
-                openAuthModal('signin');
-                return;
-              }
-              setIsPushModalOpen(true);
-            }}
-            disabled={isAuthenticated && !hasEnoughScrap}
-            className={`flex items-center space-x-2 py-2.5 px-4 rounded-xl font-heading font-black text-xs shadow-md transition-all transform active:scale-95 ${
-              !isAuthenticated
-                ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm'
-                : hasEnoughScrap
-                ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white shadow-glow-emerald'
-                : 'bg-white text-[#6B6358] border border-[#E8DFD1] cursor-not-allowed opacity-60'
-            }`}
-          >
-            {!isAuthenticated ? (
-              <Lock className="w-3.5 h-3.5 text-amber-200" />
-            ) : (
-              <Sparkles className="w-4 h-4" />
-            )}
-            <span>
-              {!isAuthenticated
-                ? 'Sign in to Push to POS'
-                : hasEnoughScrap
-                ? 'Approve & Push to POS'
-                : `Need +${(recipe.scrapWeightNeededKg - availableScrapWeight).toFixed(1)}kg Scrap`}
-            </span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          {/* Cook & Rescue Batch Action Button */}
+          {isCooked ? (
+            <div className="flex items-center space-x-1.5 py-2.5 px-4 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-300 font-heading font-bold text-xs shadow-xs">
+              <Check className="w-4 h-4 text-emerald-700" />
+              <span>Cooked & Rescued ({recipe.yieldPortions} Portions)</span>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleCookBatch}
+              disabled={isAuthenticated && !hasEnoughScrap}
+              className={`flex items-center space-x-2 py-2.5 px-4 rounded-xl font-heading font-black text-xs shadow-md transition-all transform active:scale-95 ${
+                !isAuthenticated
+                  ? 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm'
+                  : hasEnoughScrap
+                  ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white shadow-glow-emerald'
+                  : 'bg-white text-[#6B6358] border border-[#E8DFD1] cursor-not-allowed opacity-60'
+              }`}
+            >
+              {!isAuthenticated ? (
+                <Lock className="w-3.5 h-3.5 text-emerald-200" />
+              ) : (
+                <Sparkles className="w-4 h-4" />
+              )}
+              <span>
+                {!isAuthenticated
+                  ? 'Sign in to Cook Batch'
+                  : hasEnoughScrap
+                  ? `Cook Batch (${recipe.yieldPortions} Portions)`
+                  : `Need +${(recipe.scrapWeightNeededKg - availableScrapWeight).toFixed(1)}kg Scrap`}
+              </span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
       </div>
-
-      {/* Push to POS Modal */}
-      <PushToPosModal
-        isOpen={isPushModalOpen}
-        recipe={recipe}
-        onClose={() => setIsPushModalOpen(false)}
-      />
     </>
   );
 };

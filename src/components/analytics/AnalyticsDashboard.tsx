@@ -37,12 +37,12 @@ export const AnalyticsDashboard: React.FC = () => {
 
   const kpis = [
     {
-      label: 'Recovered Revenue (₹)',
-      value: `₹${totalPosRevenue.toLocaleString()}`,
-      subtitle: '+24.6% vs baseline prep waste',
-      icon: <TrendingUp className="w-5 h-5 text-emerald-700" />,
+      label: 'Nutritious Meals Created',
+      value: `${Math.round(totalScrapDiverted * 4.2 + totalDonatedMeals)} Meals`,
+      subtitle: 'Zero-waste community servings',
+      icon: <Award className="w-5 h-5 text-emerald-700" />,
       color: 'text-emerald-700',
-      badge: 'High ROI',
+      badge: 'Food Security',
       badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-200'
     },
     {
@@ -189,7 +189,7 @@ export const AnalyticsDashboard: React.FC = () => {
                   Circularity Audit Ledger (Last 24 Hours)
                 </h3>
                 <p className="text-xs text-stone-500 font-mono">
-                  Immutable audit trail of scrap conversions, POS decrements, and NGO handovers
+                  Immutable audit trail of scrap conversions, batch preparations, and NGO handovers
                 </p>
               </div>
             </div>
@@ -206,7 +206,7 @@ export const AnalyticsDashboard: React.FC = () => {
                   <th className="pb-2.5 font-bold">Event Type</th>
                   <th className="pb-2.5 font-bold">Item / Dish Reference</th>
                   <th className="pb-2.5 font-bold">Weight / Portions</th>
-                  <th className="pb-2.5 font-bold">Economic Yield</th>
+                  <th className="pb-2.5 font-bold">Nutritional Purpose</th>
                   <th className="pb-2.5 font-bold">ESG Impact</th>
                   <th className="pb-2.5 font-bold text-right">Timestamp</th>
                 </tr>
@@ -215,13 +215,13 @@ export const AnalyticsDashboard: React.FC = () => {
                 <tr className="hover:bg-stone-50 transition-colors">
                   <td className="py-3">
                     <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-200">
-                      POS SALE
+                      COMMUNITY BATCH
                     </span>
                   </td>
                   <td className="py-3 font-semibold text-stone-900">Slow-Roasted Peppercorn Broth</td>
-                  <td className="py-3">2 Portions</td>
-                  <td className="py-3 text-emerald-700 font-bold">+₹178.00</td>
-                  <td className="py-3 text-stone-500">0.5 kg CO₂e saved</td>
+                  <td className="py-3">12 Portions</td>
+                  <td className="py-3 text-emerald-700 font-bold">Community Relief</td>
+                  <td className="py-3 text-stone-500">1.8 kg CO₂e saved</td>
                   <td className="py-3 text-right text-stone-400">Just now</td>
                 </tr>
                 <tr className="hover:bg-stone-50 transition-colors">
@@ -232,7 +232,7 @@ export const AnalyticsDashboard: React.FC = () => {
                   </td>
                   <td className="py-3 font-semibold text-stone-900">Charred Herb Stem Chimichurri</td>
                   <td className="py-3">6 Portions</td>
-                  <td className="py-3 text-violet-700 font-bold">Rescued Meal</td>
+                  <td className="py-3 text-violet-700 font-bold">Rescued Meals</td>
                   <td className="py-3 text-emerald-700">100% Diverted</td>
                   <td className="py-3 text-right text-stone-400">40m ago</td>
                 </tr>
@@ -244,19 +244,19 @@ export const AnalyticsDashboard: React.FC = () => {
                   </td>
                   <td className="py-3 font-semibold text-stone-900">Chicken Carcass & Wing Tips</td>
                   <td className="py-3">2.4 kg</td>
-                  <td className="py-3 text-emerald-700 font-bold">₹0 Raw Cost</td>
-                  <td className="py-3 text-stone-500">Collagen stock locked</td>
+                  <td className="py-3 text-emerald-700 font-bold">Zero Waste Intake</td>
+                  <td className="py-3 text-stone-500">Collagen broth locked</td>
                   <td className="py-3 text-right text-stone-400">2h ago</td>
                 </tr>
                 <tr className="hover:bg-stone-50 transition-colors">
                   <td className="py-3">
                     <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-200">
-                      KDS APPROVAL
+                      RECIPE COOKED
                     </span>
                   </td>
                   <td className="py-3 font-semibold text-stone-900">Spiced Sourdough Heel Crisps</td>
                   <td className="py-3">10 Portions</td>
-                  <td className="py-3 text-emerald-700 font-bold">₹69.00 / portion</td>
+                  <td className="py-3 text-emerald-700 font-bold">10 Portions Cooked</td>
                   <td className="py-3 text-stone-500">1.0 kg crusts saved</td>
                   <td className="py-3 text-right text-stone-400">3h ago</td>
                 </tr>

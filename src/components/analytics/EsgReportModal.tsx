@@ -50,8 +50,8 @@ export const EsgReportModal: React.FC<EsgReportModalProps> = ({ isOpen, onClose,
           {/* Key Metrics Verified Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-left">
             <div className="p-3 rounded-xl bg-white border border-[#E8DFD1] font-mono shadow-xs">
-              <span className="text-[10px] text-stone-500 uppercase block">Recovered Revenue</span>
-              <span className="text-lg font-heading font-black text-emerald-700">₹{metrics.recoveredRevenue.toLocaleString()}</span>
+              <span className="text-[10px] text-stone-500 uppercase block">Meals Created</span>
+              <span className="text-lg font-heading font-black text-emerald-700">{Math.round(metrics.scrapDivertedKg * 4.2 + metrics.donatedMeals)} portions</span>
             </div>
 
             <div className="p-3 rounded-xl bg-white border border-[#E8DFD1] font-mono shadow-xs">
@@ -87,7 +87,7 @@ export const EsgReportModal: React.FC<EsgReportModalProps> = ({ isOpen, onClose,
               <span>Standard Compliance: ISO 14001 & UN SDG 12.3 (50% Food Waste Reduction)</span>
             </div>
             <p className="text-[11px] text-stone-500">
-              This commercial kitchen has integrated real-time prep byproduct tracking and algorithmic reverse-recipe generation to recover commercial value from food waste while ensuring surplus redistribution to verified non-profit organizations.
+              This kitchen has integrated real-time prep byproduct tracking and algorithmic reverse-recipe generation to eliminate food waste while ensuring surplus redistribution to verified non-profit organizations.
             </p>
           </div>
 

@@ -63,8 +63,8 @@ export const MainOpeningDashboard: React.FC = () => {
   const co2AvoidedKg = totalScrapDiverted * 2.5;
   const waterSavedLiters = Math.round(totalScrapDiverted * 128);
 
-  // Dynamic ROI Calculations
-  const calcMonthlyRevenue = Math.round(calculatorScrapKg * 30 * 140 * 0.92);
+  // Dynamic Impact Calculations
+  const calcMonthlyMeals = Math.round(calculatorScrapKg * 30 * 3.5);
   const calcAnnualDivertedKg = Math.round(calculatorScrapKg * 365);
   const calcCo2PreventedKg = Math.round(calcAnnualDivertedKg * 2.5);
   const calcAnnualDonatedMeals = Math.round(calculatorScrapKg * 30 * 4);
@@ -78,54 +78,59 @@ export const MainOpeningDashboard: React.FC = () => {
       color: 'emerald',
       dishesCount: '3 Chef Recipes',
       popularDish: 'Roasted Mirepoix Vegetable Jus',
+      co2eSavedKg: 111.25,
       percentage: 31
     },
     {
-      name: 'Poultry Carcasses & Bones',
+      name: 'Poultry & Meat Bones',
       emoji: '🍗',
       quantityKg: 38.2,
       color: 'amber',
       dishesCount: '2 Chef Recipes',
-      popularDish: 'Slow-Roasted Peppercorn Bone Broth',
+      popularDish: 'Slow-Roasted Peppercorn Broth',
+      co2eSavedKg: 95.5,
       percentage: 26
     },
     {
-      name: 'Sourdough Crusts & Trimmings',
-      emoji: '🍞',
-      quantityKg: 26.8,
-      color: 'stone',
+      name: 'Citrus & Fruit Peels',
+      emoji: '🍊',
+      quantityKg: 21.0,
+      color: 'sky',
       dishesCount: '2 Chef Recipes',
-      popularDish: 'Sourdough Breadcrumb Gnocchi',
-      percentage: 19
-    },
-    {
-      name: 'Meyer Citrus Rinds & Peels',
-      emoji: '🍋',
-      quantityKg: 18.5,
-      color: 'amber',
-      dishesCount: '2 Chef Recipes',
-      popularDish: 'Candied Citrus Peel Glaze',
+      popularDish: 'Candied Citrus Zest Glaze',
+      co2eSavedKg: 52.5,
       percentage: 13
     },
     {
-      name: 'Chlorophyll Herb Stems',
-      emoji: '🌿',
+      name: 'Sourdough & Bread Crusts',
+      emoji: '🥖',
       quantityKg: 14.8,
-      color: 'emerald',
+      color: 'violet',
+      dishesCount: '2 Chef Recipes',
+      popularDish: 'Spiced Sourdough Heel Crisps',
+      co2eSavedKg: 37.0,
+      percentage: 19
+    },
+    {
+      name: 'Herb Stems & Greens',
+      emoji: '🌿',
+      quantityKg: 10.0,
+      color: 'rose',
       dishesCount: '2 Chef Recipes',
       popularDish: 'Charred Herb Stem Chimichurri',
+      co2eSavedKg: 25.0,
       percentage: 10
     }
   ];
 
-  // 5-Stage Interactive Circular Pipeline stages
+  // 5-Step Continuous Circular Kitchen Loop
   const pipelineStages = [
     {
       step: '01',
-      title: 'Vision Scrap Scan',
-      subtitle: 'Cutting-Board Ingestion',
+      title: 'AI Computer Vision',
+      subtitle: 'Neural Segmentation',
       icon: <Camera className="w-5 h-5 text-emerald-700" />,
-      badge: '98.4% Confidence',
+      badge: 'Real-Time Intake',
       badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
       description: 'Upload or snap a photo of prep trims. Multi-class neural network models segment mirepoix peels, bones, crusts, and herbs in milliseconds.'
     },
@@ -143,18 +148,18 @@ export const MainOpeningDashboard: React.FC = () => {
       title: 'Reverse Recipe OS',
       subtitle: 'Master-Chef Matching',
       icon: <ChefHat className="w-5 h-5 text-emerald-700" />,
-      badge: '93.7% Margin',
+      badge: 'Zero-Waste',
       badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
       description: 'Algorithm pairs byproduct weights with pantry staples (oils, seasonings, garlic) to formulate rich stocks, velvety potages, and crunchy garnishes.'
     },
     {
       step: '04',
-      title: 'POS Dynamic Specials',
-      subtitle: 'Real-Time Menu Deployment',
-      icon: <CreditCard className="w-5 h-5 text-violet-700" />,
-      badge: 'Scarcity Engine',
+      title: 'Community Relief Kiosk',
+      subtitle: 'Accessible Food Synthesis',
+      icon: <Users className="w-5 h-5 text-violet-700" />,
+      badge: 'Relief Engine',
       badgeColor: 'bg-violet-100 text-violet-800 border-violet-300',
-      description: 'Chefs push high-margin specials to cashier POS stations with real-time portion decrement, dynamic flash markdown sliders, and revenue recovery.'
+      description: 'Synthesizes available scrap items into nutritious, 1-pot meals with step-by-step voice guidance designed for community nourishment and needy relief.'
     },
     {
       step: '05',
@@ -163,7 +168,7 @@ export const MainOpeningDashboard: React.FC = () => {
       icon: <HeartHandshake className="w-5 h-5 text-rose-700" />,
       badge: 'OTP Verified',
       badgeColor: 'bg-rose-100 text-rose-800 border-rose-300',
-      description: 'Unsold portions at shift end automatically broadcast to verified food rescue shelters with 4-digit tamper-proof OTP driver verification.'
+      description: 'Surplus cooked portions automatically broadcast to verified food rescue shelters with 4-digit tamper-proof OTP driver verification.'
     }
   ];
 
@@ -387,7 +392,7 @@ export const MainOpeningDashboard: React.FC = () => {
         </section>
       </ScrollReveal>
 
-      {/* 2. Interactive Circularity & Margin Calculator Widget */}
+      {/* 2. Interactive Circularity & Impact Calculator Widget */}
       <ScrollReveal direction="up" distance={28} duration={0.6} delay={0.05}>
         <section className="bg-gradient-to-r from-stone-900 via-stone-800 to-stone-900 text-white p-6 sm:p-10 rounded-3xl shadow-xl relative overflow-hidden space-y-6">
         {/* Subtle background luxury glow */}
@@ -398,22 +403,22 @@ export const MainOpeningDashboard: React.FC = () => {
           <div>
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold mb-2">
               <Sliders className="w-3.5 h-3.5" />
-              <span>Interactive ROI & Impact Simulator</span>
+              <span>Interactive Sustainability & Impact Simulator</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-heading font-black tracking-tight">
-              Simulate Your Kitchen's Circular Dividends
+              Simulate Your Kitchen's Community Dividends
             </h2>
             <p className="text-xs sm:text-sm text-stone-400 font-sans mt-1">
-              Drag the daily scrap quantity to compute your monthly recaptured profit and ecological savings.
+              Drag the daily scrap quantity to compute your monthly nutritious meals created and ecological savings.
             </p>
           </div>
 
           {/* Quick Preset Badges */}
           <div className="flex items-center space-x-2 shrink-0">
             {[
-              { label: 'Small Bistro (5kg)', val: 5 },
-              { label: 'Busy Kitchen (15kg)', val: 15 },
-              { label: 'Banquet Hall (35kg)', val: 35 }
+              { label: 'Small Kitchen (5kg)', val: 5 },
+              { label: 'Community Hub (15kg)', val: 15 },
+              { label: 'Dining Hall (35kg)', val: 35 }
             ].map((preset) => (
               <button
                 key={preset.val}
@@ -460,9 +465,9 @@ export const MainOpeningDashboard: React.FC = () => {
             />
 
             <div className="flex justify-between text-[10px] font-mono text-stone-400">
-              <span>2 kg (Home / Café)</span>
+              <span>2 kg (Home Kitchen)</span>
               <span>25 kg (Mid-Scale)</span>
-              <span>50 kg (Commercial Dining)</span>
+              <span>50 kg (Community Kitchen)</span>
             </div>
           </div>
 
@@ -471,13 +476,13 @@ export const MainOpeningDashboard: React.FC = () => {
             
             <div className="bg-stone-800/80 border border-stone-700/80 p-4 rounded-2xl space-y-1">
               <span className="text-[10px] font-mono text-stone-400 uppercase font-semibold block">
-                Monthly Profit
+                Monthly Meals
               </span>
               <div className="text-xl sm:text-2xl font-heading font-black text-emerald-400">
-                ₹{calcMonthlyRevenue.toLocaleString()}
+                {calcMonthlyMeals.toLocaleString()}
               </div>
               <span className="text-[9px] font-mono text-stone-500 block">
-                92% upcycled margin
+                Nutritious servings
               </span>
             </div>
 
@@ -538,7 +543,7 @@ export const MainOpeningDashboard: React.FC = () => {
                 ✨ Upcycled Dishes Designed by Master Chefs
               </h2>
               <p className="text-xs text-stone-500 font-mono">
-                Hover to pause • Click any dish card to inspect full chef recipe, instructions, and profit breakdown
+                Hover to pause • Click any dish card to inspect full chef recipe, instructions, and upcycling breakdown
               </p>
             </div>
 
@@ -586,7 +591,7 @@ export const MainOpeningDashboard: React.FC = () => {
                       </span>
                       <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-violet-50 text-violet-700 border border-violet-200 flex items-center gap-1">
                         <Flame className="w-2.5 h-2.5 text-amber-500" />
-                        <span>{dish.marginPercent}% Margin</span>
+                        <span>Zero-Waste</span>
                       </span>
                     </div>
 
@@ -623,7 +628,7 @@ export const MainOpeningDashboard: React.FC = () => {
                     </div>
 
                     <div className="font-bold text-emerald-700">
-                      ₹{dish.suggestedPrice.toFixed(0)} <span className="text-[10px] font-normal text-stone-400">/ portion</span>
+                      {dish.yieldPortions} <span className="text-[10px] font-normal text-stone-400">portions</span>
                     </div>
                   </div>
 
@@ -887,7 +892,7 @@ export const MainOpeningDashboard: React.FC = () => {
               Workspace Solutions
             </span>
             <h2 className="text-2xl font-heading font-black text-stone-900">
-              Designed for Commercial Kitchens & Home Cooks
+              Designed for Community Kitchens & Home Cooks
             </h2>
             <p className="text-xs text-stone-500">
               Sign in or create your account to enter the workspace tailored to your culinary needs
@@ -897,7 +902,7 @@ export const MainOpeningDashboard: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           
-          {/* Chef Commercial Suite Card */}
+          {/* Chef Community Suite Card */}
           <ScrollReveal direction="left" distance={28} delay={0}>
             <div className="p-6 sm:p-8 rounded-3xl bg-white border-2 border-[#E8DFD1] hover:border-emerald-600 shadow-xs hover:shadow-xl transition-all space-y-5 flex flex-col justify-between card-3d-hover border-glow-emerald h-full">
               <div className="space-y-4">
@@ -908,26 +913,26 @@ export const MainOpeningDashboard: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="font-heading font-black text-stone-900 text-lg">
-                        Professional Chef Suite
+                        Community Chef Suite
                       </h3>
                       <p className="text-xs font-mono text-emerald-700 font-bold">
-                        Commercial KitchenOS
+                        Community KitchenOS
                       </p>
                     </div>
                   </div>
                   <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
-                    Commercial Grade
+                    Community Grade
                   </span>
                 </div>
 
                 <p className="text-xs text-stone-600 leading-relaxed">
-                  Empower your line cooks, reduce food waste costs, author signature upcycled dishes with dish photography, push dynamic specials to POS, and automate surplus donations to partner NGOs.
+                  Empower your kitchen, eliminate food waste, author signature upcycled dishes with dish photography, cook community batches, and automate surplus donations to partner NGOs.
                 </p>
 
                 <div className="space-y-2 pt-2 border-t border-stone-100">
                   <div className="flex items-center space-x-2 text-xs text-stone-600 font-mono">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Smart Prep Intake & Knife Trim Benchmark</span>
+                    <span>Smart Prep Intake & AI Scrap Recognition</span>
                   </div>
                   <div className="flex items-center space-x-2 text-xs text-stone-600 font-mono">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -935,7 +940,7 @@ export const MainOpeningDashboard: React.FC = () => {
                   </div>
                   <div className="flex items-center space-x-2 text-xs text-stone-600 font-mono">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Cashier POS Terminal & Flash Markdown Slider</span>
+                    <span>Offline Relief Kiosk & Community Voice Guide</span>
                   </div>
                   <div className="flex items-center space-x-2 text-xs text-stone-600 font-mono">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -943,7 +948,7 @@ export const MainOpeningDashboard: React.FC = () => {
                   </div>
                   <div className="flex items-center space-x-2 text-xs text-stone-600 font-mono">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Circularity Ledger & ISO 14001 ESG Audit Report</span>
+                    <span>Circularity Ledger & Sustainability Impact Report</span>
                   </div>
                 </div>
               </div>
@@ -1137,7 +1142,7 @@ export const MainOpeningDashboard: React.FC = () => {
                 </span>
               </div>
               <p className="text-xs text-stone-500 leading-relaxed max-w-md font-sans">
-                Enterprise circular gastronomy platform converting commercial and household kitchen byproducts into high-margin revenue streams, verified ESG impact certificates, and automated food rescue redistributions.
+                Sustainable circular gastronomy platform converting household and community kitchen byproducts into nutritious meals, verified environmental savings, and automated food rescue redistributions.
               </p>
             </div>
 

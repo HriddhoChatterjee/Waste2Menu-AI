@@ -185,14 +185,14 @@ export const CreateRecipeModal: React.FC<CreateRecipeModalProps> = ({ isOpen, on
         { name: 'Olive Oil or Ghee', inStock: true, qty: '30 ml' }
       ],
       rawByproductCost: 0,
-      seasoningGasCost: 18,
-      suggestedPrice,
-      marginPercent,
-      description: description.trim() || `Chef-crafted zero-waste dish upcycling ${scrapTypeNeeded.replace('_', ' ')}.`,
-      flavorProfile: flavorProfile.trim(),
-      chefTips: chefTips.trim(),
+      seasoningGasCost: 0,
+      suggestedPrice: 0,
+      marginPercent: 100,
+      description: description.trim(),
+      flavorProfile: flavorProfile.trim() || 'Savory, aromatic, nutrient-rich',
+      chefTips: chefTips.trim() || 'Simmer on low flame to extract maximum nutrients from scraps.',
       instructions,
-      tags: ['Chef Custom', 'Zero-Waste', 'High Margin'],
+      tags: ['Chef Custom', 'Zero-Waste', 'Community Nutrition'],
       author: userProfile?.name || 'Chef Aarav Singhania',
       imageUrl: imageUrl || undefined,
       status: 'ready_to_cook'
@@ -493,21 +493,8 @@ export const CreateRecipeModal: React.FC<CreateRecipeModalProps> = ({ isOpen, on
             </div>
           </div>
 
-          {/* 4. Economics & Timing */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label className="block text-xs font-mono font-bold text-stone-700 uppercase mb-1">
-                Suggested POS Price (₹)
-              </label>
-              <input
-                type="number"
-                min="10"
-                value={suggestedPrice}
-                onChange={(e) => setSuggestedPrice(parseFloat(e.target.value) || 50)}
-                className="w-full bg-white text-stone-900 text-xs px-3.5 py-2 rounded-xl border border-[#E8DFD1] focus:outline-none focus:border-emerald-600 font-mono shadow-xs"
-              />
-            </div>
-
+          {/* 4. Timing & Eco Impact */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-mono font-bold text-stone-700 uppercase mb-1">
                 Prep Time (Minutes)
@@ -523,11 +510,11 @@ export const CreateRecipeModal: React.FC<CreateRecipeModalProps> = ({ isOpen, on
 
             <div className="bg-[#FFFDF9] border border-[#E8DFD1] p-2.5 rounded-xl flex flex-col justify-center">
               <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
-                Estimated Margin
+                Estimated Eco Impact
               </span>
               <div className="text-xl font-heading font-black text-emerald-700">
-                {Math.round(((suggestedPrice - 18) / suggestedPrice) * 100)}%
-                <span className="text-[10px] font-mono font-normal text-stone-400 ml-1">zero raw cost</span>
+                {(scrapWeightNeededKg * 2.5).toFixed(1)} kg CO₂e
+                <span className="text-[10px] font-mono font-normal text-stone-400 ml-1">avoided</span>
               </div>
             </div>
           </div>

@@ -242,7 +242,7 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
                     ⏱️ {recipe.prepTimeMins} mins
                   </span>
                   <span className="bg-emerald-700/90 backdrop-blur-xs px-2.5 py-1 rounded-lg font-bold">
-                    {recipe.marginPercent}% Margin
+                    100% Upcycled
                   </span>
                 </div>
               </div>
@@ -321,12 +321,12 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
             </div>
 
             <div className="p-3.5 rounded-2xl bg-white border border-[#E8DFD1] space-y-1">
-              <span className="text-stone-400 text-[10px] uppercase font-semibold block">Total Prep Cost</span>
-              <strong className="text-base font-heading font-black text-stone-900 block">
-                ₹{totalMealCost}
+              <span className="text-stone-400 text-[10px] uppercase font-semibold block">CO₂e Avoided</span>
+              <strong className="text-base font-heading font-black text-emerald-700 block">
+                {(Number(scaledScrapWeightKg) * 2.5).toFixed(1)} kg
               </strong>
               <span className="text-[10px] text-emerald-600 block">
-                (₹{costPerPortion.toFixed(1)} / serving)
+                Zero-waste impact
               </span>
             </div>
 
@@ -464,8 +464,8 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
                     <strong className="text-amber-700">Zinc & Iron</strong>
                   </div>
                   <div className="p-2 rounded-lg bg-[#FAF7F2] border border-[#E8DFD1]">
-                    <span className="text-[10px] text-stone-400 block">Pantry Cost</span>
-                    <strong className="text-stone-900">₹{costPerPortion.toFixed(1)}</strong>
+                    <span className="text-[10px] text-stone-400 block">Food Safety</span>
+                    <strong className="text-emerald-700">100% Edible</strong>
                   </div>
                 </div>
               </div>
