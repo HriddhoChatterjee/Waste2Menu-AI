@@ -20,12 +20,10 @@ import {
   ChevronDown,
   UserPlus,
   Users,
-  Coins,
   Smartphone
 } from 'lucide-react';
 import { NotificationTray } from './NotificationTray';
 import { LoginModal } from '../auth/LoginModal';
-import { BusinessModelModal } from '../business/BusinessModelModal';
 
 export const Navbar: React.FC = () => {
   const { 
@@ -49,7 +47,6 @@ export const Navbar: React.FC = () => {
 
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [isBusinessModalOpen, setIsBusinessModalOpen] = useState(false);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
   const activeSpecialsCount = activeSpecials.filter((s) => !s.isSoldOut && s.remainingPortions > 0).length;
@@ -106,16 +103,6 @@ export const Navbar: React.FC = () => {
         setRole('community_kiosk');
       },
       isActive: currentRole === 'community_kiosk'
-    },
-    {
-      id: 'business-model',
-      label: 'Business Model',
-      shortLabel: 'ROI Model',
-      icon: <Coins className="w-3.5 h-3.5 text-amber-600 shrink-0" />,
-      action: () => {
-        setIsBusinessModalOpen(true);
-      },
-      isActive: isBusinessModalOpen
     }
   ];
 
@@ -382,8 +369,6 @@ export const Navbar: React.FC = () => {
                         ? 'prep' 
                         : currentRole === 'analytics' 
                         ? 'impact' 
-                        : isBusinessModalOpen
-                        ? 'business_model'
                         : activeLandingSection === 'how-it-works' 
                         ? 'how-it-works' 
                         : 'overview'
@@ -398,8 +383,6 @@ export const Navbar: React.FC = () => {
                         setRole('prep');
                       } else if (val === 'impact') {
                         setRole('analytics');
-                      } else if (val === 'business_model') {
-                        setIsBusinessModalOpen(true);
                       } else if (val === 'how-it-works') {
                         setActiveLandingSection('how-it-works');
                       } else {
@@ -415,7 +398,6 @@ export const Navbar: React.FC = () => {
                     <option value="impact">📊 Food Saved</option>
                     <option value="how-it-works">⚡ How It Works</option>
                     <option value="community_kiosk">📱 Offline Kiosk</option>
-                    <option value="business_model">💰 Business Model</option>
                   </select>
                 ) : (
                   <select
@@ -518,22 +500,6 @@ export const Navbar: React.FC = () => {
               <button
                 onClick={() => {
                   setIsProfileModalOpen(false);
-                  setIsBusinessModalOpen(true);
-                }}
-                className="w-full flex items-center justify-between px-3 py-2 text-xs font-bold text-stone-700 hover:text-emerald-800 hover:bg-white rounded-xl transition-all"
-              >
-                <span className="flex items-center space-x-2">
-                  <Coins className="w-3.5 h-3.5 text-amber-600" />
-                  <span>View B2B Business Model & ROI Tiers</span>
-                </span>
-                <span className="text-[9px] font-mono font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-200">
-                  Enterprise
-                </span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setIsProfileModalOpen(false);
                   setRole('community_kiosk');
                 }}
                 className="w-full flex items-center justify-between px-3 py-2 text-xs font-bold text-stone-700 hover:text-emerald-800 hover:bg-white rounded-xl transition-all"
@@ -572,12 +538,6 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Business Model & ROI Architecture Modal */}
-      <BusinessModelModal
-        isOpen={isBusinessModalOpen}
-        onClose={() => setIsBusinessModalOpen(false)}
-      />
 
       {/* Workspace Authentication Modal */}
       <LoginModal 

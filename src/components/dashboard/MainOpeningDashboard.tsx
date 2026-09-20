@@ -27,13 +27,11 @@ import {
   Camera,
   X,
   Check,
-  Coins,
   Eye
 } from 'lucide-react';
 import { sounds } from '../../utils/soundEffects';
 import { ScrollReveal } from '../common/ScrollReveal';
 import { RecipeDetailModal } from '../recipes/RecipeDetailModal';
-import { BusinessModelModal } from '../business/BusinessModelModal';
 
 export const MainOpeningDashboard: React.FC = () => {
   const { 
@@ -55,8 +53,6 @@ export const MainOpeningDashboard: React.FC = () => {
   const [activePipelineStep, setActivePipelineStep] = useState<number>(0);
   // Quick Dish Inspector Modal state
   const [inspectingDish, setInspectingDish] = useState<RecipeDish | null>(null);
-  // Business Model Modal state
-  const [isBizModelOpen, setIsBizModelOpen] = useState<boolean>(false);
 
   const totalScrapDiverted = scraps.reduce((acc, s) => acc + s.weightKg, 0) + 128.5;
   const totalRevenue = completedOrders.reduce((acc, o) => acc + o.totalAmount, 0) + 42500;
@@ -355,17 +351,6 @@ export const MainOpeningDashboard: React.FC = () => {
                     <Sparkles className="w-4 h-4 text-emerald-200" />
                     <span>Try Ingredient Selector & Recipes</span>
                     <ArrowRight className="w-4 h-4" />
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      sounds.playTap();
-                      setIsBizModelOpen(true);
-                    }}
-                    className="w-full sm:w-auto px-5 py-3.5 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 font-heading font-bold text-xs shadow-xs transition-all flex items-center justify-center space-x-1.5"
-                  >
-                    <Coins className="w-4 h-4 text-amber-700" />
-                    <span>Commercial Business Model & ROI</span>
                   </button>
 
                   <button
@@ -894,81 +879,6 @@ export const MainOpeningDashboard: React.FC = () => {
         </ScrollReveal>
       </section>
 
-      {/* 5.5 Commercial B2B Business Model & Monetization Engine Section */}
-      <ScrollReveal direction="up" distance={24}>
-        <section className="bg-gradient-to-br from-white via-[#FFFDF9] to-[#FAF7F2] border border-[#E8DFD1] p-6 sm:p-10 rounded-3xl shadow-xs space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E8DFD1] pb-5">
-            <div className="space-y-1.5">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-mono font-bold">
-                <Coins className="w-3.5 h-3.5 text-amber-700" />
-                <span>B2B Commercial Architecture & Revenue Model</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-heading font-black text-stone-900">
-                Not a Food Delivery App — A Circular Kitchen Profit Engine
-              </h2>
-              <p className="text-xs sm:text-sm text-stone-600 font-sans max-w-2xl leading-relaxed">
-                Hospitality kitchens throw away 18%–25% of all purchased food. Waste2Menu empowers chefs to monetize prep trimmings into high-margin daily specials, claim CSR tax deductions, and automate ESG compliance.
-              </p>
-            </div>
-
-            <button
-              onClick={() => {
-                sounds.playTap();
-                setIsBizModelOpen(true);
-              }}
-              className="btn-shimmer px-5 py-3.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-heading font-black text-xs shadow-md transition-all flex items-center space-x-2 shrink-0 active:scale-95"
-            >
-              <Coins className="w-4 h-4 text-emerald-200" />
-              <span>Inspect B2B Unit Economics & SaaS Tiers</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* 4 Pillars of Commercial Monetization */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-2xl border border-[#E8DFD1] shadow-xs space-y-2 card-3d-hover">
-              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-sm">
-                18%
-              </div>
-              <h4 className="font-heading font-bold text-stone-900 text-sm">Food Procurement Savings</h4>
-              <p className="text-xs text-stone-600 leading-relaxed font-sans">
-                Commercial kitchens stop purchasing pre-made vegetable stocks, soup bases, and glazes by upcycling on-premise scraps.
-              </p>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl border border-[#E8DFD1] shadow-xs space-y-2 card-3d-hover">
-              <div className="w-9 h-9 rounded-xl bg-violet-100 text-violet-800 flex items-center justify-center font-bold text-sm">
-                92%
-              </div>
-              <h4 className="font-heading font-bold text-stone-900 text-sm">Daily Special Margins</h4>
-              <p className="text-xs text-stone-600 leading-relaxed font-sans">
-                Byproducts carry zero raw acquisition cost. Daily specials deployed to the POS generate pure gross revenue.
-              </p>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl border border-[#E8DFD1] shadow-xs space-y-2 card-3d-hover">
-              <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-sm">
-                80G
-              </div>
-              <h4 className="font-heading font-bold text-stone-900 text-sm">Automated CSR Tax Credits</h4>
-              <p className="text-xs text-stone-600 leading-relaxed font-sans">
-                Unsold portions at shift end automatically dispatch to partner shelters, generating tamper-proof 80G tax receipts.
-              </p>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl border border-[#E8DFD1] shadow-xs space-y-2 card-3d-hover">
-              <div className="w-9 h-9 rounded-xl bg-sky-100 text-sky-800 flex items-center justify-center font-bold text-sm">
-                ESG
-              </div>
-              <h4 className="font-heading font-bold text-stone-900 text-sm">Scope 3 Emission Certs</h4>
-              <p className="text-xs text-stone-600 leading-relaxed font-sans">
-                Full compliance with ISO 14001 and UN SDG 12.3 audits, positioning enterprise restaurant chains for sustainability incentives.
-              </p>
-            </div>
-          </div>
-        </section>
-      </ScrollReveal>
-
       {/* 6. Kitchen & Home Suites Comparison Section (#suites) */}
       <section id="suites" className="space-y-6 scroll-mt-24">
         <ScrollReveal direction="up" distance={20}>
@@ -1209,12 +1119,6 @@ export const MainOpeningDashboard: React.FC = () => {
         recipe={inspectingDish}
         isOpen={!!inspectingDish}
         onClose={() => setInspectingDish(null)}
-      />
-
-      {/* Commercial Business Model & ROI Architecture Modal */}
-      <BusinessModelModal
-        isOpen={isBizModelOpen}
-        onClose={() => setIsBizModelOpen(false)}
       />
 
       {/* 8. Luxury Culinary Executive Footer */}
