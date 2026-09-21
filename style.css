@@ -93,6 +93,7 @@ body.theme-light-creme {
   align-items: center;
   gap: 0.85rem;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .brand-logo {
@@ -156,6 +157,7 @@ body.theme-light-creme {
   gap: 0.45rem;
   transition: all var(--transition-fast);
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .nav-tab-btn:hover {
