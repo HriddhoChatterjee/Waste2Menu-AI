@@ -50,14 +50,14 @@ This platform is **strictly non-commercial**:
 | **Voice Engine** | Web Speech API | Native browser speech synthesis for hands-free kitchen voice guidance. |
 | **Backend REST API**| Python 3.10+, FastAPI, Uvicorn | High-performance asynchronous API endpoints for auth, recipes, scraps, and NGO dispatches. |
 | **Relational Database** | PostgreSQL 12+ / pgAdmin 4 | Normalized schema with foreign keys (`schema.sql` and `seed_data.sql`). |
-| **Local Fallback** | SQLite (`annapurna.db`) | Automatic embedded fallback enabling zero-configuration instant local execution with all 30 PDF scraps & recipes. |
+| **Local Fallback** | SQLite (`waste2menu.db`) | Automatic embedded fallback enabling zero-configuration instant local execution with all 30 PDF scraps & recipes. |
 
 ---
 
 ## 🚀 Quick Start
 
 ### 1. Instant Run (Zero Configuration)
-The backend automatically falls back to an embedded SQLite database (`annapurna.db`) pre-seeded with all 17 recipes and scraps:
+The backend automatically falls back to an embedded SQLite database (`waste2menu.db`) pre-seeded with all 30 recipes and scraps:
 
 ```powershell
 # In project root:

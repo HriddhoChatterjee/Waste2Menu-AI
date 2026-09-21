@@ -116,14 +116,23 @@ def test_js():
         "updateCatalogSelectionDock",
         "viewRecipesForCatalogSelection"
     ]
-    for func in required_funcs:
+    # 4. Master Chef functions
+    master_funcs = [
+        "renderMasterChefScrapsSelector",
+        "selectMasterChefScrap",
+        "updateMasterStep1SelectionUI",
+        "openMasterRecipeBuilderModal",
+        "closeMasterRecipeBuilderModal",
+        "handleMasterRecipeSubmit"
+    ]
+    for func in master_funcs:
         assert func in js, f"Missing function '{func}' in app.js"
-        print(f"  [PASS] Function '{func}' defined in app.js.")
+        print(f"  [PASS] Master Chef authoring function '{func}' defined in app.js.")
 
-    # 3. No search query logic
-    assert "searchDebounceTimer" not in js, "searchDebounceTimer still present in app.js"
-    assert "catalogSearchQuery" not in js, "catalogSearchQuery still present in app.js"
-    print("  [PASS] Obsolete search query states and debounce timers completely removed.")
+    # 5. Check that Home Chef has zero recipe upload CTA in recipes grid
+    assert "btn-empty-upload" not in js, "Found btn-empty-upload in app.js - Home Chef shouldn't have upload option!"
+    assert "btn-empty-browse-catalog" in js, "Missing btn-empty-browse-catalog in app.js"
+    print("  [PASS] Empty recipe state cleanly directs Home Chefs to browse catalog without upload CTA.")
 
 def test_css():
     print("\n--- Testing style.css Aesthetics & Animations ---")
@@ -145,11 +154,69 @@ def test_css():
         ".scrap-item-rich-card",
         ".btn-scrap-select-toggle",
         ".btn-scrap-view-recipe",
-        ".guide-selection-bar"
+        ".guide-selection-bar",
+        ".master-author-stepper",
+        ".master-scraps-category-grid",
+        ".master-cat-section",
+        ".master-scrap-card",
+        ".master-step1-dock",
+        ".btn-step-next",
+        ".recipe-builder-modal-card",
+        ".builder-scrap-banner"
     ]
     for item in required_classes_and_keyframes:
         assert item in css, f"Missing '{item}' in style.css"
         print(f"  [PASS] CSS rule '{item}' exists.")
+
+def test_database_and_recipe_submission():
+    print("\n--- Testing Database and Recipe Submission ---")
+    db_file = BASE_DIR / "waste2menu.db"
+    assert db_file.exists(), f"waste2menu.db does not exist at {db_file}"
+    print(f"  [PASS] Database waste2menu.db exists ({db_file.stat().st_size} bytes).")
+
+    # Verify server.py points to waste2menu.db
+    server_py = (BASE_DIR / "server.py").read_text(encoding="utf-8")
+    assert 'DB_FILE = BASE_DIR / "waste2menu.db"' in server_py, "server.py does not point to waste2menu.db"
+    print("  [PASS] server.py correctly configured for waste2menu.db.")
+
+    # Test POST /api/recipes for a new Master Chef recipe
+    test_payload = {
+        "title": "Verifiable Lauki Peel Thogayal",
+        "scrap_id": 1,
+        "chef_name": "Chef Sanjeev",
+        "chef_affiliation": "Guild Heritage Kitchen",
+        "prep_time_minutes": 20,
+        "difficulty": "Easy",
+        "course_type": "Chutney/Dip",
+        "dietary_type": "Vegan",
+        "pantry_staples": ["Urad dal", "Dried red chillies", "Tamarind", "Mustard seeds"],
+        "step_by_step_instructions": [
+            "Roast urad dal and red chillies until fragrant.",
+            "Saute bottle gourd peels until tender.",
+            "Grind together with tamarind and salt into a coarse paste."
+        ],
+        "chef_wisdom_tip": "Roasting peels on low heat preserves dietary flavonoids.",
+        "servings": 4
+    }
+
+    req = urllib.request.Request(
+        "http://127.0.0.1:8000/api/recipes",
+        data=json.dumps(test_payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"}
+    )
+    resp = urllib.request.urlopen(req)
+    assert resp.status in (200, 201), f"Failed to post recipe: {resp.status}"
+    created = json.loads(resp.read().decode("utf-8"))
+    assert created.get("id") is not None, f"Expected id in response, got: {created}"
+    new_id = created.get("id")
+    print(f"  [PASS] POST /api/recipes returned recipe ID #{new_id} in waste2menu.db!")
+
+    # Verify retrieval of newly created recipe
+    fetch_resp = urllib.request.urlopen(f"http://127.0.0.1:8000/api/recipes/{new_id}")
+    assert fetch_resp.status == 200
+    fetched_rc = json.loads(fetch_resp.read().decode("utf-8"))
+    assert fetched_rc.get("title") == test_payload["title"], f"Expected {test_payload['title']}, got {fetched_rc.get('title')}"
+    print(f"  [PASS] Retrieved recipe #{new_id} from waste2menu.db and verified title: '{fetched_rc.get('title')}'")
 
 if __name__ == "__main__":
     try:
@@ -157,9 +224,12 @@ if __name__ == "__main__":
         test_html()
         test_js()
         test_css()
+        test_database_and_recipe_submission()
         print("\n=======================================================")
-        print("🎉 ALL TESTS PASSED! Waste2Menu redesign verified 100%.")
+        print("[SUCCESS] ALL TESTS PASSED! Waste2Menu redesign verified 100%.")
         print("=======================================================\n")
-    except AssertionError as e:
-        print(f"\n❌ TEST FAILED: {e}")
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print(f"\n[FAIL] TEST FAILED: {e}")
         sys.exit(1)

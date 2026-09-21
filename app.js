@@ -284,6 +284,7 @@
     dispatches: [],
     // Ingredient selection
     selectedScrapIds: new Set(),
+    masterChefSelectedScrapId: null,
     selectedCourse: 'all',
     selectedDietary: 'all',
     activeRecipe: null,
@@ -320,16 +321,39 @@
     activeScrapsFilterTag: document.getElementById('active-scraps-filter-tag'),
     homeRecipeGrid: document.getElementById('home-recipe-grid'),
 
-    // Master Chef Elements
+    // Master Chef Elements (2-Step Authoring Studio & Pop-up Dialog)
     chefRoleBanner: document.getElementById('chef-role-banner'),
     chefRoleNoticeText: document.getElementById('chef-role-notice-text'),
     btnChefDemoSignin: document.getElementById('btn-chef-demo-signin'),
+    masterStep1View: document.getElementById('master-step1-view'),
+    masterScrapsSelectorContainer: document.getElementById('master-scraps-selector-container'),
+    step1SelectedBadge: document.getElementById('step1-selected-badge'),
+    dockSelectedScrapName: document.getElementById('dock-selected-scrap-name'),
+    btnMasterStep1Next: document.getElementById('btn-master-step1-next'),
+    masterRecipeModal: document.getElementById('master-recipe-modal'),
+    masterModalClose: document.getElementById('master-modal-close'),
+    builderScrapBanner: document.getElementById('builder-scrap-banner'),
+    builderScrapPill: document.getElementById('builder-scrap-pill'),
+    builderScrapTitle: document.getElementById('builder-scrap-title'),
+    builderScrapReg: document.getElementById('builder-scrap-reg'),
+    btnBuilderChangeScrap: document.getElementById('btn-builder-change-scrap'),
     masterRecipeForm: document.getElementById('master-recipe-form'),
-    formRcScrap: document.getElementById('form-rc-scrap'),
+    formRcScrapId: document.getElementById('form-rc-scrap-id'),
+    formRcTitle: document.getElementById('form-rc-title'),
+    formRcCourse: document.getElementById('form-rc-course'),
+    formRcDietary: document.getElementById('form-rc-dietary'),
+    formRcChef: document.getElementById('form-rc-chef'),
+    formRcAffiliation: document.getElementById('form-rc-affiliation'),
+    formRcPrep: document.getElementById('form-rc-prep'),
+    formRcDiff: document.getElementById('form-rc-diff'),
+    formRcServings: document.getElementById('form-rc-servings'),
+    formRcWisdom: document.getElementById('form-rc-wisdom'),
     btnAddPantryItem: document.getElementById('btn-add-pantry-item'),
     pantryInputsContainer: document.getElementById('pantry-inputs-container'),
     btnAddStepItem: document.getElementById('btn-add-step-item'),
     stepsInputsContainer: document.getElementById('steps-inputs-container'),
+    btnModalStep2Back: document.getElementById('btn-modal-step2-back'),
+    btnSaveRecipe: document.getElementById('btn-save-recipe'),
 
     // NGO Dispatch Elements
     ngoBroadcastForm: document.getElementById('ngo-broadcast-form'),
@@ -441,6 +465,7 @@
 
     renderAncestralShowcase();
     renderCategorizedCatalog();
+    renderMasterChefScrapsSelector();
     populateScrapDropdown();
     animateMetricCounters();
 
@@ -466,6 +491,7 @@
       // Render updated views
       renderAncestralShowcase();
       renderCategorizedCatalog();
+      renderMasterChefScrapsSelector();
       populateScrapDropdown();
       renderRecipesGrid();
       renderDispatchesFeed();
@@ -475,6 +501,7 @@
       renderCategorizedCatalog();
       populateScrapDropdown();
       renderRecipesGrid();
+      renderMasterChefScrapsSelector();
     }
   }
 
@@ -505,11 +532,10 @@
       if (state.currentUser && state.currentUser.role === 'master_chef') {
         switchTab('master-chef');
       } else if (state.currentUser && state.currentUser.role === 'home_chef') {
-        showToast('You are signed in as Home Chef. Switch to Master Chef mode to upload recipes.', 'info');
-        openAuthModal();
+        showToast('Recipe upload is exclusive to Master Chefs. Home Chefs can view and cook all recipes!', 'info');
       } else {
         openAuthModal();
-        showToast('Master Chef recipe upload portal is available after signing in. Use 1-Click Demo!', 'info');
+        showToast('Master Chef recipe authoring studio is available after signing in. Use 1-Click Demo!', 'info');
       }
     });
 
@@ -555,7 +581,24 @@
       applyFiltersAndRenderRecipes();
     });
 
-    // Dynamic Master Chef Form Builders
+    // Master Chef Step 1 -> Step 2 Modal Popup Triggers
+    if (DOM.btnMasterStep1Next) {
+      DOM.btnMasterStep1Next.addEventListener('click', openMasterRecipeBuilderModal);
+    }
+    if (DOM.masterModalClose) {
+      DOM.masterModalClose.addEventListener('click', closeMasterRecipeBuilderModal);
+    }
+    if (DOM.btnBuilderChangeScrap) {
+      DOM.btnBuilderChangeScrap.addEventListener('click', closeMasterRecipeBuilderModal);
+    }
+    if (DOM.btnModalStep2Back) {
+      DOM.btnModalStep2Back.addEventListener('click', closeMasterRecipeBuilderModal);
+    }
+    if (DOM.masterRecipeModal) {
+      DOM.masterRecipeModal.addEventListener('cancel', closeMasterRecipeBuilderModal);
+    }
+
+    // Dynamic Master Chef Form Builders (Inside Step 2 Popup)
     DOM.btnAddPantryItem.addEventListener('click', addPantryInputRow);
     DOM.btnAddStepItem.addEventListener('click', addStepInputRow);
 
@@ -582,7 +625,7 @@
       }
     });
 
-    // Master Chef Recipe Submit
+    // Master Chef Recipe Submit (Step 2 Popup)
     DOM.masterRecipeForm.addEventListener('submit', handleMasterRecipeSubmit);
 
     // NGO Broadcast Submit
@@ -619,10 +662,17 @@
   // NAVIGATION & TAB SWITCHING
   // ==========================================================================
   function switchTab(tabId) {
-    if (tabId === 'master-chef' && (!state.currentUser || state.currentUser.role !== 'master_chef')) {
-      showToast('Master Chef recipe upload studio is available after signing in as Master Chef.', 'info');
-      openAuthModal();
-      return;
+    if (tabId === 'master-chef') {
+      if (state.currentUser && state.currentUser.role === 'home_chef') {
+        showToast('Recipe authoring & upload is exclusive to Master Chefs. Home Chefs can explore and cook all recipes!', 'info');
+        switchTab('home-chef');
+        return;
+      }
+      if (!state.currentUser || state.currentUser.role !== 'master_chef') {
+        showToast('Master Chef recipe authoring studio is available after signing in as Master Chef.', 'info');
+        openAuthModal();
+        return;
+      }
     }
 
     state.activeTab = tabId;
@@ -639,9 +689,7 @@
     if (tabId === 'master-chef') {
       const isMaster = state.currentUser && state.currentUser.role === 'master_chef';
       DOM.chefRoleBanner.style.display = isMaster ? 'none' : 'flex';
-      if (state.currentUser && state.currentUser.role === 'home_chef') {
-        DOM.chefRoleNoticeText.textContent = `You are currently in Home Chef mode (${state.currentUser.name}). Switch to Master Chef demo to author verified community recipes.`;
-      }
+      renderMasterChefScrapsSelector();
     }
 
     if (tabId === 'home-overview') {
@@ -672,6 +720,7 @@
       // Hidden in navbar when logged out
       if (homeTabBtn) homeTabBtn.style.display = 'none';
       if (masterTabBtn) masterTabBtn.style.display = 'none';
+      if (DOM.btnHeroContribute) DOM.btnHeroContribute.style.display = 'inline-flex';
 
       // Redirect if on an authenticated tab
       if (state.activeTab === 'master-chef') {
@@ -683,10 +732,15 @@
       if (role === 'master_chef') {
         if (masterTabBtn) masterTabBtn.style.display = 'inline-flex';
         if (homeTabBtn) homeTabBtn.style.display = 'inline-flex';
+        if (DOM.btnHeroContribute) {
+          DOM.btnHeroContribute.style.display = 'inline-flex';
+          DOM.btnHeroContribute.innerHTML = '<span>👨‍🍳 + Upload Recipe (Studio)</span>';
+        }
       } else {
-        // Home Chef role
+        // Home Chef role - strictly remove upload recipe options
         if (homeTabBtn) homeTabBtn.style.display = 'inline-flex';
         if (masterTabBtn) masterTabBtn.style.display = 'none';
+        if (DOM.btnHeroContribute) DOM.btnHeroContribute.style.display = 'none';
         if (state.activeTab === 'master-chef') {
           switchTab('home-chef');
         }
@@ -924,16 +978,16 @@
           <div style="font-size: 2.8rem; margin-bottom: 0.5rem;">🥗</div>
           <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">No matching zero-waste recipes found</h3>
           <p style="font-size: 0.92rem; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.5rem;">
-            Try selecting more ingredients from the 30-scraps list above or clear your search term. Have a family recipe for this scrap? Upload it as a Master Chef!
+            Try selecting different scraps from the 30-scraps catalog or clear filters to view authentic zero-waste dishes.
           </p>
-          <button class="btn-hero-primary" id="btn-empty-upload">
-            <span>👨‍🍳 Upload This Byproduct Recipe</span>
+          <button class="btn-hero-primary" id="btn-empty-browse-catalog">
+            <span>📚 Browse 30 Kitchen Scraps Catalog</span>
           </button>
         </div>
       `;
-      const emptyBtn = DOM.homeRecipeGrid.querySelector('#btn-empty-upload');
+      const emptyBtn = DOM.homeRecipeGrid.querySelector('#btn-empty-browse-catalog');
       if (emptyBtn) {
-        emptyBtn.addEventListener('click', () => DOM.btnHeroContribute.click());
+        emptyBtn.addEventListener('click', () => switchTab('scraps-matrix'));
       }
       return;
     }
@@ -1230,14 +1284,192 @@
   }
 
   // ==========================================================================
-  // MASTER CHEF RECIPE SUBMISSION
+  // MASTER CHEF: 2-STEP RECIPE AUTHORING STUDIO & BUILDER POPUP
   // ==========================================================================
+
+  /**
+   * Step 1: Render 30 Scraps Organized in 5 Categorized Sections for Master Chef Selection
+   */
+  function renderMasterChefScrapsSelector() {
+    if (!DOM.masterScrapsSelectorContainer) return;
+    DOM.masterScrapsSelectorContainer.innerHTML = '';
+
+    state.categories.forEach(cat => {
+      const catScraps = state.scraps.filter(s => s.category_id === cat.id);
+      if (catScraps.length === 0) return;
+
+      const catSection = document.createElement('div');
+      catSection.className = 'master-cat-section';
+
+      catSection.innerHTML = `
+        <h4 class="master-cat-title">
+          <span>${cat.emoji}</span>
+          <span>Category ${cat.id}: ${escapeHtml(cat.name)}</span>
+          <span style="font-size: 0.82rem; font-weight: 500; color: var(--text-muted); margin-left: 0.25rem;">(${escapeHtml(cat.regional)})</span>
+        </h4>
+        <div class="master-scraps-subgrid"></div>
+      `;
+
+      const subgrid = catSection.querySelector('.master-scraps-subgrid');
+
+      catScraps.forEach(sc => {
+        const isSelected = (state.masterChefSelectedScrapId === sc.id);
+        const card = document.createElement('div');
+        card.className = `master-scrap-card ${isSelected ? 'selected' : ''}`;
+        card.dataset.scrapId = sc.id;
+
+        card.innerHTML = `
+          <div>
+            <div class="master-scrap-card-top">
+              <span class="master-scrap-id">#${sc.id}</span>
+              <div class="master-scrap-radio-indicator">${isSelected ? '✓' : ''}</div>
+            </div>
+            <h4 class="master-scrap-name">${escapeHtml(sc.name_en)}</h4>
+            <div class="master-scrap-regional">🇮🇳 ${escapeHtml(sc.name_regional)}</div>
+            <p class="master-scrap-method">${escapeHtml(sc.common_uses)}</p>
+          </div>
+          <button type="button" class="btn-master-card-select">
+            <span>${isSelected ? '✓ Selected for Recipe' : 'Select for Recipe'}</span>
+          </button>
+        `;
+
+        card.addEventListener('click', () => {
+          selectMasterChefScrap(sc.id);
+        });
+
+        subgrid.appendChild(card);
+      });
+
+      DOM.masterScrapsSelectorContainer.appendChild(catSection);
+    });
+
+    updateMasterStep1SelectionUI();
+  }
+
+  /**
+   * Handle scrap selection in Master Chef Step 1
+   */
+  function selectMasterChefScrap(scrapId) {
+    state.masterChefSelectedScrapId = scrapId;
+    updateMasterStep1SelectionUI();
+
+    const selectedScrap = state.scraps.find(s => s.id === scrapId);
+    if (selectedScrap) {
+      showToast(`Selected "${selectedScrap.name_en}". Click "Next" to build the recipe!`, 'info');
+    }
+  }
+
+  /**
+   * Synchronize visual selection badges, radio indicators, and the bottom sticky dock
+   */
+  function updateMasterStep1SelectionUI() {
+    if (!DOM.masterScrapsSelectorContainer) return;
+
+    const selId = state.masterChefSelectedScrapId;
+    const cards = DOM.masterScrapsSelectorContainer.querySelectorAll('.master-scrap-card');
+    cards.forEach(card => {
+      const id = parseInt(card.dataset.scrapId, 10);
+      const isSelected = (id === selId);
+      card.classList.toggle('selected', isSelected);
+      const radio = card.querySelector('.master-scrap-radio-indicator');
+      if (radio) radio.textContent = isSelected ? '✓' : '';
+      const btn = card.querySelector('.btn-master-card-select span');
+      if (btn) btn.textContent = isSelected ? '✓ Selected for Recipe' : 'Select for Recipe';
+    });
+
+    const selectedScrap = state.scraps.find(s => s.id === selId);
+
+    if (DOM.step1SelectedBadge) {
+      if (selectedScrap) {
+        DOM.step1SelectedBadge.classList.add('has-selection');
+        DOM.step1SelectedBadge.innerHTML = `<span>✓ Selected: <strong>${escapeHtml(selectedScrap.name_en)}</strong></span>`;
+      } else {
+        DOM.step1SelectedBadge.classList.remove('has-selection');
+        DOM.step1SelectedBadge.innerHTML = `<span>No scrap selected yet</span>`;
+      }
+    }
+
+    if (DOM.dockSelectedScrapName) {
+      if (selectedScrap) {
+        const reg = selectedScrap.name_regional ? ` (${selectedScrap.name_regional.split(',')[0].trim()})` : '';
+        DOM.dockSelectedScrapName.textContent = `${selectedScrap.name_en}${reg}`;
+        DOM.dockSelectedScrapName.style.color = 'var(--emerald-primary)';
+      } else {
+        DOM.dockSelectedScrapName.textContent = 'None chosen — please click a scrap card above';
+        DOM.dockSelectedScrapName.style.color = 'var(--text-muted)';
+      }
+    }
+
+    if (DOM.btnMasterStep1Next) {
+      DOM.btnMasterStep1Next.disabled = !selectedScrap;
+    }
+
+    if (DOM.formRcScrapId && selectedScrap) {
+      DOM.formRcScrapId.value = selectedScrap.id;
+    }
+  }
+
+  /**
+   * Step 2: Open Master Chef Recipe Builder Pop-Up Modal
+   */
+  function openMasterRecipeBuilderModal() {
+    if (!state.masterChefSelectedScrapId) {
+      showToast('Please select a kitchen scrap first from Step 1.', 'info');
+      return;
+    }
+
+    const scrap = state.scraps.find(s => s.id === state.masterChefSelectedScrapId);
+    if (!scrap) return;
+
+    if (DOM.builderScrapPill) {
+      DOM.builderScrapPill.textContent = `♻️ Scrap #${scrap.id}`;
+    }
+    if (DOM.builderScrapTitle) {
+      DOM.builderScrapTitle.textContent = scrap.name_en;
+    }
+    if (DOM.builderScrapReg) {
+      DOM.builderScrapReg.textContent = scrap.name_regional ? `Regional aliases: ${scrap.name_regional}` : '';
+    }
+    if (DOM.formRcScrapId) {
+      DOM.formRcScrapId.value = scrap.id;
+    }
+
+    // Pre-populate author details if user is logged in
+    if (state.currentUser) {
+      if (DOM.formRcChef && !DOM.formRcChef.value) {
+        DOM.formRcChef.value = state.currentUser.name || '';
+      }
+      if (DOM.formRcAffiliation && !DOM.formRcAffiliation.value) {
+        DOM.formRcAffiliation.value = state.currentUser.affiliation || '';
+      }
+    }
+
+    // Set stepper indicator 2 to active
+    const step2 = document.getElementById('stepper-item-2');
+    if (step2) step2.classList.add('active');
+
+    if (DOM.masterRecipeModal) {
+      DOM.masterRecipeModal.showModal();
+    }
+  }
+
+  /**
+   * Close Master Chef Recipe Builder Pop-Up Modal
+   */
+  function closeMasterRecipeBuilderModal() {
+    if (DOM.masterRecipeModal) {
+      DOM.masterRecipeModal.close();
+    }
+    const step2 = document.getElementById('stepper-item-2');
+    if (step2) step2.classList.remove('active');
+  }
+
   function addPantryInputRow() {
     const row = document.createElement('div');
     row.className = 'dynamic-input-row';
     const num = DOM.pantryInputsContainer.querySelectorAll('.dynamic-input-row').length + 1;
     row.innerHTML = `
-      <input type="text" class="input-pantry" placeholder="Ingredient ${num} (e.g. Turmeric, Salt, Ghee)" required />
+      <input type="text" class="input-pantry" placeholder="Ingredient ${num} (e.g. Mustard oil, Kalonji, Turmeric)" required />
       <button type="button" class="btn-remove-row" title="Remove">✕</button>
     `;
     DOM.pantryInputsContainer.appendChild(row);
@@ -1264,8 +1496,17 @@
     });
   }
 
+  /**
+   * Submit new dish authored in Master Chef Step 2 Popup
+   */
   async function handleMasterRecipeSubmit(e) {
     e.preventDefault();
+
+    const scrapId = parseInt(DOM.formRcScrapId && DOM.formRcScrapId.value ? DOM.formRcScrapId.value : state.masterChefSelectedScrapId, 10);
+    if (!scrapId) {
+      showToast('Please select a kitchen scrap first.', 'error');
+      return;
+    }
 
     const staples = Array.from(DOM.pantryInputsContainer.querySelectorAll('.input-pantry'))
       .map(i => i.value.trim())
@@ -1281,23 +1522,25 @@
     }
 
     const payload = {
-      title: document.getElementById('form-rc-title').value.trim(),
-      scrap_id: parseInt(document.getElementById('form-rc-scrap').value, 10),
-      chef_name: document.getElementById('form-rc-chef').value.trim(),
-      chef_affiliation: document.getElementById('form-rc-affiliation').value.trim(),
-      prep_time_minutes: parseInt(document.getElementById('form-rc-prep').value, 10),
-      difficulty: document.getElementById('form-rc-diff').value,
-      course_type: document.getElementById('form-rc-course').value,
-      dietary_type: document.getElementById('form-rc-dietary').value,
+      title: DOM.formRcTitle.value.trim(),
+      scrap_id: scrapId,
+      chef_name: DOM.formRcChef.value.trim(),
+      chef_affiliation: DOM.formRcAffiliation.value.trim(),
+      prep_time_minutes: parseInt(DOM.formRcPrep.value, 10),
+      difficulty: DOM.formRcDiff.value,
+      course_type: DOM.formRcCourse.value,
+      dietary_type: DOM.formRcDietary.value,
       pantry_staples: staples,
       step_by_step_instructions: steps,
-      chef_wisdom_tip: document.getElementById('form-rc-wisdom').value.trim() || null,
-      servings: parseInt(document.getElementById('form-rc-servings').value, 10)
+      chef_wisdom_tip: (DOM.formRcWisdom && DOM.formRcWisdom.value.trim()) ? DOM.formRcWisdom.value.trim() : null,
+      servings: parseInt(DOM.formRcServings.value, 10)
     };
 
-    const submitBtn = document.getElementById('btn-save-recipe');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Preserving Recipe...';
+    const submitBtn = DOM.btnSaveRecipe || document.getElementById('btn-save-recipe');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Preserving Recipe...';
+    }
 
     try {
       const res = await fetch('/api/recipes', {
@@ -1311,8 +1554,12 @@
         throw new Error(err.detail || 'Failed to submit recipe');
       }
 
-      showToast('✨ Recipe preserved in the Annapurna Loop catalog!', 'success');
+      showToast(`✨ "${payload.title}" published & preserved in the catalog!`, 'success');
       DOM.masterRecipeForm.reset();
+      closeMasterRecipeBuilderModal();
+
+      state.masterChefSelectedScrapId = null;
+      updateMasterStep1SelectionUI();
 
       // Refresh recipe list and switch to Home Chef
       const updated = await fetch('/api/recipes');
@@ -1322,8 +1569,10 @@
     } catch (err) {
       showToast(`Error: ${err.message}`, 'error');
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<span>🌿 Preserve Recipe in Annapurna Loop</span>';
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>🌿 Publish & Build New Dish</span>';
+      }
     }
   }
 

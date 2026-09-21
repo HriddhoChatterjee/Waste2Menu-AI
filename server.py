@@ -6,7 +6,7 @@ BACKEND SERVER: FastAPI REST API & Dual PostgreSQL / SQLite Persistence
 Mission:
 A community-first, non-commercial food scrap valorization platform.
 Supports PostgreSQL (for pgAdmin 4 setups) with an automatic,
-seamless fallback to SQLite (annapurna.db) for zero-barrier local execution.
+seamless fallback to SQLite (waste2menu.db) for zero-barrier local execution.
 ============================================================================
 """
 
@@ -28,7 +28,7 @@ logger = logging.getLogger("AnnapurnaLoop")
 
 # Base Paths
 BASE_DIR = Path(__file__).resolve().parent
-DB_FILE = BASE_DIR / "annapurna.db"
+DB_FILE = BASE_DIR / "waste2menu.db"
 SEED_FILE = BASE_DIR / "seed_data.json"
 
 # Database Configuration

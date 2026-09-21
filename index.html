@@ -279,151 +279,71 @@
       <div class="portal-header-bar">
         <div>
           <h2 class="portal-heading">👨‍🍳 Master Chef: Recipe Authoring Studio</h2>
-          <p class="portal-sub">Preserve authentic zero-waste culinary recipes and ancestral kitchen wisdom into the open community database.</p>
+          <p class="portal-sub">Select the kitchen byproduct you want to valorize, then enter cooking steps and ingredients to publish a new dish.</p>
         </div>
         <div class="role-indicator-badge master-badge">
-          <span>Mode: <strong>Master Chef (Recipe Author)</strong></span>
+          <span>Mode: <strong>Master Chef (Recipe Author & Uploader)</strong></span>
         </div>
       </div>
 
-      <!-- Permission Banner if logged out or home cook -->
+      <!-- Permission Banner if logged out -->
       <div class="auth-role-notice-card" id="chef-role-banner" style="display:none;">
         <div class="notice-icon">👨‍🍳</div>
         <div class="notice-body">
-          <h4>Master Chef Sign-In Recommended</h4>
-          <p id="chef-role-notice-text">Anyone can test uploading recipes, but signing in with a Master Chef account links your name and culinary heritage affiliation to every recipe published.</p>
+          <h4>Master Chef Sign-In Required</h4>
+          <p id="chef-role-notice-text">Recipe authoring and upload is exclusive to Master Chefs. Sign in or use the instant Master Chef demo to author community dishes.</p>
         </div>
         <button class="btn-small-auth" id="btn-chef-demo-signin">
           <span>Sign In as Master Chef Demo</span>
         </button>
       </div>
 
-      <!-- Recipe Submission Form -->
-      <div class="form-container-card">
-        <form id="master-recipe-form">
-          <div class="form-two-cols">
-            <div class="form-group full-width">
-              <label for="form-rc-title">Recipe Dish Title *</label>
-              <input type="text" id="form-rc-title" required placeholder="e.g. Lauki Chilka Chechki (Crispy Bottle Gourd Peel Stir-Fry)" />
-            </div>
-
-            <div class="form-group">
-              <label for="form-rc-scrap">Byproduct Scrap Used (From 30 Scraps List) *</label>
-              <select id="form-rc-scrap" required>
-                <option value="">-- Choose from 30 Household Scraps --</option>
-                <!-- Populated dynamically via JS -->
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="form-rc-course">Course Category *</label>
-              <select id="form-rc-course" required>
-                <option value="Chutney/Dip">Chutney / Dip</option>
-                <option value="Crispy Bhaja/Side">Crispy Bhaja / Side</option>
-                <option value="Dry Sabzi">Dry Sabzi</option>
-                <option value="Dal/Sambar">Dal / Sambar</option>
-                <option value="Breakfast/Snack">Breakfast / Snack</option>
-                <option value="Pickle/Condiment">Pickle / Condiment</option>
-                <option value="Digestive Soup/Rasam">Digestive Soup / Rasam</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="form-rc-chef">Chef / Contributor Name *</label>
-              <input type="text" id="form-rc-chef" required placeholder="e.g. Chef Sanjeev or Nani Sushila" />
-            </div>
-
-            <div class="form-group">
-              <label for="form-rc-affiliation">Kitchen Affiliation / Heritage Tradition *</label>
-              <input type="text" id="form-rc-affiliation" required placeholder="e.g. Awadhi Rasoi / Bengal Heritage Kitchen" />
-            </div>
-
-            <div class="form-group">
-              <label for="form-rc-prep">Prep & Cook Time (Minutes) *</label>
-              <input type="number" id="form-rc-prep" min="1" max="240" value="15" required />
-            </div>
-
-            <div class="form-group">
-              <label for="form-rc-diff">Difficulty Level</label>
-              <select id="form-rc-diff">
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Advanced">Advanced</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="form-rc-servings">Servings (Portions)</label>
-              <input type="number" id="form-rc-servings" min="1" max="50" value="4" required />
-            </div>
-
-            <div class="form-group">
-              <label for="form-rc-dietary">Dietary Preference</label>
-              <select id="form-rc-dietary">
-                <option value="Pure Veg">Pure Veg</option>
-                <option value="Vegan">Vegan</option>
-                <option value="Gluten-Free">Gluten-Free</option>
-              </select>
-            </div>
+      <!-- STEPPER NAVIGATION BAR -->
+      <div class="master-author-stepper">
+        <div class="author-step-item active" id="stepper-item-1">
+          <span class="author-step-num">1</span>
+          <div class="author-step-meta">
+            <span class="author-step-title">Step 1: Select Ingredient</span>
+            <span class="author-step-sub">Choose byproduct from 30 Indian scraps</span>
           </div>
-
-          <!-- Dynamic Pantry Ingredients -->
-          <div class="dynamic-inputs-card">
-            <div class="dynamic-header-row">
-              <div>
-                <h4>Pantry Staples & Household Spices *</h4>
-                <p class="subtext">Everyday spices needed (e.g. Mustard oil, Kalonji, Green chillies, Turmeric).</p>
-              </div>
-              <button type="button" class="btn-dynamic-add" id="btn-add-pantry-item">+ Add Ingredient</button>
-            </div>
-            <div class="dynamic-list" id="pantry-inputs-container">
-              <div class="dynamic-input-row">
-                <input type="text" class="input-pantry" placeholder="Ingredient 1 (e.g. Mustard oil)" required />
-                <button type="button" class="btn-remove-row" title="Remove">✕</button>
-              </div>
-              <div class="dynamic-input-row">
-                <input type="text" class="input-pantry" placeholder="Ingredient 2 (e.g. Kalonji / Nigella seeds)" required />
-                <button type="button" class="btn-remove-row" title="Remove">✕</button>
-              </div>
-            </div>
+        </div>
+        <div class="author-step-connector">➔</div>
+        <div class="author-step-item" id="stepper-item-2">
+          <span class="author-step-num">2</span>
+          <div class="author-step-meta">
+            <span class="author-step-title">Step 2: Build Recipe & Steps</span>
+            <span class="author-step-sub">Pop-up editor for cooking steps & spices</span>
           </div>
+        </div>
+      </div>
 
-          <!-- Dynamic Step-by-Step Instructions -->
-          <div class="dynamic-inputs-card">
-            <div class="dynamic-header-row">
-              <div>
-                <h4>Step-by-Step Preparation Method *</h4>
-                <p class="subtext">Clear, simple steps for home cooks to follow (also read aloud by voice guide!).</p>
-              </div>
-              <button type="button" class="btn-dynamic-add" id="btn-add-step-item">+ Add Step</button>
-            </div>
-            <div class="dynamic-list" id="steps-inputs-container">
-              <div class="dynamic-input-row">
-                <span class="step-num-pill">1</span>
-                <textarea class="input-step" rows="2" placeholder="Step 1: Thoroughly wash and slice scraps..." required></textarea>
-                <button type="button" class="btn-remove-row" title="Remove">✕</button>
-              </div>
-              <div class="dynamic-input-row">
-                <span class="step-num-pill">2</span>
-                <textarea class="input-step" rows="2" placeholder="Step 2: Heat oil in a pan, temper spices, and sauté until tender..." required></textarea>
-                <button type="button" class="btn-remove-row" title="Remove">✕</button>
-              </div>
-            </div>
+      <!-- STEP 1: INGREDIENT SELECTION VIEW -->
+      <div class="master-step-view" id="master-step1-view">
+        <div class="step1-header-bar">
+          <div>
+            <h3 class="step-section-heading">Step 1: Choose the Ingredient / Scrap to Build Your Dish</h3>
+            <p class="step-section-sub">Select the household discard or counter scrap you want to transform into a delicious zero-waste recipe:</p>
           </div>
+          <div class="step1-selected-indicator" id="step1-selected-badge">
+            <span>No scrap selected yet</span>
+          </div>
+        </div>
 
-          <!-- Chef Wisdom Tip -->
-          <div class="form-group full-width">
-            <label for="form-rc-wisdom">Ancestral / Chef Wisdom Tip (Optional)</label>
-            <textarea id="form-rc-wisdom" rows="3" placeholder="e.g. Grandma's Secret: A splash of raw tamarind balances the natural minerals of gourd peels..."></textarea>
-          </div>
+        <!-- 30 Scraps Grouped by Categories for Selection -->
+        <div class="master-scraps-category-grid" id="master-scraps-selector-container">
+          <!-- Populated dynamically via JS -->
+        </div>
 
-          <!-- Submit Button -->
-          <div class="form-actions-bar">
-            <button type="submit" class="btn-submit-recipe" id="btn-save-recipe">
-              <span>🌿 Preserve Recipe in Annapurna Loop</span>
-            </button>
+        <!-- Bottom Action Dock for Step 1 -->
+        <div class="master-step1-dock" id="master-step1-dock">
+          <div class="dock-selection-info">
+            <span class="dock-label">Selected Byproduct:</span>
+            <span class="dock-scrap-name" id="dock-selected-scrap-name">None chosen — please click a scrap card above</span>
           </div>
-        </form>
+          <button type="button" class="btn-step-next" id="btn-master-step1-next" disabled>
+            <span>Next: Enter Cooking Steps & Build Dish ➔</span>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -775,6 +695,160 @@
         <div class="favorites-list-grid" id="favorites-list-container">
           <!-- Populated by JS -->
         </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ===================================================================== -->
+  <!-- NATIVE HTML5 DIALOG: MASTER CHEF RECIPE BUILDER POPUP (STEP 2) -->
+  <!-- ===================================================================== -->
+  <dialog class="app-modal" id="master-recipe-modal">
+    <div class="modal-card wide recipe-builder-modal-card">
+      <header class="modal-card-header">
+        <div>
+          <span class="modal-step-badge">Step 2 of 2: Build New Dish</span>
+          <h2 class="modal-card-title" style="margin-top: 0.25rem;">👨‍🍳 Recipe Details & Cooking Steps</h2>
+        </div>
+        <button class="btn-close-modal" id="master-modal-close" aria-label="Close">✕</button>
+      </header>
+
+      <div class="modal-card-body">
+        <!-- Selected Scrap Summary Header Banner -->
+        <div class="builder-scrap-banner" id="builder-scrap-banner">
+          <div class="builder-scrap-info">
+            <span class="builder-scrap-pill" id="builder-scrap-pill">🥔 Byproduct #1</span>
+            <div>
+              <h3 class="builder-scrap-title" id="builder-scrap-title">Bottle Gourd Peels</h3>
+              <span class="builder-scrap-reg" id="builder-scrap-reg">Lauki Chilka, Lau-er Khosha</span>
+            </div>
+          </div>
+          <button type="button" class="btn-change-scrap" id="btn-builder-change-scrap">
+            <span>↺ Change Ingredient</span>
+          </button>
+        </div>
+
+        <!-- Recipe Authoring Form -->
+        <form id="master-recipe-form">
+          <input type="hidden" id="form-rc-scrap-id" value="" />
+
+          <div class="form-two-cols">
+            <div class="form-group full-width">
+              <label for="form-rc-title">Recipe Dish Title *</label>
+              <input type="text" id="form-rc-title" required placeholder="e.g. Lauki Chilka Chechki (Crispy Bottle Gourd Peel Stir-Fry)" />
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-course">Course Category *</label>
+              <select id="form-rc-course" required>
+                <option value="Chutney/Dip">Chutney / Dip</option>
+                <option value="Crispy Bhaja/Side">Crispy Bhaja / Side</option>
+                <option value="Dry Sabzi">Dry Sabzi</option>
+                <option value="Dal/Sambar">Dal / Sambar</option>
+                <option value="Breakfast/Snack">Breakfast / Snack</option>
+                <option value="Pickle/Condiment">Pickle / Condiment</option>
+                <option value="Digestive Soup/Rasam">Digestive Soup / Rasam</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-dietary">Dietary Preference *</label>
+              <select id="form-rc-dietary">
+                <option value="Pure Veg">Pure Veg</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Gluten-Free">Gluten-Free</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-chef">Chef / Author Name *</label>
+              <input type="text" id="form-rc-chef" required placeholder="e.g. Chef Sanjeev or Nani Sushila" />
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-affiliation">Kitchen Affiliation / Tradition *</label>
+              <input type="text" id="form-rc-affiliation" required placeholder="e.g. Bengal Heritage Kitchen / Awadhi Rasoi" />
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-prep">Prep & Cook Time (Minutes) *</label>
+              <input type="number" id="form-rc-prep" min="1" max="240" value="15" required />
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-diff">Difficulty Level</label>
+              <select id="form-rc-diff">
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-servings">Servings (Portions)</label>
+              <input type="number" id="form-rc-servings" min="1" max="50" value="4" required />
+            </div>
+          </div>
+
+          <!-- Dynamic Pantry Ingredients -->
+          <div class="dynamic-inputs-card">
+            <div class="dynamic-header-row">
+              <div>
+                <h4>Pantry Staples & Household Spices *</h4>
+                <p class="subtext">Spices needed to cook this dish (e.g. Mustard oil, Kalonji, Green chillies, Turmeric).</p>
+              </div>
+              <button type="button" class="btn-dynamic-add" id="btn-add-pantry-item">+ Add Ingredient</button>
+            </div>
+            <div class="dynamic-list" id="pantry-inputs-container">
+              <div class="dynamic-input-row">
+                <input type="text" class="input-pantry" placeholder="Ingredient 1 (e.g. 2 tbsp Mustard oil)" required />
+                <button type="button" class="btn-remove-row" title="Remove">✕</button>
+              </div>
+              <div class="dynamic-input-row">
+                <input type="text" class="input-pantry" placeholder="Ingredient 2 (e.g. 1/2 tsp Kalonji / Nigella seeds)" required />
+                <button type="button" class="btn-remove-row" title="Remove">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Step-by-Step Instructions -->
+          <div class="dynamic-inputs-card">
+            <div class="dynamic-header-row">
+              <div>
+                <h4>Step-by-Step Cooking Steps *</h4>
+                <p class="subtext">Clear, simple steps for home cooks to follow (also read aloud by hands-free voice guide!).</p>
+              </div>
+              <button type="button" class="btn-dynamic-add" id="btn-add-step-item">+ Add Cooking Step</button>
+            </div>
+            <div class="dynamic-list" id="steps-inputs-container">
+              <div class="dynamic-input-row">
+                <span class="step-num-pill">1</span>
+                <textarea class="input-step" rows="2" placeholder="Step 1: Thoroughly wash and slice peels into fine juliennes..." required></textarea>
+                <button type="button" class="btn-remove-row" title="Remove">✕</button>
+              </div>
+              <div class="dynamic-input-row">
+                <span class="step-num-pill">2</span>
+                <textarea class="input-step" rows="2" placeholder="Step 2: Heat mustard oil in a pan, temper with nigella seeds and green chillies..." required></textarea>
+                <button type="button" class="btn-remove-row" title="Remove">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chef Wisdom Tip -->
+          <div class="form-group full-width">
+            <label for="form-rc-wisdom">Chef / Ancestral Wisdom Tip (Optional)</label>
+            <textarea id="form-rc-wisdom" rows="2" placeholder="e.g. Grandma's Secret: Sauté over high heat without covering to retain crunch and bright color..."></textarea>
+          </div>
+
+          <!-- Submit Bar -->
+          <div class="modal-form-actions-bar">
+            <button type="button" class="btn-back-step" id="btn-modal-step2-back">
+              <span>⬅ Back to Ingredient Selection</span>
+            </button>
+            <button type="submit" class="btn-submit-recipe" id="btn-save-recipe">
+              <span>🌿 Publish & Build New Dish</span>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </dialog>

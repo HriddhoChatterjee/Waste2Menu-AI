@@ -143,7 +143,7 @@ The **🌟 Home & Impact** page highlights real-time collective achievements:
    - Uses `DATABASE_URL` with connection pooling (`psycopg2.pool.SimpleConnectionPool`).
    - Fully normalized tables (`users`, `scrap_categories`, `byproduct_scraps`, `recipes`, `ngo_dispatches`).
 2. **Automatic SQLite Fallback Mode**:
-   - If PostgreSQL is not yet configured or password differs, automatically boots on embedded `annapurna.db`.
+   - If PostgreSQL is not yet configured or password differs, automatically boots on embedded `waste2menu.db`.
    - Seeds all 5 categories, 30 scraps, 30 recipes, and demo users on the fly.
    - Zero-barrier execution out of the box.
 

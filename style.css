@@ -2653,6 +2653,418 @@ dialog[open] .modal-card {
 }
 
 /* ==========================================================================
+   MASTER CHEF: 2-STEP RECIPE AUTHORING STUDIO & POPUP
+   ========================================================================== */
+.master-author-stepper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.author-step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  opacity: 0.65;
+  transition: all var(--transition-fast);
+}
+
+.author-step-item.active {
+  opacity: 1;
+}
+
+.author-step-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg-base);
+  border: 2px solid var(--border-dark);
+  color: var(--text-secondary);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.author-step-item.active .author-step-num {
+  background: var(--emerald-primary);
+  border-color: var(--emerald-primary);
+  color: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+}
+
+.author-step-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.author-step-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.author-step-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.author-step-connector {
+  color: var(--border-dark);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0.5rem;
+}
+
+/* Step 1 Header & Category Grid */
+.step1-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.step-section-heading {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.step-section-sub {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.step1-selected-indicator {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.step1-selected-indicator.has-selection {
+  background: var(--emerald-light);
+  border-color: var(--emerald-border);
+  color: var(--emerald-primary);
+}
+
+.master-scraps-category-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 6rem; /* Room for sticky dock */
+}
+
+.master-cat-section {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.master-cat-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.master-scraps-subgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.master-scrap-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.master-scrap-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--emerald-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.master-scrap-card.selected {
+  border-color: var(--emerald-primary);
+  background: #F1F8F4;
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.3);
+}
+
+.master-scrap-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.master-scrap-id {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.master-scrap-radio-indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: transparent;
+  transition: all var(--transition-fast);
+}
+
+.master-scrap-card.selected .master-scrap-radio-indicator {
+  border-color: var(--emerald-primary);
+  background: var(--emerald-primary);
+  color: #FFFFFF;
+}
+
+.master-scrap-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.master-scrap-regional {
+  font-size: 0.78rem;
+  color: var(--saffron-primary);
+  font-weight: 600;
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+.master-scrap-method {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin-bottom: 0.75rem;
+}
+
+.btn-master-card-select {
+  background: var(--bg-base);
+  border: 1px solid var(--border-dark);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  align-self: flex-start;
+  transition: all var(--transition-fast);
+}
+
+.master-scrap-card.selected .btn-master-card-select {
+  background: var(--emerald-primary);
+  border-color: var(--emerald-primary);
+  color: #FFFFFF;
+}
+
+/* Master Step 1 Bottom Action Dock */
+.master-step1-dock {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 3rem);
+  max-width: 960px;
+  background: #FFFFFF;
+  border: 2px solid var(--emerald-border);
+  border-radius: var(--radius-full);
+  padding: 0.85rem 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: 0 12px 36px rgba(46, 125, 50, 0.18), 0 4px 16px rgba(34, 31, 27, 0.08);
+  z-index: 100;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dock-selection-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.dock-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.dock-scrap-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--emerald-primary);
+}
+
+.btn-step-next {
+  background: linear-gradient(135deg, var(--emerald-primary), var(--emerald-hover));
+  color: #FFFFFF;
+  border: none;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 0.65rem 1.5rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.3);
+}
+
+.btn-step-next:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(46, 125, 50, 0.4);
+}
+
+.btn-step-next:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Step 2 Recipe Builder Modal & Summary Banner */
+.recipe-builder-modal-card {
+  max-width: 860px;
+}
+
+.modal-step-badge {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--emerald-primary);
+  background: var(--emerald-light);
+  border: 1px solid var(--emerald-border);
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+  display: inline-block;
+}
+
+.builder-scrap-banner {
+  background: linear-gradient(135deg, #F1F8F4, #EBF5EF);
+  border: 1.5px solid var(--emerald-border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.builder-scrap-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.builder-scrap-pill {
+  background: var(--emerald-primary);
+  color: #FFFFFF;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.builder-scrap-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.15rem;
+}
+
+.builder-scrap-reg {
+  font-size: 0.82rem;
+  color: var(--saffron-primary);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.btn-change-scrap {
+  background: #FFFFFF;
+  border: 1px solid var(--emerald-border);
+  color: var(--emerald-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-change-scrap:hover {
+  background: var(--emerald-primary);
+  color: #FFFFFF;
+}
+
+.modal-form-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-back-step {
+  background: var(--bg-base);
+  border: 1px solid var(--border-dark);
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-back-step:hover {
+  background: var(--border-dark);
+}
+
+/* ==========================================================================
    RESPONSIVE DESIGN BREAKPOINTS
    ========================================================================== */
 @media (max-width: 900px) {
