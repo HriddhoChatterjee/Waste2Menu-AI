@@ -1,150 +1,87 @@
-# 🍲 Waste2Menu-AI
-
-> **Autonomous Closed-Loop Kitchen Prep-Scrap Monetization, Dynamic POS Engine & Humanitarian Surplus Redistribution Platform**
-
-[![Next.js](https://img.shields.io/badge/Next.js-14+-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4+-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+# 🌿 Waste2Menu
+> **A Zero-Waste Reverse Recipe & Byproduct Optimization Engine**  
+> *A community-first, non-commercial platform celebrating Indian kitchen wisdom to protect nature from food waste.*
 
 ---
 
-## 📌 Executive Overview
+## 📖 Mission Statement
+> *“In nature, nothing is lost, everything is transformed.”*
 
-Traditional restaurant POS and ERP systems rely on a rigid **Forward Bill-of-Materials (BOM)**: customer orders deduct inventory, while pre-consumer prep scraps (such as bones, vegetable skins, citrus rinds, and herb stems) are treated as unmonetized loss—accounting for **8% to 18%** of commercial kitchen food waste.
+Modern households and community caterers generate hundreds of tons of avoidable food waste every day. **Waste2Menu** rejects the culture of food waste by digitizing ancestral Indian culinary wisdom. It transforms kitchen discards—vegetable peels, fibrous green stems, jackfruit seeds, stale rotis, overnight cooked rice, and paneer whey—into nourishing, delicious family meals. 
 
-**Waste2Menu-AI** inverts this paradigm with a **Reverse Ingredient Dependency Engine (RIDE)**. It dynamically quantifies prep byproducts, runs machine learning anomaly audits on knife efficiency, optimizes recipe batch yields using Integer Linear Programming, and injects high-margin ephemeral daily specials directly into the live POS. If portions remain unsold by closing time, an automated geospatial dispatch engine matches and locks surplus hot meals for nearby verified NGOs via an OTP handshake.
-
----
-
-## 🔄 End-to-End System Architecture
-
-```text
-[ Kitchen Prep Line ] ─────────► [ Reverse Recipe Engine ] ─────────► [ Cashier POS & Digital Menu ]
-  • Vision/scale scrap logging     • Byproduct recipe matching          • Ephemeral SKU injection
-  • Isolation Forest yield check   • PuLP Integer Linear Solver        • Atomic portion decrements
-  • Active Reservoir accumulation  • Chef 1-tap KDS approval           • Auto-delist on stockout
-                                                                                    │
-                                                                   (Shift End / Unsold Stock)
-                                                                                    ▼
-[ Sustainability Analytics ] ◄─── [ 6-Digit OTP Handover ] ◄─── [ NGO Proximity Dispatch ]
-  • Recovered P&L ledger           • Cashier counter verification      • Haversine matrix routing
-  • Avoided CO2e & water metrics   • Physical chain of custody         • Atomic status locking
-```
+This platform is **strictly non-commercial**:
+- ❌ NO point-of-sale (POS) registers or customer billing
+- ❌ NO pricing tiers, profit margins, or invoice ledgers
+- ✅ 100% focused on food scrap valorization, ancestral rasoi wisdom, and 1-tap surplus meal redistribution to non-profit shelters.
 
 ---
 
-## ✨ Core Features
+## 🌟 Key Features
 
-* 🔪 **Smart Prep Logging & Anomaly Detection:** Ingests prep trimmings and audits knife technique in real time using an unsupervised **Isolation Forest** anomaly detector to flag excessive yield loss against baseline cut metrics.
-* 🧠 **Reverse Recipe Batch Optimizer (RIDE):** Solves multi-scrap combinatorial constraints using **Integer Linear Programming (PuLP)** to verify batch feasibility (>= 8 servings) and compute high-margin pricing (>85% gross margin) with near-zero raw ingredient costs.
-* ⚡ **Live POS Ephemeral Injection:** Automatically spawns dynamic SKUs on cashier screens and QR menus with live scarcity badging (`🔥 Only 12 Left`) and executes atomic inventory decrements per order.
-* 🏷️ **Closing-Hour Flash Markdown:** Dynamically adjusts time-decay discounts during the final 90 minutes of service to accelerate byproduct inventory liquidation.
-* 📍 **Geospatial NGO Redistribution Fallback:** Automatically aggregates unsold portions at shift close, identifies active shelters within 10 km via the **Haversine formula**, and manages physical handovers using a secure **6-digit OTP handshake**.
-* 📊 **ESG & Financial Analytics Ledger:** Aggregates recovered byproduct revenue alongside calculated environmental metrics:
-  - Avoided CO2e (kg) = Rescued Weight (kg) * 2.5
-  - Saved Water (Liters) = Rescued Weight (kg) * 80
+### 1. 🥕 30 Kitchen Ingredients & Scraps Interactive Catalog
+- **Unblocked Multi-Select Matrix**: All 30 traditional Indian kitchen byproducts organized across 5 categories as per the reference guide. Available to every visitor with zero guest blockers.
+- **Multi-Lingual Live Search**: Instant live debounced search across English and Pan-Indian regional aliases (*Turai Chilka, Lauki Chilka, Posto Khosha, Fulkopi Danta, Basi Roti, Panta Bhaat, Kathal Beej, Paneer Whey*).
+- **6 Category Filter Tabs**: Quick filtering across `All (30)`, `🥔 Vegetable Peels & Skins (9)`, `🌿 Stems, Stalks & Leaves (6)`, `🍉 Seeds, Piths & Rinds (5)`, `🍚 Grains, Starches & Staples (5)`, and `🥛 Dairy & Spice Discards (5)`.
+- **Floating Bottom Action Bar**: Live selected count and matching recipe counter with instant 1-tap transition to matching dishes.
+
+### 2. 🏡 Home Chef (Reverse Recipe & Cooking Hub)
+- **Scrap-to-Recipe Reverse Engine**: Select counter discards and discover authentic dishes.
+- **Interactive Recipe Checklist**: Mark off available pantry spices and track cooking steps in real time.
+- **🔊 Hands-Free Voice Guide (Web Speech API)**: Built-in voice synthesizer reads ingredients and instructions aloud so home cooks can follow steps without touching screens while cooking.
+- **❤️ Saved Favorites Cookbook**: Bookmark preferred zero-waste recipes for quick reference anytime.
+- **Nature Impact Tracking**: Displays estimated kg of food scrap diverted from landfills and CO₂ emissions prevented per dish.
+
+### 3. 👨‍🍳 Master Chef Recipe Authoring Studio
+- **Document Ancestral Zero-Waste Wisdom**: Chefs, grandmothers, and culinary mentors can document traditional byproduct recipes with regional heritage attribution.
+- **Dynamic Ingredient & Step Builders**: Add spices and instructions dynamically with 1-click controls.
+- **Immediate Catalog Sync**: New recipes instantly persist to the database and become searchable.
+
+### 4. 🤝 Community NGO Surplus Food Dispatch
+- **1-Tap Surplus Food Broadcast**: Community kitchens, banquet halls, and temples broadcast freshly prepared surplus food with portion counts, pickup landmarks, and contact details.
+- **Live Shelter Claim Board**: Verified NGOs and shelters can claim meal batches in one tap to feed needy community members.
 
 ---
 
 ## 🛠️ Technology Stack
 
-| Layer | Technologies |
-| :--- | :--- |
-| **Frontend UI** | Next.js 14+ (App Router), React, TypeScript, Tailwind CSS, Lucide Icons, Framer Motion |
-| **State & Sync** | Zustand, TanStack Query, WebSockets / Server-Sent Events |
-| **Backend API** | Python 3.11+, FastAPI, Uvicorn, Pydantic v2 |
-| **Database & ORM** | PostgreSQL 15+ / SQLite (Dev), SQLAlchemy 2.0 / Prisma ORM |
-| **Optimization & ML** | PuLP (Integer Linear Programming), scikit-learn (Isolation Forest), NumPy |
-| **Geospatial & Security** | Haversine Great-Circle Proximity Algorithm, 6-Digit OTP Verification |
-
----
-
-## 📁 Repository Structure
-
-```text
-Waste2Menu-AI/
-├── backend/
-│   ├── app/
-│   │   ├── api/v1/            # FastAPI REST routers (scrap, recipes, pos, fallback, analytics)
-│   │   ├── core/              # Config, DB connection pool, security
-│   │   ├── models/            # SQLAlchemy database models
-│   │   ├── schemas/           # Pydantic validation schemas
-│   │   └── services/          # PuLP optimizer, ML anomaly auditor, Haversine matcher
-│   ├── main.py                # Server entry point & auto-seed lifecycle
-│   ├── requirements.txt       # Python dependencies
-│   └── Dockerfile
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── kitchen/       # Scrap entry & Active Reservoir view
-│   │   │   ├── recipes/       # Reverse recipe optimizer & KDS approval
-│   │   │   ├── pos/           # Cashier terminal & live portion decrement
-│   │   │   ├── ngo/           # NGO surplus claim feed & OTP verification
-│   │   │   └── analytics/     # P&L recovery & ESG impact dashboards
-│   │   ├── components/        # Modern dark-themed UI components
-│   │   └── store/             # Global client state stores
-│   ├── tailwind.config.ts
-│   └── package.json
-├── prisma/
-│   ├── schema.prisma          # PostgreSQL relational schema
-│   └── seed.ts                # Chennai demo seed script
-└── README.md
-```
-
----
-
-## 🚀 Quickstart Guide
-
-### Prerequisites
-* Node.js 18+ & npm / pnpm
-* Python 3.11+
-* Git
-
-### 1. Clone Repository
-```bash
-git clone [https://github.com/HriddhoChatterjee/Waste2Menu-AI.git](https://github.com/HriddhoChatterjee/Waste2Menu-AI.git)
-cd Waste2Menu-AI
-```
-
-### 2. Backend Setup
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-python main.py
-```
-- API Server will start at: http://localhost:8000
-- Interactive API Documentation (Swagger UI): http://localhost:8000/docs
-
-### 3. Frontend Setup
-```bash
-cd ../frontend
-npm install
-npm run dev
-```
-- Web Portal will be live at: http://localhost:3000
-
----
-
-## 🔌 API Reference Overview
-| Method | Endpoint | Description |
+| Component | Technology | Description |
 | :--- | :--- | :--- |
-| `POST` | `/api/v1/scrap/log` | Ingests prep scrap mass & runs ML knife anomaly check |
-| `GET` | `/api/v1/scrap/reservoir` | Retrieves active unallocated scrap totals |
-| `GET` | `/api/v1/recipes/match-feasible` | Runs ILP solver to find batch-viable recipes |
-| `POST` | `/api/v1/recipes/approve-batch` | Allocates scrap & pushes dynamic ephemeral SKU to POS |
-| `GET` | `/api/v1/pos/live-menu` | Returns active dynamic menu items with live portion counters |
-| `POST` | `/api/v1/pos/order` | Atomically decrements remaining stock and records sale |
-| `POST` | `/api/v1/fallback/trigger-surplus` | Runs closing-hour surplus check & ranks nearby NGOs |
-| `POST` | `/api/v1/fallback/claim` | Locks batch for NGO and issues single-use 6-digit OTP |
-| `POST` | `/api/v1/fallback/verify-handover` | Verifies OTP at cashier and updates ESG impact ledger |
-| `GET` | `/api/v1/analytics/dashboard` | Returns recovered revenue and environmental savings |
+| **Frontend UI** | HTML5, CSS3, Vanilla JS (ES6+) | Light Cream artisanal UI (`#FBF9F5`, `#FFFFFF`, `#EADBCE`, `#2E7D32`, `#D97706`, `#221F1B`, `#6B635B`). Zero build steps, zero client libraries required. |
+| **Voice Engine** | Web Speech API | Native browser speech synthesis for hands-free kitchen voice guidance. |
+| **Backend REST API**| Python 3.10+, FastAPI, Uvicorn | High-performance asynchronous API endpoints for auth, recipes, scraps, and NGO dispatches. |
+| **Relational Database** | PostgreSQL 12+ / pgAdmin 4 | Normalized schema with foreign keys (`schema.sql` and `seed_data.sql`). |
+| **Local Fallback** | SQLite (`annapurna.db`) | Automatic embedded fallback enabling zero-configuration instant local execution with all 30 PDF scraps & recipes. |
+
+---
+
+## 🚀 Quick Start
+
+### 1. Instant Run (Zero Configuration)
+The backend automatically falls back to an embedded SQLite database (`annapurna.db`) pre-seeded with all 17 recipes and scraps:
+
+```powershell
+# In project root:
+python server.py
+```
+Open your browser at:
+```
+http://localhost:8000
+```
+
+### 2. PostgreSQL & pgAdmin 4 Setup
+To connect with PostgreSQL and pgAdmin 4:
+1. Open **pgAdmin 4**, create a database named `annapurna_db`.
+2. Open the **Query Tool** and execute `schema.sql`.
+3. Open the **Query Tool** and execute `seed_data.sql`.
+4. Set your PostgreSQL password and start the server:
+   ```powershell
+   $env:DATABASE_URL = "postgresql://postgres:YOUR_PASSWORD@localhost:5432/annapurna_db"
+   python server.py
+   ```
+
+*For complete step-by-step screenshots and presentation defense talking points, refer to [SETUP_GUIDE.md](SETUP_GUIDE.md).*
+
 ---
 
 ## 📜 License
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+Open-source under the MIT License. Dedicated to circular gastronomy, environmental sustainability, and food security.

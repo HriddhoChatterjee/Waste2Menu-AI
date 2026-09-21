@@ -1,47 +1,788 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5'/><path d='M8.5 8.5v.01'/><path d='M16 15.5v.01'/><path d='M12 12v.01'/></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#FAF7F2" />
-    <title>Waste2Menu AI — Circular Gastronomy & AI Kitchen Scrap Platform</title>
-    <meta name="description" content="AI-driven automated kitchen prep-scrap tracking, reverse-recipe daily special generation, dynamic POS inventory decrement, and automated NGO redistribution fallback system." />
-    <!-- OpenGraph & Social Metadata for GitHub deployment preview -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Waste2Menu AI — Circular Gastronomy Platform" />
-    <meta property="og:description" content="Turn kitchen prep scraps into high-margin culinary masterpieces. AI vision food recognition and zero-waste recipes." />
-    <link rel="manifest" href="./manifest.json" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Waste2Menu Kiosk" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-[#FAF7F2] text-[#1C1917] font-sans antialiased selection:bg-emerald-200 selection:text-emerald-950 min-h-screen">
-    <noscript>
-      <div style="padding: 2rem; text-align: center; font-family: sans-serif; background-color: #FAF7F2; color: #1C1917;">
-        <h2>JavaScript is required to run Waste2Menu AI</h2>
-        <p>Please enable JavaScript in your browser to experience our circular gastronomy platform.</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Waste2Menu — A Zero-Waste Reverse Recipe & Byproduct Optimization Engine</title>
+  <meta name="description" content="A Zero-Waste Reverse Recipe & Byproduct Optimization Engine celebrating Indian kitchen wisdom to protect nature from food waste. Complete 30-byproduct reference matrix." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232E7D32' stroke-width='2.2'><path d='M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5'/><circle cx='12' cy='12' r='3'/></svg>" />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-light-creme">
+  <!-- TOP APP HEADER -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group" id="nav-brand-btn" role="button" tabindex="0" title="Go to Waste2Menu Home">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">Waste2Menu</h1>
+          <span class="brand-subtitle">A Zero-Waste Reverse Recipe & Byproduct Optimization Engine</span>
+        </div>
       </div>
-    </noscript>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-    <script>
-      // Service Worker Registration for Offline-First PWA support
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .then((reg) => {
-              console.log('[PWA] Service Worker registered successfully:', reg.scope);
-            })
-            .catch((err) => {
-              console.warn('[PWA] Service Worker registration failed:', err);
-            });
-        });
-      }
-    </script>
-  </body>
+
+      <!-- Main Navigation Tabs -->
+      <nav class="main-nav" aria-label="Main Navigation">
+        <button class="nav-tab-btn active" data-tab="home-overview" id="nav-tab-home">
+          <span>🌟 Home & Impact</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="scraps-matrix" id="nav-tab-matrix">
+          <span>🥕 Ingredients Catalog</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="ngo-dispatch" id="nav-tab-ngo">
+          <span>🤝 NGO Dispatch</span>
+          <span class="badge-count" id="active-dispatch-badge" style="display:none;">0</span>
+        </button>
+        <!-- Protected / Role-Specific Portals -->
+        <button class="nav-tab-btn" data-tab="home-chef" id="nav-tab-home-chef">
+          <span>🏡 Home Chef (Cook)</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="master-chef" id="nav-tab-master-chef" style="display:none;">
+          <span>👨‍🍳 + Upload Recipe</span>
+        </button>
+      </nav>
+
+      <!-- Auth Controls (Sign In / Register & Profile) -->
+      <div class="header-auth" id="header-auth">
+        <!-- Rendered dynamically by JS -->
+        <button class="btn-auth-signin" id="btn-open-auth">
+          <span>🔐 Sign In / Register</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PHILOSOPHICAL QUOTE BANNER -->
+  <section class="quote-banner">
+    <div class="quote-container">
+      <div class="quote-leaf" aria-hidden="true">🍃</div>
+      <blockquote class="quote-text">
+        “In nature, nothing is lost, everything is transformed.”
+      </blockquote>
+      <p class="quote-subtext">
+        Ancient Indian Kitchen Wisdom & Antoine Lavoisier's Principle — where vegetable peels, stems, seeds, and leftover grains are revered as nourishing ingredients, protecting nature and society from food waste.
+      </p>
+    </div>
+  </section>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="main-content">
+
+    <!-- =================================================================== -->
+    <!-- TAB 1: HOME & ACHIEVEMENTS (MAIN LANDING SHOWCASE) -->
+    <!-- =================================================================== -->
+    <section class="tab-panel active" id="panel-home-overview">
+      <!-- Hero Banner -->
+      <div class="hero-showcase-card">
+        <div class="hero-showcase-badge">
+          <span class="pulse-indicator-emerald"></span>
+          <span>Community Zero-Waste Movement • Non-Commercial Gastronomy</span>
+        </div>
+        <h2 class="hero-heading">Waste2Menu: Transform Every Scrap into Nourishment</h2>
+        <p class="hero-lead">
+          Honoring Indian kitchen wisdom to eradicate food waste. Empowering Home Chefs with ancestral upcycling recipes and connecting Master Chefs to community kitchens.
+        </p>
+
+        <div class="hero-actions-row">
+          <button class="btn-hero-primary" id="btn-hero-explore">
+            <span>🏡 Explore as Home Chef (Cook Scraps)</span>
+          </button>
+          <button class="btn-hero-secondary" id="btn-hero-contribute">
+            <span>👨‍🍳 Upload Recipes as Master Chef</span>
+          </button>
+          <button class="btn-hero-tertiary" id="btn-hero-matrix">
+            <span>🥕 Browse 30 Kitchen Ingredients</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ACHIEVEMENTS & IMPACT COUNTERS -->
+      <div class="section-title-wrap">
+        <span class="section-kicker">COMMUNITY IMPACT & REAL-TIME STATS</span>
+        <h3 class="section-heading">Our Collective Achievements in Food Valorization</h3>
+        <p class="section-subtitle">Real-time metrics measuring food diverted from municipal landfills, carbon emissions avoided, and families fed.</p>
+      </div>
+
+      <div class="achievements-grid">
+        <div class="achievement-card">
+          <div class="achieve-icon-box leaf-bg">🌾</div>
+          <div class="achieve-content">
+            <span class="achieve-number" id="stat-scraps-rescued">12,450+ kg</span>
+            <h4 class="achieve-label">Organic Kitchen Scraps Saved from Landfills</h4>
+            <p class="achieve-desc">Vegetable peels, stems, seeds, and discards diverted into wholesome nutrition.</p>
+          </div>
+        </div>
+
+        <div class="achievement-card">
+          <div class="achieve-icon-box amber-bg">💨</div>
+          <div class="achieve-content">
+            <span class="achieve-number" id="stat-co2-saved">31,125 kg</span>
+            <h4 class="achieve-label">CO₂e Greenhouse Gas Emissions Avoided</h4>
+            <p class="achieve-desc">Prevented anaerobic decomposition and toxic methane emissions in open dump yards.</p>
+          </div>
+        </div>
+
+        <div class="achievement-card">
+          <div class="achieve-icon-box saffron-bg">🍲</div>
+          <div class="achieve-content">
+            <span class="achieve-number" id="stat-meals-served">1,420+</span>
+            <h4 class="achieve-label">Traditional Zero-Waste Recipes Curated</h4>
+            <p class="achieve-desc">Documented from grandmothers, temple kitchens, and master chefs across India.</p>
+          </div>
+        </div>
+
+        <div class="achievement-card">
+          <div class="achieve-icon-box blue-bg">🤝</div>
+          <div class="achieve-content">
+            <span class="achieve-number">8,600+</span>
+            <h4 class="achieve-label">Low-Cost Meals Dispatched to Local Shelters & NGOs</h4>
+            <p class="achieve-desc">Freshly prepared surplus cooked batches handed over with zero food wasted.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CORE COMMUNITY PILLARS (3 CARDS) -->
+      <div class="how-it-works-section">
+        <div class="section-title-wrap">
+          <span class="section-kicker">COMMUNITY FRAMEWORK</span>
+          <h3 class="section-heading">Core Community Pillars</h3>
+        </div>
+
+        <div class="steps-cards-grid">
+          <div class="step-card">
+            <div class="step-badge-num">🏡</div>
+            <h4>For Home Chefs</h4>
+            <p>Select any peel, stem, or leftover grain on your counter and get instant chef-guided culinary steps.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-badge-num">👨‍🍳</div>
+            <h4>For Master Chefs</h4>
+            <p>Publish ancestral and modern zero-waste recipes, standardizing byproduct valorization.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-badge-num">🌍</div>
+            <h4>For NGOs & Nature</h4>
+            <p>Zero food wasted; diverting organics away from toxic methane-producing dump yards.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANCESTRAL UPCYCLING SHOWCASE (FEATURED BYPRODUCTS) -->
+      <div class="ancestral-showcase-section">
+        <div class="section-title-wrap">
+          <span class="section-kicker">CURATED ZERO-WASTE INSPIRATION</span>
+          <h3 class="section-heading">Ancestral Upcycling Showcase</h3>
+          <p class="section-subtitle">Discover how everyday Indian kitchen discards transform into nutrient-dense, chef-verified culinary treasures.</p>
+        </div>
+
+        <div class="ancestral-showcase-grid" id="ancestral-showcase-grid">
+          <!-- Curated featured scrap cards injected dynamically by JS -->
+        </div>
+      </div>
+
+      <!-- WHY INDIAN KITCHEN SCIENCE IS SUSTAINABLE -->
+      <div class="heritage-wisdom-banner">
+        <div class="wisdom-banner-text">
+          <h3>The Science Behind Ancestral Valorization</h3>
+          <p>
+            Modern nutrition science confirms what Indian grandmothers knew centuries ago: vegetable skins contain up to <strong>65% of total dietary polyphenols and insoluble fiber</strong>, cauliflower stalks hold more calcium and vitamin C than florets, and paneer whey is a complete electrolyte-protein beverage. By valorizing these byproducts, we nourish our families while defending nature.
+          </p>
+        </div>
+        <div class="wisdom-banner-btn-wrap">
+          <button class="btn-primary" id="btn-banner-cook">
+            <span>Start Cooking Zero-Waste Now ➔</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 2: HOME CHEF PORTAL (FIND & COOK RECIPES) -->
+    <!-- =================================================================== -->
+    <section class="tab-panel" id="panel-home-chef">
+      <div class="portal-header-bar">
+        <div>
+          <h2 class="portal-heading">🏡 Home Chef: Reverse Recipe Hub</h2>
+          <p class="portal-sub">Select the ingredients currently on your kitchen counter to instantly discover traditional zero-waste dishes.</p>
+        </div>
+        <div class="role-indicator-badge">
+          <span>Mode: <strong>Home Chef (Viewer & Cook)</strong></span>
+        </div>
+      </div>
+
+      <!-- RECIPES FILTER TOOLBAR (NO SEARCH BAR) -->
+      <div class="search-filter-card">
+        <div class="filter-dropdown-row" style="width: 100%; justify-content: space-between;">
+          <div style="display: flex; gap: 1.25rem; flex-wrap: wrap;">
+            <div class="filter-item">
+              <label for="filter-course">Course:</label>
+              <select id="filter-course">
+                <option value="all">All Courses</option>
+                <option value="Chutney/Dip">Chutney / Dip</option>
+                <option value="Crispy Bhaja/Side">Crispy Bhaja / Side</option>
+                <option value="Dry Sabzi">Dry Sabzi</option>
+                <option value="Dal/Sambar">Dal / Sambar</option>
+                <option value="Breakfast/Snack">Breakfast / Snack</option>
+                <option value="Pickle/Condiment">Pickle / Condiment</option>
+                <option value="Digestive Soup/Rasam">Digestive Soup / Rasam</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label for="filter-dietary">Dietary:</label>
+              <select id="filter-dietary">
+                <option value="all">All Diets</option>
+                <option value="Pure Veg">Pure Veg</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Gluten-Free">Gluten-Free</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="btn-sel-action" id="btn-nav-to-catalog" style="align-self: center;">
+            🥕 Select Kitchen Scraps in Catalog ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- RECIPES RESULTS HEADER -->
+      <div class="results-header-bar">
+        <div>
+          <span class="results-counter" id="recipes-results-counter">Showing 30 traditional recipes</span>
+          <span class="results-hint" id="active-scraps-filter-tag"></span>
+        </div>
+        <span class="eco-tag">🌱 100% Edible Upcycling • Zero Food Waste</span>
+      </div>
+
+      <!-- RECIPES CARDS GRID -->
+      <div class="recipe-cards-grid" id="home-recipe-grid">
+        <div class="loading-state">Loading authentic Indian byproduct recipes...</div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 3: MASTER CHEF PORTAL (UPLOAD & PRESERVE RECIPES) -->
+    <!-- =================================================================== -->
+    <section class="tab-panel" id="panel-master-chef">
+      <div class="portal-header-bar">
+        <div>
+          <h2 class="portal-heading">👨‍🍳 Master Chef: Recipe Authoring Studio</h2>
+          <p class="portal-sub">Preserve authentic zero-waste culinary recipes and ancestral kitchen wisdom into the open community database.</p>
+        </div>
+        <div class="role-indicator-badge master-badge">
+          <span>Mode: <strong>Master Chef (Recipe Author)</strong></span>
+        </div>
+      </div>
+
+      <!-- Permission Banner if logged out or home cook -->
+      <div class="auth-role-notice-card" id="chef-role-banner" style="display:none;">
+        <div class="notice-icon">👨‍🍳</div>
+        <div class="notice-body">
+          <h4>Master Chef Sign-In Recommended</h4>
+          <p id="chef-role-notice-text">Anyone can test uploading recipes, but signing in with a Master Chef account links your name and culinary heritage affiliation to every recipe published.</p>
+        </div>
+        <button class="btn-small-auth" id="btn-chef-demo-signin">
+          <span>Sign In as Master Chef Demo</span>
+        </button>
+      </div>
+
+      <!-- Recipe Submission Form -->
+      <div class="form-container-card">
+        <form id="master-recipe-form">
+          <div class="form-two-cols">
+            <div class="form-group full-width">
+              <label for="form-rc-title">Recipe Dish Title *</label>
+              <input type="text" id="form-rc-title" required placeholder="e.g. Lauki Chilka Chechki (Crispy Bottle Gourd Peel Stir-Fry)" />
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-scrap">Byproduct Scrap Used (From 30 Scraps List) *</label>
+              <select id="form-rc-scrap" required>
+                <option value="">-- Choose from 30 Household Scraps --</option>
+                <!-- Populated dynamically via JS -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-course">Course Category *</label>
+              <select id="form-rc-course" required>
+                <option value="Chutney/Dip">Chutney / Dip</option>
+                <option value="Crispy Bhaja/Side">Crispy Bhaja / Side</option>
+                <option value="Dry Sabzi">Dry Sabzi</option>
+                <option value="Dal/Sambar">Dal / Sambar</option>
+                <option value="Breakfast/Snack">Breakfast / Snack</option>
+                <option value="Pickle/Condiment">Pickle / Condiment</option>
+                <option value="Digestive Soup/Rasam">Digestive Soup / Rasam</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-chef">Chef / Contributor Name *</label>
+              <input type="text" id="form-rc-chef" required placeholder="e.g. Chef Sanjeev or Nani Sushila" />
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-affiliation">Kitchen Affiliation / Heritage Tradition *</label>
+              <input type="text" id="form-rc-affiliation" required placeholder="e.g. Awadhi Rasoi / Bengal Heritage Kitchen" />
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-prep">Prep & Cook Time (Minutes) *</label>
+              <input type="number" id="form-rc-prep" min="1" max="240" value="15" required />
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-diff">Difficulty Level</label>
+              <select id="form-rc-diff">
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-servings">Servings (Portions)</label>
+              <input type="number" id="form-rc-servings" min="1" max="50" value="4" required />
+            </div>
+
+            <div class="form-group">
+              <label for="form-rc-dietary">Dietary Preference</label>
+              <select id="form-rc-dietary">
+                <option value="Pure Veg">Pure Veg</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Gluten-Free">Gluten-Free</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Dynamic Pantry Ingredients -->
+          <div class="dynamic-inputs-card">
+            <div class="dynamic-header-row">
+              <div>
+                <h4>Pantry Staples & Household Spices *</h4>
+                <p class="subtext">Everyday spices needed (e.g. Mustard oil, Kalonji, Green chillies, Turmeric).</p>
+              </div>
+              <button type="button" class="btn-dynamic-add" id="btn-add-pantry-item">+ Add Ingredient</button>
+            </div>
+            <div class="dynamic-list" id="pantry-inputs-container">
+              <div class="dynamic-input-row">
+                <input type="text" class="input-pantry" placeholder="Ingredient 1 (e.g. Mustard oil)" required />
+                <button type="button" class="btn-remove-row" title="Remove">✕</button>
+              </div>
+              <div class="dynamic-input-row">
+                <input type="text" class="input-pantry" placeholder="Ingredient 2 (e.g. Kalonji / Nigella seeds)" required />
+                <button type="button" class="btn-remove-row" title="Remove">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Step-by-Step Instructions -->
+          <div class="dynamic-inputs-card">
+            <div class="dynamic-header-row">
+              <div>
+                <h4>Step-by-Step Preparation Method *</h4>
+                <p class="subtext">Clear, simple steps for home cooks to follow (also read aloud by voice guide!).</p>
+              </div>
+              <button type="button" class="btn-dynamic-add" id="btn-add-step-item">+ Add Step</button>
+            </div>
+            <div class="dynamic-list" id="steps-inputs-container">
+              <div class="dynamic-input-row">
+                <span class="step-num-pill">1</span>
+                <textarea class="input-step" rows="2" placeholder="Step 1: Thoroughly wash and slice scraps..." required></textarea>
+                <button type="button" class="btn-remove-row" title="Remove">✕</button>
+              </div>
+              <div class="dynamic-input-row">
+                <span class="step-num-pill">2</span>
+                <textarea class="input-step" rows="2" placeholder="Step 2: Heat oil in a pan, temper spices, and sauté until tender..." required></textarea>
+                <button type="button" class="btn-remove-row" title="Remove">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chef Wisdom Tip -->
+          <div class="form-group full-width">
+            <label for="form-rc-wisdom">Ancestral / Chef Wisdom Tip (Optional)</label>
+            <textarea id="form-rc-wisdom" rows="3" placeholder="e.g. Grandma's Secret: A splash of raw tamarind balances the natural minerals of gourd peels..."></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="form-actions-bar">
+            <button type="submit" class="btn-submit-recipe" id="btn-save-recipe">
+              <span>🌿 Preserve Recipe in Annapurna Loop</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 4: NGO SURPLUS FOOD DISPATCH -->
+    <!-- =================================================================== -->
+    <section class="tab-panel" id="panel-ngo-dispatch">
+      <div class="portal-header-bar">
+        <div>
+          <h2 class="portal-heading">🤝 Community Kitchen & NGO Surplus Dispatch</h2>
+          <p class="portal-sub">A non-commercial, 1-tap bridge between community kitchens with extra cooked meals and local shelters feeding the needy.</p>
+        </div>
+      </div>
+
+      <div class="dispatch-two-cols">
+        <!-- Left: Broadcast Alert Form -->
+        <div class="dispatch-broadcast-card">
+          <div class="broadcast-header">
+            <div class="pulse-indicator-saffron"></div>
+            <h3>1-Tap Surplus Meal Broadcast</h3>
+          </div>
+          <p class="broadcast-desc">Have wholesome surplus cooked food from a kitchen batch, community langar, or festive event? Alert nearby verified non-profit shelters instantly.</p>
+
+          <form id="ngo-broadcast-form">
+            <div class="form-group">
+              <label for="disp-dish-name">Dish / Meal Name *</label>
+              <input type="text" id="disp-dish-name" required placeholder="e.g. Fulkopi Danta Chorchori with Steamed Rice" />
+            </div>
+
+            <div class="form-group">
+              <label for="disp-chef-name">Prepared By / Kitchen *</label>
+              <input type="text" id="disp-chef-name" required placeholder="e.g. Community Kitchen Hub #2" />
+            </div>
+
+            <div class="form-group">
+              <label for="disp-portions">Portions Available (Number of People) *</label>
+              <input type="number" id="disp-portions" min="1" max="2500" value="30" required />
+            </div>
+
+            <div class="form-group">
+              <label for="disp-location">Pickup Location & Landmark *</label>
+              <input type="text" id="disp-location" required placeholder="e.g. 14 Lake Road, Southern Avenue, Kolkata" />
+            </div>
+
+            <div class="form-group">
+              <label for="disp-contact">Contact Phone Number *</label>
+              <input type="tel" id="disp-contact" required placeholder="e.g. +91 98301 44521" />
+            </div>
+
+            <div class="form-group">
+              <label for="disp-notes">Packaging & Dietary Notes</label>
+              <textarea id="disp-notes" rows="2" placeholder="e.g. Freshly prepared at 1 PM. Packed in insulated containers. Pure vegetarian."></textarea>
+            </div>
+
+            <button type="submit" class="btn-broadcast-submit" id="btn-submit-broadcast">
+              <span>📢 Broadcast Surplus Alert to Shelters</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Right: Live Feed of Dispatches -->
+        <div class="dispatch-feed-wrap">
+          <div class="feed-header-row">
+            <div>
+              <h3>Live Community Surplus Feed</h3>
+              <p class="feed-sub">Active alerts awaiting NGO pickup</p>
+            </div>
+            <div class="feed-active-counter">
+              <span id="stat-feed-active-meals">0</span> Meals Open
+            </div>
+          </div>
+
+          <div class="feed-cards-list" id="ngo-dispatches-list">
+            <!-- Rendered by JS -->
+            <div class="loading-state">Loading active community dispatches...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 3: 30 KITCHEN INGREDIENTS & SCRAPS CATALOG -->
+    <!-- =================================================================== -->
+    <section class="tab-panel" id="panel-scraps-matrix">
+      <div class="portal-header-bar">
+        <div>
+          <h2 class="portal-heading">🥕 30 Traditional Kitchen Ingredients & Scraps Catalog</h2>
+          <p class="portal-sub">A comprehensive reference of all 30 household food byproducts, regional pan-Indian nomenclature, and authentic upcycling methods from the reference guide.</p>
+        </div>
+        <div class="matrix-verified-pill">
+          <span>✅ 30 Ingredients Cataloged</span>
+        </div>
+      </div>
+
+      <!-- 5 EXPANDABLE VISUAL CATEGORY SECTIONS CONTAINER (PRE-LOADED 30 SCRAPS) -->
+      <div class="categories-catalog-container" id="categories-catalog-container">
+        <!-- 5 Expandable category accordions with rich scrap cards injected dynamically by JS -->
+      </div>
+
+      <!-- Floating Action Dock (Slides up smoothly when 1+ scraps are selected) -->
+      <div class="guide-selection-bar" id="guide-selection-bar" style="display: none;">
+        <div class="sel-bar-left">
+          <span class="sel-bar-badge" id="sel-bar-count">0 Selected</span>
+          <span class="sel-bar-names" id="sel-bar-names">Tap any scrap to select</span>
+        </div>
+        <div class="sel-bar-actions">
+          <button type="button" class="btn-sel-action" id="btn-guide-select-all">Select All (30)</button>
+          <button type="button" class="btn-sel-action outline" id="btn-guide-clear">Clear</button>
+          <button type="button" class="btn-sel-view-recipes" id="btn-guide-view-recipes">
+            <span>🍲 View Matched Zero-Waste Recipes (<span id="sel-recipes-count">0</span>)</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- NATIVE HTML5 DIALOG: AUTH MODAL (SIGN IN / REGISTER / DEMO) -->
+  <!-- ===================================================================== -->
+  <dialog class="app-modal" id="auth-modal">
+    <div class="modal-card small">
+      <header class="modal-card-header">
+        <div class="auth-tabs-toggle">
+          <button class="auth-tab-btn active" id="auth-toggle-signin">Sign In</button>
+          <button class="auth-tab-btn" id="auth-toggle-register">Create Account</button>
+        </div>
+        <button class="btn-close-modal" id="auth-modal-close" aria-label="Close">✕</button>
+      </header>
+
+      <div class="modal-card-body">
+        <!-- Quick 1-Click Demo Buttons -->
+        <div class="demo-login-shortcuts">
+          <span class="demo-shortcuts-label">⚡ 1-Click Instant Demo Login:</span>
+          <div class="demo-btns-row">
+            <button class="btn-demo-pill chef" id="btn-quick-demo-chef">
+              <span>👨‍🍳 Master Chef Demo</span>
+            </button>
+            <button class="btn-demo-pill home" id="btn-quick-demo-home">
+              <span>🏡 Home Chef Demo</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-divider">
+          <span>or continue with email</span>
+        </div>
+
+        <!-- SIGN IN FORM -->
+        <form id="form-signin" class="auth-form-view">
+          <div class="form-group">
+            <label for="signin-email">Email Address</label>
+            <input type="email" id="signin-email" required placeholder="e.g. chef@annapurna.org" />
+          </div>
+
+          <div class="form-group">
+            <label for="signin-password">Password</label>
+            <input type="password" id="signin-password" required placeholder="Enter your password" />
+          </div>
+
+          <button type="submit" class="btn-auth-submit" id="btn-submit-signin">
+            <span>Sign In</span>
+          </button>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form id="form-register" class="auth-form-view" style="display:none;">
+          <div class="form-group">
+            <label for="reg-name">Full Name *</label>
+            <input type="text" id="reg-name" required placeholder="e.g. Ananya Sen" />
+          </div>
+
+          <div class="form-group">
+            <label for="reg-email">Email Address *</label>
+            <input type="email" id="reg-email" required placeholder="e.g. ananya@rasoi.in" />
+          </div>
+
+          <div class="form-group">
+            <label for="reg-password">Password *</label>
+            <input type="password" id="reg-password" minlength="4" required placeholder="At least 4 characters" />
+          </div>
+
+          <div class="form-group">
+            <label for="reg-role">Account Role *</label>
+            <select id="reg-role" required>
+              <option value="home_chef">🏡 Home Chef (Browse, Select Scraps & Cook)</option>
+              <option value="master_chef">👨‍🍳 Master Chef (Upload Recipes & Broadcast Meals)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-affiliation">Kitchen Affiliation / Location</label>
+            <input type="text" id="reg-affiliation" placeholder="e.g. Home Kitchen, Kolkata / Seva Rasoi" />
+          </div>
+
+          <button type="submit" class="btn-auth-submit" id="btn-submit-register">
+            <span>Create Free Account</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ===================================================================== -->
+  <!-- NATIVE HTML5 DIALOG: RECIPE DETAIL & AUDIO GUIDE MODAL -->
+  <!-- ===================================================================== -->
+  <dialog class="app-modal" id="recipe-modal">
+    <div class="modal-card">
+      <header class="modal-card-header">
+        <div class="modal-tags-row">
+          <span class="badge badge-course" id="modal-rc-course">Course</span>
+          <span class="badge badge-dietary" id="modal-rc-dietary">Pure Veg</span>
+          <span class="badge badge-scrap" id="modal-rc-scrap-title">Scrap Name</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <button type="button" class="btn-toggle-favorite" id="btn-modal-favorite" title="Save to Favorites">
+            <span id="fav-icon">🤍</span>
+            <span id="fav-text">Save</span>
+          </button>
+          <button class="btn-close-modal" id="recipe-modal-close" aria-label="Close">✕</button>
+        </div>
+      </header>
+
+      <div class="modal-card-body">
+        <h2 class="modal-dish-title" id="modal-rc-title">Recipe Title</h2>
+        
+        <div class="modal-chef-meta">
+          <span class="chef-icon">👨‍🍳</span>
+          <div>
+            <strong id="modal-rc-chef-name">Chef Name</strong>
+            <span class="chef-affil-text" id="modal-rc-chef-affil">Affiliation</span>
+          </div>
+          <div class="modal-specs-pills">
+            <span class="spec-pill">⏱️ <span id="modal-rc-prep">15</span> mins</span>
+            <span class="spec-pill">⚡ <span id="modal-rc-diff">Easy</span></span>
+            <span class="spec-pill">🍽️ <span id="modal-rc-servings">4</span> portions</span>
+          </div>
+        </div>
+
+        <!-- Scrap Highlight Card with Regional Names -->
+        <div class="modal-byproduct-card">
+          <div class="byproduct-card-icon">♻️</div>
+          <div class="byproduct-card-body">
+            <span class="byproduct-kicker">VALORIZED KITCHEN BYPRODUCT</span>
+            <h4 id="modal-rc-scrap-en">Scrap English</h4>
+            <p class="byproduct-regional-text" id="modal-rc-scrap-reg">Regional Aliases</p>
+          </div>
+        </div>
+
+        <!-- WEB SPEECH API AUDIO VOICE GUIDE BANNER -->
+        <div class="audio-voice-banner">
+          <div class="audio-banner-info">
+            <div class="speaker-symbol">🔊</div>
+            <div>
+              <strong>Hands-Free Cooking Audio Guide</strong>
+              <p>Listen to ingredients and cooking steps read aloud while handling dough and hot pans.</p>
+            </div>
+          </div>
+          <div class="audio-banner-actions">
+            <button class="btn-audio-play" id="btn-audio-play" title="Play step-by-step narration">
+              <span id="audio-icon-span">▶️</span>
+              <span id="audio-text-span">Listen to Voice Guide</span>
+            </button>
+            <button class="btn-audio-stop" id="btn-audio-stop" style="display:none;" title="Stop narration">
+              ⏹️ Stop
+            </button>
+          </div>
+        </div>
+
+        <!-- Interactive Pantry Checklist -->
+        <div class="modal-section-block">
+          <div class="section-badge-title">
+            <h3>Pantry Staples & Household Spices</h3>
+            <span class="tap-hint">(Tap to check off what's on your counter)</span>
+          </div>
+          <ul class="interactive-checklist" id="modal-rc-staples">
+            <!-- Injected by JS -->
+          </ul>
+        </div>
+
+        <!-- Interactive Cooking Steps Checklist -->
+        <div class="modal-section-block">
+          <div class="section-badge-title">
+            <h3>Step-by-Step Cooking Method</h3>
+            <span class="tap-hint">(Tap to mark step complete)</span>
+          </div>
+          <ol class="interactive-steps-list" id="modal-rc-steps">
+            <!-- Injected by JS -->
+          </ol>
+        </div>
+
+        <!-- Ancestral Wisdom Box -->
+        <div class="ancestral-wisdom-box" id="modal-rc-wisdom-wrap">
+          <div class="wisdom-lamp">💡</div>
+          <div class="wisdom-text-wrap">
+            <h4>Ancestral Rasoi Wisdom</h4>
+            <p id="modal-rc-wisdom">Tip content...</p>
+          </div>
+        </div>
+
+        <div class="modal-footer-eco">
+          <span>🌱 <strong>Ecological Value:</strong> Transforming this scrap diverts organic biomass from landfills, preventing potent greenhouse gases.</span>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ===================================================================== -->
+  <!-- NATIVE HTML5 DIALOG: CLAIM SURPLUS DISPATCH -->
+  <!-- ===================================================================== -->
+  <dialog class="app-modal" id="claim-modal">
+    <div class="modal-card small">
+      <header class="modal-card-header">
+        <h3>Claim Meal Batch for NGO / Shelter</h3>
+        <button class="btn-close-modal" id="claim-modal-close" aria-label="Close">✕</button>
+      </header>
+      <div class="modal-card-body">
+        <form id="claim-dispatch-form">
+          <p class="claim-info-msg">
+            Claiming: <strong id="claim-target-dish">...</strong> (<span id="claim-target-portions">0</span> portions)
+          </p>
+          <div class="form-group">
+            <label for="claim-input-ngo">NGO / Shelter / Volunteer Team Name *</label>
+            <input type="text" id="claim-input-ngo" required placeholder="e.g. Robin Hood Army / Seva Sadan Shelter" />
+          </div>
+          <div class="modal-actions-right">
+            <button type="button" class="btn-secondary" id="claim-cancel-btn">Cancel</button>
+            <button type="submit" class="btn-primary">Confirm Shelter Claim</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ===================================================================== -->
+  <!-- NATIVE HTML5 DIALOG: SAVED FAVORITES MODAL (HOME CHEF) -->
+  <!-- ===================================================================== -->
+  <dialog class="app-modal" id="favorites-modal">
+    <div class="modal-card">
+      <header class="modal-card-header">
+        <div>
+          <h2 class="modal-dish-title" style="margin-bottom: 0.25rem;">❤️ Saved Favorite Recipes</h2>
+          <p style="font-size: 0.88rem; color: var(--text-secondary);">Your personal collection of bookmarked zero-waste kitchen recipes.</p>
+        </div>
+        <button class="btn-close-modal" id="favorites-modal-close" aria-label="Close">✕</button>
+      </header>
+
+      <div class="modal-card-body">
+        <div class="favorites-list-grid" id="favorites-list-container">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- FLOATING TOAST NOTIFICATIONS -->
+  <div class="toast-tray" id="toast-tray" aria-live="polite"></div>
+
+  <!-- Pure Modern Vanilla JavaScript Controller -->
+  <script src="app.js"></script>
+</body>
 </html>
