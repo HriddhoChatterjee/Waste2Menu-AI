@@ -34,6 +34,13 @@
       "short_name": "Dairy & Spice Discards",
       "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M8 2h8l2 5H6l2-5zm0 5v13a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V7\"/></svg>",
       "description": "Bio-active paneer whey, sour curd, caramelized ghee residue (khurchan), ginger skins, and roasted coconut husks."
+    },
+    {
+      "id": 6,
+      "name": "6. Non-Veg Discards & Byproducts",
+      "short_name": "Non-Veg Discards & Byproducts",
+      "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M18 8c0-3.3-2.7-6-6-6S6 4.7 6 8c0 2.2 1.2 4.1 3 5.1V20a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-6.9c1.8-1 3-2.9 3-5.1z\"/><circle cx=\"9\" cy=\"8\" r=\"1\"/><circle cx=\"15\" cy=\"8\" r=\"1\"/></svg>",
+      "description": "Nutrient-rich bone frames, marrow knuckles, fish heads, cartilage, prawn shells, chicken skin, and fish roe sacs."
     }
   ],
   "scraps": [
@@ -246,6 +253,41 @@
       "name_en": "Coconut Brown Husk Skins",
       "name_regional": "Nariyal ka Khurchan / Brown Skin",
       "common_uses": "Shredded and dry-roasted with red chillies, tamarind, and garlic into flavorful dry idli podi."
+    },
+    {
+      "id": 31,
+      "category_id": 6,
+      "name_en": "Bone Frames & Knuckles",
+      "name_regional": "Mutton Nalli, Chicken Haddi, Elumbu",
+      "common_uses": "Slow-simmered with crushed ginger, peppercorns, and turmeric into nutrient-dense bone broth (Nalli Soup / Paya Yakhni broth)."
+    },
+    {
+      "id": 32,
+      "category_id": 6,
+      "name_en": "Fish Head & Cartilage Trimmings",
+      "name_regional": "Machher Matha, Meen Thala",
+      "common_uses": "Fried with turmeric and slow-cooked into rich Bengali Muri Ghonto with fragrant rice, or simmered in spicy Assamese/South Indian sour gravies."
+    },
+    {
+      "id": 33,
+      "category_id": 6,
+      "name_en": "Prawn Shells & Heads",
+      "name_regional": "Chingri Khosha, Eral Odu",
+      "common_uses": "Roasted dry, crushed, and simmered with onions, garlic, and chillies to extract aromatic seafood broth or ground into spicy prawn shell chutney powder."
+    },
+    {
+      "id": 34,
+      "category_id": 6,
+      "name_en": "Chicken Skin & Fat Trimmings",
+      "name_regional": "Chicken Charbi",
+      "common_uses": "Rendered over low flame into natural cooking fat (schmaltz), and the crispy cracklings used as a crunchy garnish for pulav or dal."
+    },
+    {
+      "id": 35,
+      "category_id": 6,
+      "name_en": "Fish Roe / Egg Sacs",
+      "name_regional": "Machher Deem, Meen Muttai",
+      "common_uses": "Lightly seasoned with turmeric, salt, chopped green chillies, and onions, then pan-fried into crispy fish egg pakoras (Machher Deem-er Bora)."
     }
   ],
   "recipes": [
@@ -1094,6 +1136,156 @@
       ],
       "chef_wisdom_tip": "The fibrous brown coconut testa contains high insoluble fiber and rich natural aromatic oils that create legendary podi powders.",
       "servings": 8
+    },
+    {
+      "id": 31,
+      "title": "Slow-Simmered Mutton Bone Broth (Paya Yakhni Soup)",
+      "scrap_id": 31,
+      "chef_name": "Ustad Abdul Kareem",
+      "chef_affiliation": "Dakhni Heritage Rasoi, Hyderabad",
+      "prep_time_minutes": 50,
+      "difficulty": "Medium",
+      "course_type": "Soup/Broth",
+      "dietary_type": "Non-Veg",
+      "pantry_staples": [
+        "Mutton bone knuckles",
+        "Crushed black peppercorns",
+        "Fresh ginger & garlic",
+        "Turmeric powder",
+        "Coriander seeds",
+        "Green cardamom",
+        "Ghee",
+        "Fresh mint"
+      ],
+      "step_by_step_instructions": [
+        "Rinse mutton bone frames and knuckles thoroughly in warm salted water.",
+        "Crack knuckles slightly with a heavy cleaver or pestle to expose marrow cavities for nutrient extraction.",
+        "In a heavy-bottomed pot or pressure cooker, heat 1 tsp ghee; add bruised green cardamoms, crushed black pepper, ginger, and garlic until aromatic.",
+        "Add bone frames and sear for 3 minutes. Pour 6 cups of water, add 1/2 tsp turmeric and salt.",
+        "Slow-simmer on low flame for 45-60 minutes (or 6 whistles in cooker) until gelatinous marrow and collagen infuse the golden broth.",
+        "Strain into bowls, sprinkle roasted cumin powder and fresh mint leaves. Serve piping hot with lemon wedges."
+      ],
+      "chef_wisdom_tip": "Adding a splash of lemon during simmering leaches out maximum calcium and bioavailable collagen from the knuckle bones.",
+      "servings": 4
+    },
+    {
+      "id": 32,
+      "title": "Spiced Fish Head Rice Medley (Bengali Muri Ghonto)",
+      "scrap_id": 32,
+      "chef_name": "Ruma Mukherjee",
+      "chef_affiliation": "Ganga Delta Home Kitchens, Kolkata",
+      "prep_time_minutes": 35,
+      "difficulty": "Advanced",
+      "course_type": "Main Course",
+      "dietary_type": "Non-Veg",
+      "pantry_staples": [
+        "Rahu or Katla fish heads",
+        "Fragrant Gobindobhog or Basmati rice",
+        "Mustard oil",
+        "Bay leaf & cumin seeds",
+        "Onions & ginger paste",
+        "Turmeric & Kashmiri chilli",
+        "Garam masala & ghee"
+      ],
+      "step_by_step_instructions": [
+        "Halve fish head into manageable quarters, wash clean, and marinate with turmeric and salt.",
+        "Deeply sear fish head pieces in hot mustard oil until golden brown and aromatic, breaking slightly with the spatula.",
+        "In the remaining oil, temper whole garam masala, bay leaf, and cumin seeds; sauté sliced onions and ginger-garlic paste until brown.",
+        "Add rinsed fragrant rice and gently sauté for 2 minutes to coat the grains in aromatic fat.",
+        "Return the fried fish head pieces to the pan, add warm water (1:2 ratio to rice), cover and simmer on low for 15 minutes.",
+        "Finish with a spoonful of aromatic ghee and garam masala. Let it rest 5 minutes before serving with steamed rice."
+      ],
+      "chef_wisdom_tip": "Deeply frying the fish head until crisp eliminates any fishy odor and extracts rich omega-3 oils that cook the fragrant rice grains from within.",
+      "servings": 4
+    },
+    {
+      "id": 33,
+      "title": "Spiced Prawn Shell Chutney Powder & Broth",
+      "scrap_id": 33,
+      "chef_name": "Chef Meenakshi Sundaram",
+      "chef_affiliation": "Coromandel Coastal Kitchen, Chennai",
+      "prep_time_minutes": 25,
+      "difficulty": "Easy",
+      "course_type": "Side Dish / Condiment",
+      "dietary_type": "Non-Veg",
+      "pantry_staples": [
+        "Fresh prawn heads and shells",
+        "Byadagi dried red chillies",
+        "Urad dal & chana dal",
+        "Curry leaves",
+        "Tamarind pulp",
+        "Garlic cloves",
+        "Hing (Asafoetida)",
+        "Sesame oil"
+      ],
+      "step_by_step_instructions": [
+        "Thoroughly rinse prawn heads and shells; pat completely dry on cotton kitchen towels.",
+        "Dry-roast prawn shells on a cast iron pan over medium flame for 8-10 minutes until intensely fragrant, crisp, and brittle.",
+        "Separately roast urad dal, chana dal, dried red chillies, garlic, and fresh curry leaves in 1/2 tsp sesame oil until aromatic.",
+        "Let all ingredients cool down to room temperature.",
+        "Transfer roasted shells, lentils, spices, salt, and tamarind into a spice grinder and pulse to a coarse, vibrant red podi.",
+        "Store in an airtight jar. Serve with hot steamed rice and ghee, or sprinkle over crisp dosas."
+      ],
+      "chef_wisdom_tip": "The prawn shells contain rich chitin and umami-heavy glutamates. Ensure they are bone-dry before grinding so the powder stays fresh for months.",
+      "servings": 6
+    },
+    {
+      "id": 34,
+      "title": "Rendered Chicken Schmaltz & Golden Cracklings",
+      "scrap_id": 34,
+      "chef_name": "Chef Zorawar Sethi",
+      "chef_affiliation": "Grand Trunk Road Culinary Collective, Amritsar",
+      "prep_time_minutes": 20,
+      "difficulty": "Easy",
+      "course_type": "Side Dish / Condiment",
+      "dietary_type": "Non-Veg",
+      "pantry_staples": [
+        "Trimmed chicken skin and charbi fat",
+        "Coarse sea salt",
+        "Crushed black pepper",
+        "Chopped garlic cloves",
+        "Sliced shallots"
+      ],
+      "step_by_step_instructions": [
+        "Chop chicken skin trimmings and solid fat pockets into bite-sized 1-inch squares.",
+        "Place skin pieces in a cold skillet with 2 tablespoons of water over low-medium heat.",
+        "As water evaporates, the chicken fat begins to slowly render out into clean, liquid golden cooking fat.",
+        "Stir occasionally for 12-15 minutes until the skin pieces turn ultra-crispy, golden cracklings (chicharrones).",
+        "Remove crispy cracklings with a slotted spoon onto paper towels; toss with rock salt and freshly crushed black pepper.",
+        "Strain the rendered liquid chicken schmaltz into a glass jar—use it as cooking oil for roasting potatoes or kneading dough."
+      ],
+      "chef_wisdom_tip": "Starting with a small splash of water prevents the raw skin from burning while easing the low-temperature fat rendering process.",
+      "servings": 4
+    },
+    {
+      "id": 35,
+      "title": "Crispy Spiced Fish Roe Fritters (Machher Deem-er Bora)",
+      "scrap_id": 35,
+      "chef_name": "Chef Tanusree Ganguly",
+      "chef_affiliation": "Bengal Byproduct Heritage Circle, Siliguri",
+      "prep_time_minutes": 18,
+      "difficulty": "Easy",
+      "course_type": "Snack / Fritter",
+      "dietary_type": "Non-Veg",
+      "pantry_staples": [
+        "Fresh fish roe / egg sacs",
+        "Finely chopped red onions",
+        "Chopped green chillies",
+        "Besan (Gram flour)",
+        "Turmeric & kalonji (nigella) seeds",
+        "Mustard oil for frying",
+        "Rock salt"
+      ],
+      "step_by_step_instructions": [
+        "Wash fish roe gently under running water, removing any tough outer membrane veins.",
+        "In a mixing bowl, gently mash fish roe using a fork; add finely chopped onions, green chillies, kalonji, turmeric, and salt.",
+        "Add 1-2 tablespoons of besan (gram flour) strictly as a light binder—do not add water as roe contains natural moisture.",
+        "Heat mustard oil in a pan until it reaches smoking point, then reduce to medium.",
+        "Drop tablespoon-sized balls of the mixture into hot oil and shallow fry for 2-3 minutes per side until golden and crunchy.",
+        "Drain on paper towels and serve hot alongside steamed rice, yellow masoor dal, and green chillies."
+      ],
+      "chef_wisdom_tip": "Do not over-mix or add extra water to the roe batter; the eggs naturally puff into tender, airy fritters with a delicate crisp shell.",
+      "servings": 4
     }
   ],
   "dispatches": [
@@ -1107,7 +1299,10 @@
       "contact_number": "+91 98301 44521",
       "status": "ACTIVE",
       "claimed_by_ngo": null,
-      "notes": "Freshly prepared from bulk market cauliflower trims. Packed in 5-liter insulated stainless thermal containers."
+      "notes": "Freshly prepared from bulk market cauliflower trims. Packed in 5-liter insulated stainless thermal containers.",
+      "dietary_tag": "Pure Veg",
+      "ready_time": "Hot & Ready Now",
+      "claim_otp": null
     },
     {
       "id": 2,
@@ -1119,7 +1314,10 @@
       "contact_number": "+91 98250 88210",
       "status": "CLAIMED",
       "claimed_by_ngo": "Robin Hood Army - Ward 4 Volunteer Team",
-      "notes": "Claimed for evening distribution at Railway Colony Shelter."
+      "notes": "Claimed for evening distribution at Railway Colony Shelter.",
+      "dietary_tag": "Pure Veg",
+      "ready_time": "Hot & Ready Now",
+      "claim_otp": "482910"
     },
     {
       "id": 3,
@@ -1131,7 +1329,25 @@
       "contact_number": "+91 98800 23456",
       "status": "ACTIVE",
       "claimed_by_ngo": null,
-      "notes": "Prepared from 15L fresh paneer whey; hot and packed in hygienic food-grade cans."
+      "notes": "Prepared from 15L fresh paneer whey; hot and packed in hygienic food-grade cans.",
+      "dietary_tag": "Pure Veg",
+      "ready_time": "Hot & Ready Now",
+      "claim_otp": null
+    },
+    {
+      "id": 4,
+      "recipe_id": 31,
+      "dish_name": "Nalli Bone Broth & Steamed Millets",
+      "prepared_by_chef": "Chef Abdul Kareem (Heritage Rasoi)",
+      "portions_available": 30,
+      "pickup_location": "12, Venkatanarayana Road, T. Nagar, Chennai - 600017",
+      "contact_number": "+91 90877 90877",
+      "status": "ACTIVE",
+      "claimed_by_ngo": null,
+      "claim_otp": null,
+      "dietary_tag": "Non-Veg (Halal)",
+      "ready_time": "Freshly Simmered (Ready for Pickup)",
+      "notes": "Nutrient-rich bone broth simmered from marrow knuckle bones with black pepper and ginger."
     }
   ],
   "users": [
@@ -1150,6 +1366,14 @@
       "password_hash": "home123",
       "role": "home_chef",
       "affiliation": "Rasoi Hero Community Cook"
+    },
+    {
+      "id": 3,
+      "name": "Kavitha Raman",
+      "email": "ngo@chennaifoodbank.org",
+      "password_hash": "ngo123",
+      "role": "ngo_rep",
+      "affiliation": "Chennai Food Bank / No Food Waste"
     }
   ]
 }

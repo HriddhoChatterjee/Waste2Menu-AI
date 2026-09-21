@@ -2435,6 +2435,16 @@ dialog[open] .modal-card {
   background: var(--emerald-light);
 }
 
+.btn-demo-pill.ngo {
+  background: #FFFFFF;
+  border-color: #2563EB;
+  color: #1D4ED8;
+}
+
+.btn-demo-pill.ngo:hover {
+  background: #EFF6FF;
+}
+
 .auth-divider {
   text-align: center;
   position: relative;
@@ -3121,3 +3131,1228 @@ dialog[open] .modal-card {
   display: none !important;
 }
 
+/* ==========================================================================
+   HOME CHEF: SMART KITCHEN SCRAP PHOTO SCANNER
+   ========================================================================== */
+.scrap-scanner-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px -2px rgba(92, 64, 40, 0.04);
+}
+
+.scanner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+  flex-wrap: wrap;
+}
+
+.scanner-title-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.scanner-icon-badge {
+  font-size: 1.75rem;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: rgba(46, 125, 50, 0.08);
+  border: 1px solid var(--emerald-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.scanner-heading {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.scanner-subheading {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  max-width: 680px;
+  line-height: 1.45;
+}
+
+.scanner-pill-tag {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--emerald-primary);
+  background: rgba(46, 125, 50, 0.1);
+  border: 1px solid var(--emerald-border);
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+}
+
+.scanner-body-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+/* Drag & Drop Dropzone */
+.scanner-dropzone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-base);
+  min-height: 270px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.scanner-dropzone:hover,
+.scanner-dropzone.drag-over {
+  border-color: var(--emerald-primary);
+  background: rgba(46, 125, 50, 0.04);
+  box-shadow: 0 0 16px rgba(46, 125, 50, 0.08);
+}
+
+.dropzone-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+
+.dropzone-camera-icon {
+  font-size: 2.6rem;
+  margin-bottom: 0.65rem;
+  opacity: 0.9;
+}
+
+.dropzone-main-text {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.dropzone-sub-text {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 1.15rem;
+}
+
+.btn-dropzone-upload {
+  background: #FFFFFF;
+  border: 1.5px solid var(--emerald-border);
+  color: var(--emerald-primary);
+  font-size: 0.86rem;
+  font-weight: 700;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.08);
+  transition: all 0.2s ease;
+}
+
+.btn-dropzone-upload:hover {
+  background: var(--emerald-primary);
+  color: #FFFFFF;
+  border-color: var(--emerald-primary);
+  transform: translateY(-1px);
+}
+
+/* Scanner Viewfinder & Live Laser Animation */
+.scanner-viewfinder {
+  width: 100%;
+  height: 270px;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: #000000;
+}
+
+#scanner-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.scanner-laser-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #2E7D32 25%, #66BB6A 50%, #D97706 75%, transparent 100%);
+  box-shadow: 0 0 14px #2E7D32, 0 0 8px #66BB6A;
+  z-index: 10;
+  animation: scanLaserSweep 2.2s infinite ease-in-out;
+}
+
+@keyframes scanLaserSweep {
+  0% { top: 2%; opacity: 0.8; }
+  50% { top: 96%; opacity: 1; }
+  100% { top: 2%; opacity: 0.8; }
+}
+
+.scanner-overlay-status {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(34, 31, 27, 0.88);
+  backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  white-space: nowrap;
+  z-index: 12;
+}
+
+/* Control Panel & Quick Samples */
+.scanner-control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  justify-content: center;
+}
+
+.scanner-samples-wrap {
+  background: var(--bg-base);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.25rem;
+}
+
+.samples-label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.65rem;
+  display: block;
+}
+
+.samples-chip-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.btn-sample-chip,
+.btn-catalog-sample-chip {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.85rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-sample-chip:hover,
+.btn-catalog-sample-chip:hover {
+  border-color: var(--emerald-primary);
+  background: rgba(46, 125, 50, 0.03);
+  transform: translateX(3px);
+  color: var(--emerald-primary);
+}
+
+/* Recognition Results Box */
+.scanner-results-box {
+  background: #FFFFFF;
+  border: 1.5px solid var(--emerald-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.08);
+  animation: slideUp 0.3s ease-out;
+}
+
+.results-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.85rem;
+  gap: 0.5rem;
+}
+
+.results-header-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.results-badge-success {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--emerald-primary);
+  background: rgba(46, 125, 50, 0.12);
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  width: fit-content;
+}
+
+.results-summary-title {
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.btn-rescan {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-rescan:hover {
+  color: var(--saffron-primary);
+}
+
+.detected-scraps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.detected-scrap-chip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-base);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.detected-scrap-chip.active {
+  background: rgba(46, 125, 50, 0.05);
+  border-color: var(--emerald-primary);
+}
+
+.detected-chip-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.detected-chip-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--emerald-primary);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.76rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.detected-scrap-chip:not(.active) .detected-chip-check {
+  background: var(--border-color);
+  color: var(--text-muted);
+}
+
+.detected-chip-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: block;
+}
+
+.detected-chip-uses {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  display: block;
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.detected-chip-confidence {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--emerald-primary);
+  background: rgba(46, 125, 50, 0.1);
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.scanner-action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.scanner-impact-hint {
+  font-size: 0.78rem;
+  color: var(--emerald-primary);
+  font-weight: 700;
+}
+
+.btn-apply-scanned-recipes {
+  background: linear-gradient(135deg, var(--emerald-primary) 0%, #1B5E20 100%);
+  color: #FFFFFF;
+  border: none;
+  padding: 0.65rem 1.15rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-apply-scanned-recipes:hover {
+  background: linear-gradient(135deg, #246328 0%, #144718 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.35);
+}
+
+/* Header Scanner Shortcut Button */
+.btn-header-scanner {
+  background: rgba(46, 125, 50, 0.1);
+  border: 1px solid var(--emerald-border);
+  color: var(--emerald-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.btn-header-scanner:hover {
+  background: var(--emerald-primary);
+  color: #FFFFFF;
+  border-color: var(--emerald-primary);
+}
+
+@media (max-width: 860px) {
+  .scanner-body-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+/* ==========================================================================
+   FEATURE 1: HOME CHEF DISH CREATION PHOTO UPLOADER (RECIPE MODAL)
+   ========================================================================== */
+.dish-creation-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.dish-creation-card:hover {
+  border-color: var(--saffron-border);
+}
+
+.dish-creation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.creation-header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.creation-icon {
+  font-size: 1.75rem;
+  background: var(--saffron-light);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--saffron-border);
+  flex-shrink: 0;
+}
+
+.creation-heading {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.creation-subheading {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin: 0.2rem 0 0 0;
+}
+
+.creation-hero-tag {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--emerald-primary);
+  border: 1px solid var(--emerald-border);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+/* Drag & Drop Upload Zone */
+.dish-upload-dropzone {
+  border: 2px dashed var(--saffron-border);
+  background: #FCFBF7;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.dish-upload-dropzone:hover,
+.dish-upload-dropzone.dragover {
+  border-color: var(--saffron-primary);
+  background: #FAF5EB;
+}
+
+.dish-dropzone-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dish-upload-cam-icon {
+  font-size: 2.2rem;
+  color: var(--saffron-primary);
+}
+
+.dish-dropzone-prompt p {
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.dish-upload-hint {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.btn-dish-trigger-upload {
+  margin-top: 0.5rem;
+  background: #FFFFFF;
+  border: 1px solid var(--saffron-primary);
+  color: var(--saffron-hover);
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-dish-trigger-upload:hover {
+  background: var(--saffron-primary);
+  color: #FFFFFF;
+}
+
+/* Client-Side Preview Box */
+.dish-preview-box {
+  position: relative;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.dish-preview-box img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.btn-dish-remove-photo {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(34, 31, 27, 0.85);
+  color: #FFFFFF;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.btn-dish-remove-photo:hover {
+  background: #DC2626;
+}
+
+/* Creation Optional Fields & Star Rating */
+.dish-creation-fields {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dish-rating-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.dish-star-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  color: #D1D5DB;
+  cursor: pointer;
+  transition: transform 0.15s ease, color 0.15s ease;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.star-btn:hover {
+  transform: scale(1.2);
+}
+
+.star-btn.active {
+  color: #F59E0B;
+}
+
+.rating-text-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--saffron-hover);
+  margin-left: 0.6rem;
+}
+
+.btn-save-dish-creation {
+  background: linear-gradient(135deg, var(--saffron-primary) 0%, #B45309 100%);
+  color: #FFFFFF;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 3px 12px rgba(217, 119, 6, 0.25);
+  transition: all var(--transition-fast);
+}
+
+.btn-save-dish-creation:hover {
+  background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(217, 119, 6, 0.35);
+}
+
+.dish-success-badge {
+  background: rgba(46, 125, 50, 0.08);
+  border: 1px solid var(--emerald-border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--emerald-primary);
+  font-size: 0.88rem;
+  font-weight: 700;
+  animation: fadeInDown 0.3s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   FEATURE 2: HOME CHEF "MY UPCYCLED CREATIONS" GALLERY
+   ========================================================================== */
+.cooked-creations-section {
+  margin-top: 2.5rem;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.creations-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.creations-kicker-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.creations-badge-pill {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--emerald-primary);
+  border: 1px solid var(--emerald-border);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cooked-creations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.25rem;
+}
+
+.cooked-creation-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.cooked-creation-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--saffron-border);
+}
+
+.creation-card-media {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  background: #F3EFEA;
+}
+
+.creation-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.creation-scrap-tag {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(34, 31, 27, 0.82);
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(4px);
+}
+
+.btn-delete-creation {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
+  border: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-delete-creation:hover {
+  background: #DC2626;
+  color: #FFFFFF;
+}
+
+.creation-card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.5rem;
+}
+
+.creation-rating-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.creation-stars {
+  display: flex;
+  gap: 1px;
+}
+
+.creation-stars .star {
+  font-size: 0.95rem;
+  color: #D1D5DB;
+}
+
+.creation-stars .star.active {
+  color: #F59E0B;
+}
+
+.creation-date {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.creation-dish-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.creation-note {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  background: #FAF8F5;
+  border-left: 3px solid var(--saffron-primary);
+  padding: 0.45rem 0.65rem;
+  border-radius: 4px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.creation-card-footer {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.hero-micro-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--emerald-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.creations-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: #FAF8F5;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.creations-empty-state .empty-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.creations-empty-state h4 {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin: 0 0 0.4rem 0;
+}
+
+.creations-empty-state p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   FEATURE 3: CHENNAI LOCAL NGO & COMMUNITY SHELTER DIRECTORY
+   ========================================================================== */
+.chennai-ngo-section {
+  margin-top: 2.75rem;
+  background: #FAF6EE;
+  border: 1px solid #E8DFD1;
+  border-radius: var(--radius-lg);
+  padding: 1.85rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.chennai-search-box input {
+  min-width: 280px;
+  padding: 0.55rem 0.95rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: #FFFFFF;
+  font-size: 0.84rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.chennai-search-box input:focus {
+  border-color: var(--saffron-primary);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+}
+
+.chennai-ngos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.chennai-ngo-card {
+  background: #FFFFFF;
+  border: 1px solid #E8DFD1;
+  border-radius: var(--radius-md);
+  padding: 1.35rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.chennai-ngo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--saffron-primary);
+}
+
+.ngo-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ngo-icon-wrap {
+  font-size: 1.6rem;
+  width: 40px;
+  height: 40px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ngo-badge-pill {
+  background: rgba(37, 99, 235, 0.1);
+  color: #1D4ED8;
+  border: 1px solid #93C5FD;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-full);
+}
+
+.ngo-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.ngo-zone-tag {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--saffron-hover);
+  background: var(--saffron-light);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.ngo-focus-text {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.ngo-meta-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: #FAF8F5;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-sm);
+}
+
+.ngo-meta-item {
+  display: flex;
+  gap: 0.4rem;
+  align-items: baseline;
+}
+
+.ngo-meta-item span {
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.ngo-meta-item strong {
+  color: var(--text-primary);
+}
+
+.ngo-addr-text {
+  color: var(--text-primary);
+}
+
+.btn-direct-dispatch-ngo {
+  margin-top: auto;
+  background: linear-gradient(135deg, var(--emerald-primary) 0%, #15803D 100%);
+  color: #FFFFFF;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
+}
+
+.btn-direct-dispatch-ngo:hover {
+  background: linear-gradient(135deg, #15803D 0%, #166534 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+/* ==========================================================================
+   FEATURE 4: DIETARY TAGS & OTP HANDOVER LOGISTICS
+   ========================================================================== */
+.dietary-badge-pill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+}
+
+.dietary-badge-pill.veg {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--emerald-primary);
+  border: 1px solid var(--emerald-border);
+}
+
+.dietary-badge-pill.non-veg {
+  background: rgba(220, 38, 38, 0.1);
+  color: #B91C1C;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.scrap-source-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: #F3EFEA;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+}
+
+.otp-claimed-banner {
+  background: #FEF3C7;
+  border: 1px dashed var(--saffron-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin: 0.4rem 0;
+}
+
+.otp-claimed-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #92400E;
+}
+
+.otp-code-highlight {
+  font-family: 'Outfit', monospace;
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #B45309;
+  background: #FFFFFF;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid #FCD34D;
+}
+
+.otp-hint {
+  font-size: 0.74rem;
+  color: #92400E;
+  font-style: italic;
+}
+
+/* Claim Modal Handover OTP Card */
+.claim-otp-card {
+  padding: 1rem 0;
+  animation: fadeInDown 0.3s ease-out;
+}
+
+.otp-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.5rem;
+}
+
+.otp-check-icon {
+  font-size: 1.6rem;
+}
+
+.otp-card-header h4 {
+  font-size: 1.15rem;
+  color: var(--emerald-primary);
+  margin: 0;
+  font-weight: 800;
+}
+
+.otp-instruction {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.otp-code-box {
+  background: #FAF5EB;
+  border: 2px solid var(--saffron-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.otp-digits {
+  font-family: 'Outfit', monospace;
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: var(--saffron-hover);
+}
+
+.btn-copy-otp {
+  background: #FFFFFF;
+  border: 1px solid var(--saffron-primary);
+  color: var(--saffron-hover);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-copy-otp:hover {
+  background: var(--saffron-primary);
+  color: #FFFFFF;
+}
+
+.otp-logistics-meta {
+  background: #F9FAFB;
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  border: 1px solid var(--border-light);
+  margin-bottom: 1.25rem;
+}

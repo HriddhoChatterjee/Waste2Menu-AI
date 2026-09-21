@@ -22,7 +22,7 @@ CREATE TABLE users (
     name VARCHAR(120) NOT NULL,
     email VARCHAR(180) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL DEFAULT 'home_chef' CHECK (role IN ('master_chef', 'home_chef')),
+    role VARCHAR(50) NOT NULL DEFAULT 'home_chef' CHECK (role IN ('master_chef', 'home_chef', 'ngo_rep')),
     affiliation VARCHAR(180) DEFAULT 'Community Rasoi',
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -99,6 +99,9 @@ CREATE TABLE ngo_dispatches (
     contact_number VARCHAR(30) NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'CLAIMED', 'COLLECTED')),
     claimed_by_ngo VARCHAR(150),
+    claim_otp VARCHAR(10),
+    dietary_tag VARCHAR(50) DEFAULT 'Pure Veg',
+    ready_time VARCHAR(80) DEFAULT 'Hot & Ready Now',
     notes TEXT,
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP

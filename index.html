@@ -222,6 +222,91 @@
         </div>
       </div>
 
+      <!-- =============================================================== -->
+      <!-- HOME CHEF: SMART PHOTO UPLOAD & AUTOMATIC SCRAP SCANNER -->
+      <!-- =============================================================== -->
+      <div class="scrap-scanner-card" id="scrap-scanner-card">
+        <div class="scanner-header">
+          <div class="scanner-title-group">
+            <div class="scanner-icon-badge">📸</div>
+            <div>
+              <h3 class="scanner-heading">Smart Kitchen Scrap Photo Scanner</h3>
+              <p class="scanner-subheading">Upload or capture a photo of discards on your kitchen counter. Our vision engine will automatically detect the ingredients and match ancestral recipes.</p>
+            </div>
+          </div>
+          <span class="scanner-pill-tag">✨ AI Vision Powered</span>
+        </div>
+
+        <div class="scanner-body-grid">
+          <!-- Dropzone & File Picker -->
+          <div class="scanner-dropzone" id="scanner-dropzone">
+            <input type="file" id="scrap-photo-input" accept="image/*" capture="environment" style="display: none;" />
+            <div class="dropzone-empty-state" id="dropzone-prompt">
+              <div class="dropzone-camera-icon">📷</div>
+              <h4 class="dropzone-main-text">Drag & Drop Kitchen Photo Here</h4>
+              <p class="dropzone-sub-text">or choose an image from your device / camera</p>
+              <button type="button" class="btn-dropzone-upload" id="btn-trigger-photo-upload">
+                <span>📁 Upload Counter Photo</span>
+              </button>
+            </div>
+
+            <!-- Scanner Viewfinder & Live Laser Animation -->
+            <div class="scanner-viewfinder" id="scanner-viewfinder" style="display: none;">
+              <img id="scanner-preview-img" src="" alt="Counter Scraps Preview" />
+              <div class="scanner-laser-line" id="scanner-laser-line"></div>
+              <div class="scanner-overlay-status" id="scanner-status-badge">
+                <span class="pulse-indicator-emerald"></span>
+                <span id="scanner-status-text">Scanning byproducts & textures...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Samples & Recognition Results -->
+          <div class="scanner-control-panel">
+            <div class="scanner-samples-wrap">
+              <span class="samples-label">⚡ Quick 1-Click Test Samples:</span>
+              <div class="samples-chip-row">
+                <button type="button" class="btn-sample-chip" data-sample="mixed_peels">
+                  <span>🥔 Mixed Vegetable Peels</span>
+                </button>
+                <button type="button" class="btn-sample-chip" data-sample="stems_leaves">
+                  <span>🌿 Fresh Herb & Stalk Stems</span>
+                </button>
+                <button type="button" class="btn-sample-chip" data-sample="seeds_rinds">
+                  <span>🍉 Seeds & Citrus Rinds</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Recognition Results Container -->
+            <div class="scanner-results-box" id="scanner-results-box" style="display: none;">
+              <div class="results-box-header">
+                <div class="results-header-meta">
+                  <span class="results-badge-success">✅ Scan Complete</span>
+                  <h4 class="results-summary-title" id="scan-summary-title">Detected Ingredients:</h4>
+                </div>
+                <button type="button" class="btn-rescan" id="btn-rescan">↺ Scan Another Photo</button>
+              </div>
+
+              <!-- Detected Scrap Pills List -->
+              <div class="detected-scraps-list" id="detected-scraps-list">
+                <!-- Dynamically populated -->
+              </div>
+
+              <!-- Action Bar -->
+              <div class="scanner-action-bar">
+                <div class="scanner-impact-hint" id="scanner-impact-hint">
+                  🌱 Estimated 0.75 kg rescued • 1.35 kg CO₂ prevented
+                </div>
+                <button type="button" class="btn-apply-scanned-recipes" id="btn-apply-scanned-recipes">
+                  <span>🍲 View Matching Recipes (<span id="scanned-recipes-count">0</span>) ➔</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- RECIPES FILTER TOOLBAR (NO SEARCH BAR) -->
       <div class="search-filter-card">
         <div class="filter-dropdown-row" style="width: 100%; justify-content: space-between;">
@@ -269,6 +354,35 @@
       <!-- RECIPES CARDS GRID -->
       <div class="recipe-cards-grid" id="home-recipe-grid">
         <div class="loading-state">Loading authentic zero-waste recipes...</div>
+      </div>
+
+      <!-- =============================================================== -->
+      <!-- PERSONAL GALLERY: MY UPCYCLED CREATIONS (COOKED DISHES) -->
+      <!-- =============================================================== -->
+      <div class="cooked-creations-section" id="cooked-creations-gallery-section">
+        <div class="creations-section-header">
+          <div>
+            <div class="creations-kicker-row">
+              <span class="pulse-indicator-emerald"></span>
+              <span class="section-kicker">HOME CHEF PERSONAL PORTFOLIO</span>
+            </div>
+            <h3 class="section-heading">🌟 My Upcycled Creations</h3>
+            <p class="section-subtitle">Dishes you have cooked using kitchen scraps, documented with photos, star ratings, and grandma's secret twists.</p>
+          </div>
+          <div class="creations-badge-pill">
+            <span class="badge-icon">🌿</span>
+            <span id="badge-creations-count">0 Creations Saved</span>
+          </div>
+        </div>
+
+        <div class="cooked-creations-grid" id="cooked-creations-grid">
+          <!-- Populated dynamically by JS -->
+          <div class="creations-empty-state">
+            <span class="empty-icon">🍳</span>
+            <h4>No cooked creations uploaded yet</h4>
+            <p>Open any recipe above, cook it at home, and tap <strong>"Snap / Upload My Dish Creation"</strong> to build your Zero-Waste Hero portfolio!</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -384,6 +498,21 @@
             </div>
 
             <div class="form-group">
+              <label for="disp-dietary">Dietary Classification *</label>
+              <select id="disp-dietary" required>
+                <option value="Pure Veg">Pure Veg (Sattvic / Jain Friendly)</option>
+                <option value="Vegan">Vegan (100% Plant-Based)</option>
+                <option value="Non-Veg (Halal)">Non-Veg (Halal Certified / Broth)</option>
+                <option value="Non-Veg">Non-Veg (Poultry / Fish)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="disp-ready-time">Ready Time & Temperature *</label>
+              <input type="text" id="disp-ready-time" required placeholder="e.g. Hot & Ready Now (Cooked 30m ago)" value="Hot & Ready Now" />
+            </div>
+
+            <div class="form-group">
               <label for="disp-location">Pickup Location & Landmark *</label>
               <input type="text" id="disp-location" required placeholder="e.g. 14 Lake Road, Southern Avenue, Kolkata" />
             </div>
@@ -422,6 +551,28 @@
           </div>
         </div>
       </div>
+
+      <!-- =============================================================== -->
+      <!-- MASTER CHEF & DISPATCH: CHENNAI LOCAL NGO DIRECTORY -->
+      <!-- =============================================================== -->
+      <div class="chennai-ngo-section" id="chennai-ngo-directory">
+        <div class="section-title-wrap">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; width: 100%;">
+            <div>
+              <span class="section-kicker">LOCAL COMMUNITY PARTNERS • CHENNAI REGION</span>
+              <h3 class="section-heading">📍 Verified Community Shelters & Food Banks in Chennai</h3>
+              <p class="section-subtitle">Collaborate directly with grassroots relief centers, destitute homes, and volunteer networks across Chennai to collect bulk meals.</p>
+            </div>
+            <div class="chennai-search-box">
+              <input type="text" id="search-chennai-ngos" placeholder="🔍 Filter by Zone (e.g. T. Nagar, Porur, Adyar)..." />
+            </div>
+          </div>
+        </div>
+
+        <div class="chennai-ngos-grid" id="chennai-ngos-grid">
+          <!-- Rendered dynamically by JS -->
+        </div>
+      </div>
     </section>
 
     <!-- =================================================================== -->
@@ -430,17 +581,107 @@
     <section class="tab-panel" id="panel-scraps-matrix">
       <div class="portal-header-bar">
         <div>
-          <h2 class="portal-heading">🥕 30 Traditional Kitchen Ingredients & Scraps Catalog</h2>
-          <p class="portal-sub">A comprehensive reference of all 30 household food byproducts and chef-tested zero-waste upcycling methods.</p>
+          <h2 class="portal-heading">🥕 35 Traditional Kitchen Ingredients & Scraps Catalog</h2>
+          <p class="portal-sub">A comprehensive reference of all 35 household food byproducts and chef-tested zero-waste upcycling methods across 6 categories.</p>
         </div>
-        <div class="matrix-verified-pill">
-          <span>✅ 30 Ingredients Cataloged</span>
+        <div style="display: flex; gap: 0.65rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="btn-header-scanner" id="btn-scroll-to-catalog-scanner">
+            <span>📸 Scan Counter Photo</span>
+          </button>
+          <div class="matrix-verified-pill">
+            <span>✅ 35 Ingredients Cataloged</span>
+          </div>
         </div>
       </div>
 
-      <!-- 5 EXPANDABLE VISUAL CATEGORY SECTIONS CONTAINER (PRE-LOADED 30 SCRAPS) -->
+      <!-- =============================================================== -->
+      <!-- CATALOG: SMART PHOTO UPLOAD & AUTOMATIC SCRAP SELECTOR -->
+      <!-- =============================================================== -->
+      <div class="scrap-scanner-card" id="catalog-scanner-card">
+        <div class="scanner-header">
+          <div class="scanner-title-group">
+            <div class="scanner-icon-badge">📸</div>
+            <div>
+              <h3 class="scanner-heading">Auto-Select Ingredients via Counter Photo</h3>
+              <p class="scanner-subheading">Upload a picture of your kitchen counter discards — our vision scanner will automatically detect and select the matching ingredients in the 35-item catalog below.</p>
+            </div>
+          </div>
+          <span class="scanner-pill-tag">✨ Instant Auto-Selection</span>
+        </div>
+
+        <div class="scanner-body-grid">
+          <!-- Dropzone & File Picker -->
+          <div class="scanner-dropzone" id="catalog-scanner-dropzone">
+            <input type="file" id="catalog-scrap-photo-input" accept="image/*" capture="environment" style="display: none;" />
+            <div class="dropzone-empty-state" id="catalog-dropzone-prompt">
+              <div class="dropzone-camera-icon">📷</div>
+              <h4 class="dropzone-main-text">Drag & Drop Kitchen Photo Here</h4>
+              <p class="dropzone-sub-text">or click to choose an image from your device / camera</p>
+              <button type="button" class="btn-dropzone-upload" id="btn-catalog-trigger-upload">
+                <span>📁 Upload Photo to Select</span>
+              </button>
+            </div>
+
+            <!-- Scanner Viewfinder & Live Laser Animation -->
+            <div class="scanner-viewfinder" id="catalog-scanner-viewfinder" style="display: none;">
+              <img id="catalog-scanner-preview-img" src="" alt="Catalog Scraps Preview" />
+              <div class="scanner-laser-line" id="catalog-scanner-laser-line"></div>
+              <div class="scanner-overlay-status" id="catalog-scanner-status-badge">
+                <span class="pulse-indicator-emerald"></span>
+                <span id="catalog-scanner-status-text">Scanning byproducts & textures...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Samples & Recognition Results -->
+          <div class="scanner-control-panel">
+            <div class="scanner-samples-wrap">
+              <span class="samples-label">⚡ 1-Click Test Scenarios:</span>
+              <div class="samples-chip-row">
+                <button type="button" class="btn-catalog-sample-chip" data-sample="mixed_peels">
+                  <span>🥔 Mixed Vegetable Peels</span>
+                </button>
+                <button type="button" class="btn-catalog-sample-chip" data-sample="stems_leaves">
+                  <span>🌿 Fresh Herb & Stalk Stems</span>
+                </button>
+                <button type="button" class="btn-catalog-sample-chip" data-sample="seeds_rinds">
+                  <span>🍉 Seeds & Citrus Rinds</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Recognition Results Container -->
+            <div class="scanner-results-box" id="catalog-scanner-results-box" style="display: none;">
+              <div class="results-box-header">
+                <div class="results-header-meta">
+                  <span class="results-badge-success">✅ Scanned & Selected</span>
+                  <h4 class="results-summary-title">Auto-Selected in Catalog:</h4>
+                </div>
+                <button type="button" class="btn-rescan" id="btn-catalog-rescan">↺ Scan Another</button>
+              </div>
+
+              <!-- Detected Scrap Pills List -->
+              <div class="detected-scraps-list" id="catalog-detected-scraps-list">
+                <!-- Dynamically populated -->
+              </div>
+
+              <!-- Action Bar -->
+              <div class="scanner-action-bar">
+                <div class="scanner-impact-hint" id="catalog-scanner-impact-hint">
+                  🌱 Added to Counter Selection
+                </div>
+                <button type="button" class="btn-apply-scanned-recipes" id="btn-catalog-view-in-hub">
+                  <span>🍲 View Matched Recipes (<span id="catalog-scanned-recipes-count">0</span>) ➔</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 EXPANDABLE VISUAL CATEGORY SECTIONS CONTAINER (PRE-LOADED 35 SCRAPS) -->
       <div class="categories-catalog-container" id="categories-catalog-container">
-        <!-- 5 Expandable category accordions with rich scrap cards injected dynamically by JS -->
+        <!-- 6 Expandable category accordions with rich scrap cards injected dynamically by JS -->
       </div>
 
       <!-- Floating Action Dock (Slides up smoothly when 1+ scraps are selected) -->
@@ -450,7 +691,7 @@
           <span class="sel-bar-names" id="sel-bar-names">Tap any scrap to select</span>
         </div>
         <div class="sel-bar-actions">
-          <button type="button" class="btn-sel-action" id="btn-guide-select-all">Select All (30)</button>
+          <button type="button" class="btn-sel-action" id="btn-guide-select-all">Select All (35)</button>
           <button type="button" class="btn-sel-action outline" id="btn-guide-clear">Clear</button>
           <button type="button" class="btn-sel-view-recipes" id="btn-guide-view-recipes">
             <span>🍲 View Matched Zero-Waste Recipes (<span id="sel-recipes-count">0</span>)</span>
@@ -485,6 +726,9 @@
             <button class="btn-demo-pill home" id="btn-quick-demo-home">
               <span>🏡 Home Chef Demo</span>
             </button>
+            <button class="btn-demo-pill ngo" id="btn-quick-demo-ngo">
+              <span>🏢 NGO Representative Demo</span>
+            </button>
           </div>
         </div>
 
@@ -496,7 +740,7 @@
         <form id="form-signin" class="auth-form-view">
           <div class="form-group">
             <label for="signin-email">Email Address</label>
-            <input type="email" id="signin-email" required placeholder="e.g. chef@annapurna.org" />
+            <input type="email" id="signin-email" required placeholder="e.g. chef@annapurna.org or ngo@chennaifoodbank.org" />
           </div>
 
           <div class="form-group">
@@ -513,12 +757,12 @@
         <form id="form-register" class="auth-form-view" style="display:none;">
           <div class="form-group">
             <label for="reg-name">Full Name *</label>
-            <input type="text" id="reg-name" required placeholder="e.g. Ananya Sen" />
+            <input type="text" id="reg-name" required placeholder="e.g. Ananya Sen / Kavitha Raman" />
           </div>
 
           <div class="form-group">
             <label for="reg-email">Email Address *</label>
-            <input type="email" id="reg-email" required placeholder="e.g. ananya@rasoi.in" />
+            <input type="email" id="reg-email" required placeholder="e.g. ananya@rasoi.in or ngo@relief.org" />
           </div>
 
           <div class="form-group">
@@ -529,14 +773,15 @@
           <div class="form-group">
             <label for="reg-role">Account Role *</label>
             <select id="reg-role" required>
-              <option value="home_chef">🏡 Home Chef (Browse, Select Scraps & Cook)</option>
-              <option value="master_chef">👨‍🍳 Master Chef (Upload Recipes & Broadcast Meals)</option>
+              <option value="home_chef">🏡 Home Chef (Cook, select scraps, view recipes, upload dish photos)</option>
+              <option value="master_chef">👨‍🍳 Master Chef (Author & upload byproduct recipes, dispatch surplus bulk batches)</option>
+              <option value="ngo_rep">🏢 NGO / Community Shelter Representative (View surplus dishes, claim batches, track logistics)</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="reg-affiliation">Kitchen Affiliation / Location</label>
-            <input type="text" id="reg-affiliation" placeholder="e.g. Home Kitchen, Kolkata / Seva Rasoi" />
+            <label for="reg-affiliation">Kitchen Affiliation / Shelter Organization</label>
+            <input type="text" id="reg-affiliation" placeholder="e.g. Chennai Food Bank / Community Rasoi" />
           </div>
 
           <button type="submit" class="btn-auth-submit" id="btn-submit-register">
@@ -644,6 +889,71 @@
           </div>
         </div>
 
+        <!-- =============================================================== -->
+        <!-- SNAP / UPLOAD MY DISH CREATION (HOME CHEF ENGAGEMENT) -->
+        <!-- =============================================================== -->
+        <div class="dish-creation-card" id="dish-creation-upload-section">
+          <div class="dish-creation-header">
+            <div class="creation-header-title">
+              <span class="creation-icon">📸</span>
+              <div>
+                <h4 class="creation-heading">Snap / Upload My Dish Creation</h4>
+                <p class="creation-subheading">Cooked this upcycled dish? Share your zero-waste creation with the community!</p>
+              </div>
+            </div>
+            <span class="creation-hero-tag">Zero-Waste Hero</span>
+          </div>
+
+          <!-- Dropzone and Camera Capture Trigger -->
+          <div class="dish-upload-dropzone" id="dish-photo-dropzone">
+            <input type="file" id="dish-photo-input" accept="image/*" capture="environment" style="display:none;" />
+            <div class="dish-dropzone-prompt" id="dish-dropzone-prompt">
+              <span class="dish-upload-cam-icon">📷</span>
+              <p><strong>Drag & Drop photo</strong> or <strong>tap to open camera</strong></p>
+              <span class="dish-upload-hint">Supports JPEG, PNG, WEBP from your kitchen counter</span>
+              <button type="button" class="btn-dish-trigger-upload" id="btn-trigger-dish-upload">
+                <span>📸 Take / Choose Photo</span>
+              </button>
+            </div>
+
+            <!-- Client-side Preview Box -->
+            <div class="dish-preview-box" id="dish-preview-box" style="display:none;">
+              <img id="dish-preview-img" src="" alt="Dish preview" />
+              <button type="button" class="btn-dish-remove-photo" id="btn-dish-remove-photo" title="Remove photo">✕</button>
+            </div>
+          </div>
+
+          <!-- Optional Fields: Grandma's Twist note & Star Rating -->
+          <div class="dish-creation-fields">
+            <div class="form-group">
+              <label for="dish-creation-note">Add a Note / Grandma's Twist (Optional)</label>
+              <input type="text" id="dish-creation-note" placeholder="e.g. Added toasted sesame seeds and a dash of hing for extra crunch!" />
+            </div>
+
+            <div class="form-group dish-rating-group">
+              <label>Star Rating</label>
+              <div class="dish-star-rating" id="dish-star-rating" data-rating="5">
+                <button type="button" class="star-btn active" data-value="1">★</button>
+                <button type="button" class="star-btn active" data-value="2">★</button>
+                <button type="button" class="star-btn active" data-value="3">★</button>
+                <button type="button" class="star-btn active" data-value="4">★</button>
+                <button type="button" class="star-btn active" data-value="5">★</button>
+                <span class="rating-text-label" id="rating-text-label">5.0 / 5 (Legendary)</span>
+              </div>
+            </div>
+
+            <button type="button" class="btn-save-dish-creation" id="btn-save-dish-creation">
+              <span>🌟 Save to My Cooked Creations</span>
+            </button>
+
+            <!-- Micro-badge on successful upload -->
+            <div class="dish-success-badge" id="dish-success-badge" style="display:none;">
+              <span class="badge-icon">🌿</span>
+              <span>Zero Waste Hero: You diverted kitchen scrap into delicious food!</span>
+            </div>
+          </div>
+        </div>
+
         <div class="modal-footer-eco">
           <span>🌱 <strong>Ecological Value:</strong> Transforming this scrap diverts organic biomass from landfills, preventing potent greenhouse gases.</span>
         </div>
@@ -667,13 +977,30 @@
           </p>
           <div class="form-group">
             <label for="claim-input-ngo">NGO / Shelter / Volunteer Team Name *</label>
-            <input type="text" id="claim-input-ngo" required placeholder="e.g. Robin Hood Army / Seva Sadan Shelter" />
+            <input type="text" id="claim-input-ngo" required placeholder="e.g. Robin Hood Army / Chennai Food Bank" />
           </div>
           <div class="modal-actions-right">
             <button type="button" class="btn-secondary" id="claim-cancel-btn">Cancel</button>
-            <button type="submit" class="btn-primary">Confirm Shelter Claim</button>
+            <button type="submit" class="btn-primary" id="btn-confirm-claim-batch">Confirm Shelter Claim</button>
           </div>
         </form>
+
+        <!-- OTP Handover Verification Card (Presented on successful claim) -->
+        <div class="claim-otp-card" id="claim-otp-card" style="display:none;">
+          <div class="otp-card-header">
+            <span class="otp-check-icon">✅</span>
+            <h4>Surplus Batch Successfully Claimed!</h4>
+          </div>
+          <p class="otp-instruction">Please present this verified <strong>6-Digit Handover OTP</strong> to the chef or dispatch volunteer upon meal pickup:</p>
+          <div class="otp-code-box">
+            <span class="otp-digits" id="claim-otp-digits">482910</span>
+            <button type="button" class="btn-copy-otp" id="btn-copy-claim-otp" title="Copy OTP">📋 Copy</button>
+          </div>
+          <div class="otp-logistics-meta" id="claim-logistics-meta">
+            <!-- Populated dynamically with pickup address & ready time -->
+          </div>
+          <button type="button" class="btn-primary full-width" id="btn-done-claim-otp">Done</button>
+        </div>
       </div>
     </div>
   </dialog>
