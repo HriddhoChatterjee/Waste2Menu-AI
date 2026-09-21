@@ -3104,3 +3104,20 @@ dialog[open] .modal-card {
     font-size: 1.3rem;
   }
 }
+
+/* ==========================================================================
+   REGIONAL ALIASES DISPLAY OVERRIDE
+   Display clean English names only across the entire UI.
+   Underlying dataset preserves regional/multilingual names for the upcoming
+   dedicated Region / Nations selector section.
+   ========================================================================== */
+.showcase-regional-names,
+.scrap-card-regional,
+.byproduct-regional-text,
+.master-scrap-regional,
+.byproduct-aliases,
+.builder-scrap-reg,
+.scrap-item-regional {
+  display: none !important;
+}
+

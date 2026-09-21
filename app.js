@@ -1970,8 +1970,7 @@
     state.scraps.forEach(sc => {
       const opt = document.createElement('option');
       opt.value = sc.id;
-      const reg = sc.name_regional ? sc.name_regional.split(',')[0].trim() : '';
-      opt.textContent = `${sc.id}. ${sc.name_en}${reg ? ' (' + reg + ')' : ''}`;
+      opt.textContent = `${sc.id}. ${sc.name_en}`;
       DOM.formRcScrap.appendChild(opt);
     });
   }
@@ -2047,11 +2046,10 @@
             <span class="badge badge-dietary">${escapeHtml(rc.dietary_type)}</span>
           </div>
 
-          <h3 class="recipe-dish-title">${escapeHtml(rc.title)}</h3>
+          <h3 class="recipe-dish-title">${escapeHtml(getEnglishRecipeTitle(rc.title))}</h3>
 
           <div class="card-byproduct-callout">
             <span class="byproduct-title-row">♻️ Scrap: ${escapeHtml(rc.scrap_name_en)}</span>
-            <span class="byproduct-aliases">${escapeHtml(rc.scrap_name_regional)}</span>
           </div>
 
           ${rc.chef_wisdom_tip ? `<div class="card-wisdom-snippet">“${escapeHtml(rc.chef_wisdom_tip)}”</div>` : ''}
@@ -2104,14 +2102,15 @@
       DOM.modalRcCourse.textContent = rc.course_type;
       DOM.modalRcDietary.textContent = rc.dietary_type;
       DOM.modalRcScrapTitle.textContent = rc.scrap_name_en;
-      DOM.modalRcTitle.textContent = rc.title;
+      DOM.modalRcTitle.textContent = getEnglishRecipeTitle(rc.title);
       DOM.modalRcChefName.textContent = rc.chef_name;
       DOM.modalRcChefAffil.textContent = rc.chef_affiliation;
       DOM.modalRcPrep.textContent = rc.prep_time_minutes;
       DOM.modalRcDiff.textContent = rc.difficulty;
       DOM.modalRcServings.textContent = rc.servings;
       DOM.modalRcScrapEn.textContent = rc.scrap_name_en;
-      DOM.modalRcScrapReg.textContent = rc.scrap_name_regional;
+      DOM.modalRcScrapReg.textContent = '';
+      DOM.modalRcScrapReg.style.display = 'none';
 
       // Update favorite button status
       const isFav = state.favorites.some(f => f.id === rc.id);
@@ -2197,7 +2196,7 @@
     const steps = (rc.step_by_step_instructions || []).map((s, i) => `Step ${i + 1}: ${s}`).join('. ');
 
     const script = `
-      Guiding recipe: ${rc.title}.
+      Guiding recipe: ${getEnglishRecipeTitle(rc.title)}.
       Made from ${rc.scrap_name_en}.
       Cooking time is ${rc.prep_time_minutes} minutes, serving ${rc.servings} people.
       Pantry ingredients: ${ingredients}.
@@ -2264,18 +2263,18 @@
 
     if (idx >= 0) {
       state.favorites.splice(idx, 1);
-      showToast(`Removed "${rc.title}" from favorites`, 'info');
+      showToast(`Removed "${getEnglishRecipeTitle(rc.title)}" from favorites`, 'info');
       updateFavoriteButtonUI(false);
     } else {
       state.favorites.push({
         id: rc.id,
-        title: rc.title,
+        title: getEnglishRecipeTitle(rc.title),
         course_type: rc.course_type,
         scrap_name_en: rc.scrap_name_en,
         chef_name: rc.chef_name,
         prep_time_minutes: rc.prep_time_minutes
       });
-      showToast(`Saved "${rc.title}" to favorites! ❤️`, 'success');
+      showToast(`Saved "${getEnglishRecipeTitle(rc.title)}" to favorites! ❤️`, 'success');
       updateFavoriteButtonUI(true);
     }
 
@@ -2303,7 +2302,7 @@
             <span class="badge badge-course">${escapeHtml(fav.course_type || 'Dishes')}</span>
             <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">⏱️ ${fav.prep_time_minutes || 15} min</span>
           </div>
-          <h4 class="favorite-item-title">${escapeHtml(fav.title)}</h4>
+          <h4 class="favorite-item-title">${escapeHtml(getEnglishRecipeTitle(fav.title))}</h4>
           <p class="favorite-item-scrap">♻️ Scrap: ${escapeHtml(fav.scrap_name_en || 'Kitchen Scrap')}</p>
           <div class="favorite-item-actions">
             <button type="button" class="btn-fav-read" data-id="${fav.id}">View Recipe</button>
@@ -2353,7 +2352,6 @@
         <h4 class="master-cat-title">
           <span>${cat.emoji}</span>
           <span>Category ${cat.id}: ${escapeHtml(cat.name)}</span>
-          <span style="font-size: 0.82rem; font-weight: 500; color: var(--text-muted); margin-left: 0.25rem;">(${escapeHtml(cat.regional)})</span>
         </h4>
         <div class="master-scraps-subgrid"></div>
       `;
@@ -2373,7 +2371,6 @@
               <div class="master-scrap-radio-indicator">${isSelected ? '✓' : ''}</div>
             </div>
             <h4 class="master-scrap-name">${escapeHtml(sc.name_en)}</h4>
-            <div class="master-scrap-regional">🇮🇳 ${escapeHtml(sc.name_regional)}</div>
             <p class="master-scrap-method">${escapeHtml(sc.common_uses)}</p>
           </div>
           <button type="button" class="btn-master-card-select">
@@ -2439,8 +2436,7 @@
 
     if (DOM.dockSelectedScrapName) {
       if (selectedScrap) {
-        const reg = selectedScrap.name_regional ? ` (${selectedScrap.name_regional.split(',')[0].trim()})` : '';
-        DOM.dockSelectedScrapName.textContent = `${selectedScrap.name_en}${reg}`;
+        DOM.dockSelectedScrapName.textContent = selectedScrap.name_en;
         DOM.dockSelectedScrapName.style.color = 'var(--emerald-primary)';
       } else {
         DOM.dockSelectedScrapName.textContent = 'None chosen — please click a scrap card above';
@@ -2476,7 +2472,8 @@
       DOM.builderScrapTitle.textContent = scrap.name_en;
     }
     if (DOM.builderScrapReg) {
-      DOM.builderScrapReg.textContent = scrap.name_regional ? `Regional aliases: ${scrap.name_regional}` : '';
+      DOM.builderScrapReg.textContent = '';
+      DOM.builderScrapReg.style.display = 'none';
     }
     if (DOM.formRcScrapId) {
       DOM.formRcScrapId.value = scrap.id;
@@ -2847,7 +2844,6 @@
             <span class="showcase-eco-badge">♻️ 100% Edible</span>
           </div>
           <h4 class="showcase-scrap-title">${escapeHtml(sc.name_en)}</h4>
-          <div class="showcase-regional-names">🇮🇳 ${escapeHtml(sc.name_regional)}</div>
           <p class="showcase-method-text">${escapeHtml(sc.common_uses)}</p>
         </div>
         <div class="showcase-card-bottom">
@@ -2936,7 +2932,6 @@
               <span class="scrap-card-category-tag">${cat.emoji} Cat ${cat.id}</span>
             </div>
             <h4 class="scrap-card-title">${escapeHtml(sc.name_en)}</h4>
-            <div class="scrap-card-regional">🇮🇳 ${escapeHtml(sc.name_regional)}</div>
             <p class="scrap-card-method">${escapeHtml(sc.common_uses)}</p>
           </div>
           <div class="scrap-card-actions">
@@ -3042,7 +3037,7 @@
 
     if (DOM.selBarNames) {
       if (count === state.scraps.length) {
-        DOM.selBarNames.textContent = 'All 30 Indian household ingredients selected';
+        DOM.selBarNames.textContent = 'All 30 household ingredients selected';
       } else {
         const names = state.scraps
           .filter(s => state.selectedScrapIds.has(s.id))
@@ -3097,6 +3092,15 @@
       toast.style.transition = 'all 0.25s ease';
       setTimeout(() => toast.remove(), 250);
     }, 3500);
+  }
+
+  function getEnglishRecipeTitle(title) {
+    if (!title || typeof title !== 'string') return '';
+    const match = title.match(/\((.*?)\)/);
+    if (match && match[1] && match[1].trim().length > 3) {
+      return match[1].trim();
+    }
+    return title.trim();
   }
 
   function escapeHtml(str) {
