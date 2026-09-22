@@ -142,6 +142,7 @@ def init_sqlite_db():
         claim_otp TEXT,
         dietary_tag TEXT DEFAULT 'Pure Veg',
         ready_time TEXT DEFAULT 'Hot & Ready Now',
+        scrap_source TEXT,
         notes TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -201,11 +202,11 @@ def init_sqlite_db():
             for dp in seed.get("dispatches", []):
                 cursor.execute(
                     """INSERT INTO ngo_dispatches (
-                        id, recipe_id, dish_name, prepared_by_chef, portions_available,
+                        id, recipe_id, dish_name, scrap_source, prepared_by_chef, portions_available,
                         pickup_location, contact_number, status, claimed_by_ngo, claim_otp, dietary_tag, ready_time, notes
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);""",
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);""",
                     (
-                        dp["id"], dp.get("recipe_id"), dp["dish_name"], dp["prepared_by_chef"],
+                        dp["id"], dp.get("recipe_id"), dp["dish_name"], dp.get("scrap_source"), dp["prepared_by_chef"],
                         dp["portions_available"], dp["pickup_location"], dp["contact_number"],
                         dp.get("status", "ACTIVE"), dp.get("claimed_by_ngo"), dp.get("claim_otp"),
                         dp.get("dietary_tag", "Pure Veg"), dp.get("ready_time", "Hot & Ready Now"), dp.get("notes", "")
@@ -273,6 +274,7 @@ class DispatchCreate(BaseModel):
     contact_number: str = Field(..., min_length=6, max_length=30)
     dietary_tag: Optional[str] = Field("Pure Veg", max_length=50)
     ready_time: Optional[str] = Field("Hot & Ready Now", max_length=80)
+    scrap_source: Optional[str] = Field("Fresh Kitchen Byproducts", max_length=120)
     notes: Optional[str] = None
     recipe_id: Optional[int] = None
 
@@ -725,7 +727,7 @@ def get_dispatches():
     """Retrieve all surplus food dispatch alerts, most recent first."""
     query = """
         SELECT 
-            id, recipe_id, dish_name, prepared_by_chef, portions_available,
+            id, recipe_id, dish_name, scrap_source, prepared_by_chef, portions_available,
             pickup_location, contact_number, status, claimed_by_ngo, claim_otp,
             dietary_tag, ready_time, notes,
             created_at, updated_at
@@ -756,6 +758,7 @@ def create_dispatch(dispatch: DispatchCreate):
     """Broadcast an urgent surplus cooked food alert for community NGO pickup."""
     dietary_tag = dispatch.dietary_tag or "Pure Veg"
     ready_time = dispatch.ready_time or "Hot & Ready Now"
+    scrap_source = dispatch.scrap_source or "Fresh Kitchen Byproducts"
     if USE_POSTGRES:
         conn = pg_pool.getconn()
         try:
@@ -763,13 +766,13 @@ def create_dispatch(dispatch: DispatchCreate):
                 cur.execute(
                     """
                     INSERT INTO ngo_dispatches (
-                        dish_name, prepared_by_chef, portions_available,
+                        dish_name, scrap_source, prepared_by_chef, portions_available,
                         pickup_location, contact_number, dietary_tag, ready_time, notes, recipe_id, status
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 'ACTIVE')
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'ACTIVE')
                     RETURNING id;
                     """,
                     (
-                        dispatch.dish_name, dispatch.prepared_by_chef, dispatch.portions_available,
+                        dispatch.dish_name, scrap_source, dispatch.prepared_by_chef, dispatch.portions_available,
                         dispatch.pickup_location, dispatch.contact_number, dietary_tag, ready_time,
                         dispatch.notes, dispatch.recipe_id
                     )
@@ -789,12 +792,12 @@ def create_dispatch(dispatch: DispatchCreate):
             cursor.execute(
                 """
                 INSERT INTO ngo_dispatches (
-                    dish_name, prepared_by_chef, portions_available,
+                    dish_name, scrap_source, prepared_by_chef, portions_available,
                     pickup_location, contact_number, dietary_tag, ready_time, notes, recipe_id, status
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE');
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE');
                 """,
                 (
-                    dispatch.dish_name, dispatch.prepared_by_chef, dispatch.portions_available,
+                    dispatch.dish_name, scrap_source, dispatch.prepared_by_chef, dispatch.portions_available,
                     dispatch.pickup_location, dispatch.contact_number, dietary_tag, ready_time,
                     dispatch.notes, dispatch.recipe_id
                 )
@@ -812,7 +815,7 @@ def create_dispatch(dispatch: DispatchCreate):
 @app.patch("/api/dispatches/{dispatch_id}/claim")
 def claim_dispatch(dispatch_id: int, claim: DispatchClaim):
     """An authorized NGO or shelter claims an active surplus meal batch and generates a 6-digit handover OTP."""
-    otp = claim.claim_otp or f"{random.randint(100000, 999999)}"
+    otp = claim.claim_otp or f"#CN-{random.randint(1000, 9999)}"
     if USE_POSTGRES:
         conn = pg_pool.getconn()
         try:

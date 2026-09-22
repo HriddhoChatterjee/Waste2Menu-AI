@@ -1390,61 +1390,71 @@
 ];
 
   const FALLBACK_DISPATCHES = [
-  {
-    "id": 1,
-    "recipe_id": 5,
-    "dish_name": "Fulkopi Danta Chorchori & Steamed Rice",
-    "prepared_by_chef": "Chef Anirban Roy (Community Kitchen #2)",
-    "portions_available": 25,
-    "pickup_location": "Community Kitchen Hub, 14 Lake Road, Southern Avenue, Kolkata",
-    "contact_number": "+91 98301 44521",
-    "status": "ACTIVE",
-    "claimed_by_ngo": null,
-    "notes": "Freshly prepared from bulk market cauliflower trims. Packed in 5-liter insulated stainless thermal containers."
-  },
-  {
-    "id": 2,
-    "recipe_id": 8,
-    "dish_name": "Warm Basi Roti Seyal Phulka Tiffin",
-    "prepared_by_chef": "Nani Hansa Ben & Volunteers",
-    "portions_available": 35,
-    "pickup_location": "Rasoi Seva Bhavan, Subhash Chowk, Ahmedabad",
-    "contact_number": "+91 98250 88210",
-    "status": "CLAIMED",
-    "claimed_by_ngo": "Robin Hood Army - Ward 4 Volunteer Team",
-    "notes": "Claimed for evening distribution at Railway Colony Shelter."
-  },
-  {
-    "id": 3,
-    "recipe_id": 10,
-    "dish_name": "Paneer Whey Protein Rasam Broth",
-    "prepared_by_chef": "Chef Senthil Kumar (Temple Kitchen Seva)",
-    "portions_available": 40,
-    "pickup_location": "Annadanam Hall, 4th Cross, Malleshwaram, Bengaluru",
-    "contact_number": "+91 98800 23456",
-    "status": "ACTIVE",
-    "claimed_by_ngo": null,
-    "claim_otp": null,
-    "dietary_tag": "Pure Veg",
-    "ready_time": "Hot & Ready Now",
-    "notes": "Prepared from 15L fresh paneer whey; hot and packed in hygienic food-grade cans."
-  },
-  {
-    "id": 4,
-    "recipe_id": 31,
-    "dish_name": "Nalli Bone Broth & Steamed Millets",
-    "prepared_by_chef": "Chef Abdul Kareem (Heritage Rasoi)",
-    "portions_available": 30,
-    "pickup_location": "12, Venkatanarayana Road, T. Nagar, Chennai - 600017",
-    "contact_number": "+91 90877 90877",
-    "status": "ACTIVE",
-    "claimed_by_ngo": null,
-    "claim_otp": null,
-    "dietary_tag": "Non-Veg (Halal)",
-    "ready_time": "Freshly Simmered (Ready for Pickup)",
-    "notes": "Nutrient-rich bone broth simmered from marrow knuckle bones with black pepper and ginger."
-  }
-];
+    {
+      "id": 1,
+      "recipe_id": 1,
+      "dish_name": "Peerkangai Thol Thogayal & Steamed Ponni Rice",
+      "scrap_source": "🥔 Ridge Gourd Peels",
+      "prepared_by_chef": "Chef R. Sundararajan (Annapoorna Community Kitchen)",
+      "portions_available": 35,
+      "pickup_location": "28, North Mada Street, Mylapore, Chennai – 600004",
+      "contact_number": "+91 94440 18234",
+      "status": "ACTIVE",
+      "claimed_by_ngo": null,
+      "claim_otp": null,
+      "dietary_tag": "PURE VEG",
+      "ready_time": "Hot & Ready Now",
+      "notes": "Freshly ground traditional thogayal made from 4kg organic ridge gourd peel trimmings with urad dal and dry chillies. Packed with hot Ponni rice in thermal meal trays."
+    },
+    {
+      "id": 2,
+      "recipe_id": 22,
+      "dish_name": "Kothu Chapati Tiffin & Vegetable Trimming Kurma",
+      "scrap_source": "🍚 Stale Rotis & Vegetable Trimmings",
+      "prepared_by_chef": "Nallur Seva Volunteers",
+      "portions_available": 40,
+      "pickup_location": "15, Arcot Road, Porur (Near Ramapuram), Chennai – 600116",
+      "contact_number": "+91 98402 77150",
+      "status": "ACTIVE",
+      "claimed_by_ngo": null,
+      "claim_otp": null,
+      "dietary_tag": "PURE VEG",
+      "ready_time": "Hot & Ready Now",
+      "notes": "Upcycled shredded roti kothu tempered with mustard, curry leaves, and a nutrient-dense mixed vegetable stalk kurma."
+    },
+    {
+      "id": 3,
+      "recipe_id": 29,
+      "dish_name": "Mor Kuzhambu & Vazhakkai Thol Thoran",
+      "scrap_source": "🥛 Sour Curd & Raw Banana Peels",
+      "prepared_by_chef": "Chef K. Meenakshi (Thirumalai Community Mess)",
+      "portions_available": 50,
+      "pickup_location": "42, 2nd Avenue, Anna Nagar West, Chennai – 600040",
+      "contact_number": "+91 98841 99230",
+      "status": "CLAIMED",
+      "claimed_by_ngo": "No Food Waste - Chennai Chapter (Anna Nagar Volunteer Wing)",
+      "claim_otp": "#CN-4821",
+      "dietary_tag": "PURE VEG",
+      "ready_time": "Hot & Ready Now",
+      "notes": "Traditional Mor Kuzhambu made from surplus sour churned dahi, served alongside dry tempered banana peel thoran."
+    },
+    {
+      "id": 4,
+      "recipe_id": 31,
+      "dish_name": "Nalli Bone Broth & Steamed Samai Millets",
+      "scrap_source": "🍗 Bone Frames & Knuckles (Non-Veg Discards)",
+      "prepared_by_chef": "Chef Abdul Kareem (Heritage Rasoi)",
+      "portions_available": 30,
+      "pickup_location": "12, Venkatanarayana Road, T. Nagar, Chennai – 600017",
+      "contact_number": "+91 90877 90877",
+      "status": "ACTIVE",
+      "claimed_by_ngo": null,
+      "claim_otp": null,
+      "dietary_tag": "NON-VEG (HALAL)",
+      "ready_time": "Hot & Ready Now",
+      "notes": "Nutrient-rich bone broth slow-simmered for 6 hours from mutton marrow knuckles with black pepper, coriander stems, and shallots. Served with hot little millets."
+    }
+  ];
 
   // ==========================================================================
   // VERIFIED CHENNAI LOCAL GRASSROOTS NGOS & COMMUNITY SHELTERS
@@ -1528,7 +1538,9 @@
       const stored = localStorage.getItem('waste2menu_dispatches');
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed.some(d => d.dish_name && d.dish_name.includes("Peerkangai"))) {
+          return parsed;
+        }
       }
     } catch (e) {}
     return FALLBACK_DISPATCHES.slice();
@@ -3853,24 +3865,25 @@
     }
 
     state.dispatches.forEach(dp => {
-      const isActive = dp.status === 'ACTIVE';
+      const isActive = dp.status === 'ACTIVE' || dp.status === 'READY FOR PICKUP';
       if (isActive) {
         activeCount++;
         totalPortions += dp.portions_available;
       }
 
-      // Determine scrap source from recipe or fallback
-      let scrapSource = "Fresh Kitchen Byproducts";
-      if (dp.recipe_id) {
+      // Determine scrap source from dispatch or recipe fallback
+      let scrapSource = dp.scrap_source || "Fresh Kitchen Byproducts";
+      if (!dp.scrap_source && dp.recipe_id) {
         const rc = state.recipes.find(r => r.id === dp.recipe_id);
         if (rc) {
           scrapSource = rc.scrap_name_en || rc.title;
         }
       }
 
-      const dietary = dp.dietary_tag || 'Pure Veg';
+      const dietary = dp.dietary_tag || 'PURE VEG';
       const isNonVeg = dietary.toLowerCase().includes('non-veg');
       const readyTime = dp.ready_time || 'Hot & Ready Now';
+      const cleanLoc = (dp.pickup_location || '').replace(/^📍\s*/, '');
 
       const card = document.createElement('div');
       card.className = `dispatch-item-card ${isActive ? 'active-alert' : 'claimed-alert'}`;
@@ -3878,12 +3891,12 @@
       card.innerHTML = `
         <div class="disp-top-row">
           <div>
-            <div style="display: flex; gap: 0.4rem; align-items: center; margin-bottom: 0.25rem;">
-              <span class="dietary-badge-pill ${isNonVeg ? 'non-veg' : 'veg'}">${escapeHtml(dietary)}</span>
-              <span class="scrap-source-pill">♻️ ${escapeHtml(scrapSource)}</span>
+            <div style="display: flex; gap: 0.4rem; align-items: center; margin-bottom: 0.25rem; flex-wrap: wrap;">
+              <span class="dietary-badge-pill ${isNonVeg ? 'non-veg' : 'veg'}">${escapeHtml(dietary.toUpperCase())}</span>
+              <span class="scrap-source-pill">${escapeHtml(scrapSource)}</span>
             </div>
             <h4 class="disp-dish-title">${escapeHtml(dp.dish_name)}</h4>
-            <span style="font-size: 0.84rem; color: var(--emerald-primary); font-weight: 700;">🍽️ ${dp.portions_available} Meals Available</span>
+            <span style="font-size: 0.84rem; color: ${isActive ? 'var(--emerald-primary)' : 'var(--text-muted)'}; font-weight: 700;">🍽️ ${dp.portions_available} Meals Available</span>
           </div>
           <span class="disp-status-badge ${isActive ? 'active' : 'claimed'}">
             ${isActive ? '🟢 Ready for Pickup' : '🤝 CLAIMED'}
@@ -3894,7 +3907,7 @@
           <div><span>Prepared By:</span> <strong>${escapeHtml(dp.prepared_by_chef)}</strong></div>
           <div><span>Ready Time:</span> <strong>⏱️ ${escapeHtml(readyTime)}</strong></div>
           <div><span>Contact:</span> <strong><a href="tel:${escapeHtml(dp.contact_number)}" style="color: var(--saffron-primary); text-decoration: none;">${escapeHtml(dp.contact_number)}</a></strong></div>
-          <div style="grid-column: span 2;"><span>Pickup Address:</span> <strong>📍 ${escapeHtml(dp.pickup_location)}</strong></div>
+          <div style="grid-column: span 2;"><span>Pickup Address:</span> <strong>📍 ${escapeHtml(cleanLoc)}</strong></div>
         </div>
 
         ${dp.notes ? `<div style="font-size: 0.8rem; font-style: italic; color: var(--text-secondary); background: var(--bg-base); padding: 0.45rem 0.7rem; border-radius: 4px; border-left: 3px solid var(--saffron-primary);">“${escapeHtml(dp.notes)}”</div>` : ''}
@@ -3908,10 +3921,10 @@
         ` : ''}
 
         <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.5rem; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 0.5rem;">
-          <span style="font-size: 0.75rem; color: var(--text-muted);">${dp.created_at ? new Date(dp.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Ready Now'}</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">${dp.created_at ? new Date(dp.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Hot & Ready'}</span>
           ${isActive ? `
             <button type="button" class="btn-claim-dispatch" data-dispatch-id="${dp.id}">
-              <span>🤝 Claim Batch for Shelter</span>
+              <span>🌿 Claim Batch for Shelter</span>
             </button>
           ` : `
             <span style="font-size: 0.82rem; font-weight: 700; color: var(--saffron-hover);">Claimed by: ${escapeHtml(dp.claimed_by_ngo || 'Shelter Partner')}</span>
@@ -3942,7 +3955,7 @@
       portions_available: parseInt(document.getElementById('disp-portions').value, 10),
       pickup_location: document.getElementById('disp-location').value.trim(),
       contact_number: document.getElementById('disp-contact').value.trim(),
-      dietary_tag: (DOM.dispDietary && DOM.dispDietary.value) ? DOM.dispDietary.value : "Pure Veg",
+      dietary_tag: (DOM.dispDietary && DOM.dispDietary.value) ? DOM.dispDietary.value : "PURE VEG",
       ready_time: (DOM.dispReadyTime && DOM.dispReadyTime.value.trim()) ? DOM.dispReadyTime.value.trim() : "Hot & Ready Now",
       notes: document.getElementById('disp-notes').value.trim() || null
     };
@@ -4002,11 +4015,11 @@
     if (DOM.claimDispatchForm) DOM.claimDispatchForm.style.display = 'block';
     if (DOM.claimOtpCard) DOM.claimOtpCard.style.display = 'none';
 
-    // Auto-fill shelter name if signed in
+    // Auto-fill shelter name if signed in, or default to Chennai Food Bank
     if (state.currentUser) {
-      DOM.claimInputNgo.value = state.currentUser.affiliation || state.currentUser.name || '';
+      DOM.claimInputNgo.value = state.currentUser.affiliation || state.currentUser.name || 'Chennai Food Bank (Relief Partner)';
     } else {
-      DOM.claimInputNgo.value = '';
+      DOM.claimInputNgo.value = 'Chennai Food Bank (Relief Partner)';
     }
 
     DOM.claimModal.showModal();
@@ -4014,11 +4027,11 @@
 
   async function handleClaimDispatchSubmit(e) {
     e.preventDefault();
-    const ngo = DOM.claimInputNgo.value.trim();
-    if (!ngo || !state.activeClaimDispatchId) return;
+    const ngo = DOM.claimInputNgo.value.trim() || 'Chennai Food Bank (Relief Partner)';
+    if (!state.activeClaimDispatchId) return;
 
-    // Generate verified 6-digit OTP
-    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    // Generate verified 6-digit handover OTP (e.g. #CN-4821)
+    const generatedOtp = `#CN-${Math.floor(1000 + Math.random() * 9000)}`;
 
     const targetDispatch = state.dispatches.find(d => d.id === state.activeClaimDispatchId);
 
@@ -4052,9 +4065,9 @@
         if (DOM.claimLogisticsMeta && targetDispatch) {
           DOM.claimLogisticsMeta.innerHTML = `
             <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-              <div><strong>Pickup Location:</strong> ${escapeHtml(targetDispatch.pickup_location)}</div>
-              <div><strong>Ready Time:</strong> ${escapeHtml(targetDispatch.ready_time || 'Hot & Ready Now')}</div>
-              <div><strong>Kitchen Contact:</strong> ${escapeHtml(targetDispatch.contact_number)}</div>
+              <div><strong>Pickup Location:</strong> 📍 ${escapeHtml((targetDispatch.pickup_location || '').replace(/^📍\s*/, ''))}</div>
+              <div><strong>Ready Time:</strong> ⏱️ ${escapeHtml(targetDispatch.ready_time || 'Hot & Ready Now')}</div>
+              <div><strong>Kitchen Contact:</strong> 📞 ${escapeHtml(targetDispatch.contact_number)}</div>
             </div>
           `;
         }

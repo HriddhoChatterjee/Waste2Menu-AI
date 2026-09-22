@@ -102,6 +102,7 @@ CREATE TABLE ngo_dispatches (
     claim_otp VARCHAR(10),
     dietary_tag VARCHAR(50) DEFAULT 'Pure Veg',
     ready_time VARCHAR(80) DEFAULT 'Hot & Ready Now',
+    scrap_source VARCHAR(120),
     notes TEXT,
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
