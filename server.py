@@ -34,8 +34,14 @@ BASE_DIR = Path(__file__).resolve().parent
 DB_FILE = BASE_DIR / "waste2menu.db"
 SEED_FILE = BASE_DIR / "seed_data.json"
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv(BASE_DIR / ".env")
+except ImportError:
+    pass
+
 # Database Configuration
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/annapurna_db")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/waste2menu")
 USE_POSTGRES = False
 pg_pool = None
 
