@@ -236,8 +236,70 @@ def get_sqlite_connection():
     return conn
 
 
-# Initialize SQLite on module load
+def init_postgres_db():
+    """Initializes PostgreSQL schema and seeds it from seed_data.sql or seed_data.json if tables are empty."""
+    if not USE_POSTGRES or not pg_pool:
+        return
+
+    conn = None
+    try:
+        conn = pg_pool.getconn()
+        with conn.cursor() as cur:
+            # Check if tables exist
+            cur.execute("""
+                SELECT COUNT(*) FROM information_schema.tables 
+                WHERE table_schema = 'public' AND table_name = 'byproduct_scraps';
+            """)
+            table_exists = cur.fetchone()[0] > 0
+
+            need_schema = not table_exists
+            need_seed = False
+
+            if not need_schema:
+                cur.execute("SELECT COUNT(*) FROM byproduct_scraps;")
+                sc_count = cur.fetchone()[0]
+                cur.execute("SELECT COUNT(*) FROM ngo_dispatches;")
+                dp_count = cur.fetchone()[0]
+                if sc_count < 35 or dp_count < 4:
+                    need_seed = True
+            else:
+                need_seed = True
+
+            if need_schema or need_seed:
+                schema_path = BASE_DIR / "schema.sql"
+                seed_sql_path = BASE_DIR / "seed_data.sql"
+
+                if need_schema and schema_path.exists():
+                    logger.info("Applying PostgreSQL schema from schema.sql...")
+                    cur.execute(schema_path.read_text(encoding="utf-8"))
+                    conn.commit()
+
+                if seed_sql_path.exists():
+                    logger.info("Seeding PostgreSQL database from seed_data.sql...")
+                    cur.execute(seed_sql_path.read_text(encoding="utf-8"))
+                    conn.commit()
+
+            # Synchronize PostgreSQL primary key sequences
+            for tbl in ["users", "scrap_categories", "byproduct_scraps", "recipes", "ngo_dispatches"]:
+                try:
+                    cur.execute(f"SELECT setval(pg_get_serial_sequence('{tbl}', 'id'), COALESCE((SELECT MAX(id) + 1 FROM {tbl}), 1), false);")
+                except Exception:
+                    pass
+            conn.commit()
+            logger.info("PostgreSQL database initialized and verified successfully!")
+    except Exception as pg_init_err:
+        logger.error(f"Error initializing PostgreSQL database: {pg_init_err}")
+        if conn:
+            conn.rollback()
+    finally:
+        if conn:
+            pg_pool.putconn(conn)
+
+
+# Initialize SQLite and PostgreSQL on module load
 init_sqlite_db()
+if USE_POSTGRES:
+    init_postgres_db()
 
 
 # ============================================================================

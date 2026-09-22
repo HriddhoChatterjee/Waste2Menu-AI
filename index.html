@@ -15,10 +15,10 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="theme-light-creme">
-  <!-- TOP APP HEADER -->
-  <header class="app-header">
+  <!-- TOP APP HEADER & NAVBAR -->
+  <header class="navbar-container app-header">
     <div class="header-container">
-      <div class="brand-group" id="nav-brand-btn" role="button" tabindex="0" title="Go to Waste2Menu Home">
+      <div class="navbar-brand-cluster brand-group" id="nav-brand-btn" role="button" tabindex="0" title="Go to Waste2Menu Home">
         <div class="brand-logo" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
@@ -26,36 +26,28 @@
           </svg>
         </div>
         <div class="brand-text">
-          <h1 class="brand-title">Waste2Menu</h1>
-          <span class="brand-subtitle">A Zero-Waste Reverse Recipe & Byproduct Optimization Engine</span>
+          <h1 class="brand-title">🌿 Waste2Menu</h1>
+          <span class="brand-subtitle">Community Zero-Waste Edition</span>
         </div>
       </div>
 
-      <!-- Main Navigation Tabs -->
-      <nav class="main-nav" aria-label="Main Navigation">
-        <a href="#home-overview" class="nav-tab-btn active" data-tab="home-overview" id="nav-tab-home">
-          <span>🌟 Home & Impact</span>
-        </a>
-        <a href="#scraps-matrix" class="nav-tab-btn" data-tab="scraps-matrix" id="nav-tab-matrix">
+      <!-- Center Cluster: Dynamic Navigation Pills -->
+      <nav class="navbar-center-nav main-nav" id="navbar-center-nav" aria-label="Main Navigation">
+        <button type="button" class="nav-tab-btn active" data-tab="home-overview" id="nav-tab-home">
+          <span>☀️ Home & Impact</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-tab="scraps-matrix" id="nav-tab-matrix">
           <span>🥕 Ingredients Catalog</span>
-        </a>
-        <a href="#ngo-dispatch" class="nav-tab-btn" data-tab="ngo-dispatch" id="nav-tab-ngo">
-          <span>🤝 NGO Dispatch</span>
-          <span class="badge-count" id="active-dispatch-badge" style="display:none;">0</span>
-        </a>
-        <!-- Protected / Role-Specific Portals -->
-        <a href="#home-chef" class="nav-tab-btn" data-tab="home-chef" id="nav-tab-home-chef">
-          <span>🏡 Home Chef (Cook)</span>
-        </a>
-        <a href="#master-chef" class="nav-tab-btn" data-tab="master-chef" id="nav-tab-master-chef" style="display:none;">
-          <span>👨‍🍳 + Upload Recipe</span>
-        </a>
+        </button>
+        <button type="button" class="nav-tab-btn" data-action="partners" id="nav-tab-partners">
+          <span>🤝 Chennai NGO Partners</span>
+        </button>
       </nav>
 
-      <!-- Auth Controls (Sign In / Register & Profile) -->
-      <div class="header-auth" id="header-auth">
+      <!-- Right Cluster: Role-Specific Action Buttons & User Profile Badge -->
+      <div class="navbar-right-cluster header-auth" id="header-auth">
         <!-- Rendered dynamically by JS -->
-        <button class="btn-auth-signin" id="btn-open-auth">
+        <button type="button" class="btn-auth-signin" id="btn-open-auth">
           <span>🔐 Sign In / Register</span>
         </button>
       </div>

@@ -1860,12 +1860,24 @@
     // Brand button goes to Home
     DOM.navBrandBtn.addEventListener('click', () => switchTab('home-overview'));
 
-    // Top Navigation Tabs (Changes Git Deploy Link in Address Bar)
+    // Top Navigation Tabs (Changes Git Deploy Link in Address Bar) & Event Delegation
+    const centerNav = document.getElementById('navbar-center-nav') || document.querySelector('.main-nav');
+    if (centerNav) {
+      centerNav.addEventListener('click', (e) => {
+        const btn = e.target.closest('.nav-tab-btn');
+        if (!btn) return;
+        if (btn.dataset.tab) {
+          e.preventDefault();
+          switchTab(btn.dataset.tab, true);
+        }
+      });
+    }
+
     DOM.navTabButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         const tab = btn.dataset.tab;
-        switchTab(tab, true);
+        if (tab) switchTab(tab, true);
       });
     });
 
@@ -2129,6 +2141,7 @@
     DOM.navTabButtons.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.tab === tabId);
     });
+    syncNavbarActivePill(tabId);
 
     DOM.tabPanels.forEach(panel => {
       panel.classList.toggle('active', panel.id === `panel-${tabId}`);
@@ -2159,6 +2172,30 @@
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /**
+   * Synchronize active navigation pill in top navbar
+   */
+  function syncNavbarActivePill(activeTabId) {
+    const centerNav = document.getElementById('navbar-center-nav') || document.querySelector('.main-nav');
+    if (!centerNav) return;
+    const buttons = centerNav.querySelectorAll('.nav-tab-btn');
+    buttons.forEach(btn => {
+      let isMatch = false;
+      if (btn.dataset.tab === activeTabId) {
+        isMatch = true;
+      } else if (activeTabId === 'home-overview' && (btn.id === 'nav-tab-home' || btn.dataset.tab === 'home-overview')) {
+        isMatch = true;
+      } else if (activeTabId === 'home-chef' && (btn.id === 'nav-tab-home-chef' || btn.dataset.tab === 'home-chef')) {
+        isMatch = true;
+      } else if (activeTabId === 'scraps-matrix' && (btn.id === 'nav-tab-matrix' || btn.dataset.tab === 'scraps-matrix')) {
+        isMatch = true;
+      } else if (activeTabId === 'ngo-dispatch' && (btn.id === 'nav-tab-ngo-dispatch' || btn.id === 'nav-tab-ngo-feed' || btn.id === 'nav-tab-ngo' || btn.dataset.tab === 'ngo-dispatch')) {
+        isMatch = true;
+      }
+      btn.classList.toggle('active', isMatch);
+    });
   }
 
   /**
@@ -2203,132 +2240,257 @@
     switchTab(targetTab, false);
   }
 
+  // ==========================================================================
+  // DYNAMIC ROLE-BASED NAVBAR ARCHITECTURE (STATES A, B, C, D)
+  // ==========================================================================
+  function renderDynamicNavbar() {
+    const centerNav = document.getElementById('navbar-center-nav') || document.querySelector('.main-nav');
+    const rightAuth = document.getElementById('header-auth');
+    if (!centerNav || !rightAuth) return;
+
+    const user = state.currentUser;
+    const currentTab = state.activeTab || 'home-overview';
+
+    centerNav.innerHTML = '';
+    rightAuth.innerHTML = '';
+
+    // =========================================================================
+    // STATE A: Default Guest / Signed Out Visitor
+    // Center: [ ☀️ Home & Impact ], [ 🥕 Ingredients Catalog ], [ 🤝 Chennai NGO Partners ]
+    // Right: [ 🔐 Sign In / Register ] (triggers unified authentication modal)
+    // =========================================================================
+    if (!user) {
+      centerNav.innerHTML = `
+        <button type="button" class="nav-tab-btn ${currentTab === 'home-overview' ? 'active' : ''}" data-tab="home-overview" id="nav-tab-home">
+          <span>☀️ Home & Impact</span>
+        </button>
+        <button type="button" class="nav-tab-btn ${currentTab === 'scraps-matrix' ? 'active' : ''}" data-tab="scraps-matrix" id="nav-tab-matrix">
+          <span>🥕 Ingredients Catalog</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-action="partners" id="nav-tab-partners">
+          <span>🤝 Chennai NGO Partners</span>
+        </button>
+      `;
+
+      rightAuth.innerHTML = `
+        <button type="button" class="btn-auth-signin" id="btn-open-auth">
+          <span>🔐 Sign In / Register</span>
+        </button>
+      `;
+
+      const btnOpenAuth = rightAuth.querySelector('#btn-open-auth');
+      if (btnOpenAuth) btnOpenAuth.addEventListener('click', openAuthModal);
+
+      const btnPartners = centerNav.querySelector('#nav-tab-partners');
+      if (btnPartners) {
+        btnPartners.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchTab('home-overview', true);
+          setTimeout(() => {
+            const partnersSec = document.getElementById('chennai-community-partners-section');
+            if (partnersSec) {
+              partnersSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 80);
+        });
+      }
+    }
+
+    // =========================================================================
+    // STATE B: Logged in as "Home Chef (Annapurna)" (e.g., Priya)
+    // Center: [ ☀️ Home & Impact ], [ 🥕 Ingredients Catalog ], [ 📸 My Cooked Creations ]
+    // Right: Role Pill Badge 👩‍🍳 Home Chef • Priya (#E8F5E9 bg, #1B5E20 text) + [ Sign Out ]
+    // Permission Guard: STRICTLY viewing, selecting scraps, viewing recipes, and uploading cooked photos.
+    // ABSOLUTELY NO recipe-creation button in the Home Chef view.
+    // =========================================================================
+    else if (user.role === 'home_chef') {
+      const displayName = user.name ? user.name.split(' ')[0] : 'Priya';
+
+      centerNav.innerHTML = `
+        <button type="button" class="nav-tab-btn ${currentTab === 'home-overview' ? 'active' : ''}" data-tab="home-overview" id="nav-tab-home">
+          <span>☀️ Home & Impact</span>
+        </button>
+        <button type="button" class="nav-tab-btn ${currentTab === 'home-chef' ? 'active' : ''}" data-tab="home-chef" id="nav-tab-home-chef">
+          <span>🥕 Ingredients Catalog</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-action="creations" id="nav-tab-my-creations">
+          <span>📸 My Cooked Creations</span>
+        </button>
+      `;
+
+      rightAuth.innerHTML = `
+        <div class="role-pill-badge home-chef-pill" title="Signed in as Home Chef">
+          <span>👩‍🍳 Home Chef • ${escapeHtml(displayName)}</span>
+        </div>
+        <button type="button" class="btn-auth-signout" id="btn-header-signout" title="Sign Out">Sign Out</button>
+      `;
+
+      const btnCreations = centerNav.querySelector('#nav-tab-my-creations');
+      if (btnCreations) {
+        btnCreations.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchTab('home-chef', true);
+          setTimeout(() => {
+            const gal = document.getElementById('cooked-creations-gallery-section');
+            if (gal) gal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 80);
+        });
+      }
+
+      const btnSignOut = rightAuth.querySelector('#btn-header-signout');
+      if (btnSignOut) btnSignOut.addEventListener('click', handleSignOut);
+    }
+
+    // =========================================================================
+    // STATE C: Logged in as "Master Chef" (e.g., Sanjeev)
+    // Center: [ ☀️ Home & Impact ], [ 🥕 Ingredients Catalog ], [ 🍲 Dispatch Surplus to NGOs ]
+    // Right: [ ➕ Publish New Recipe ] (Emerald CTA) + Role Pill Badge 👨‍🍳 Master Chef • Sanjeev (#FEF3C7 bg, #B45309 text) + [ Sign Out ]
+    // =========================================================================
+    else if (user.role === 'master_chef') {
+      const displayName = user.name ? user.name.replace('Chef ', '').split(' ')[0] : 'Sanjeev';
+
+      centerNav.innerHTML = `
+        <button type="button" class="nav-tab-btn ${currentTab === 'home-overview' ? 'active' : ''}" data-tab="home-overview" id="nav-tab-home">
+          <span>☀️ Home & Impact</span>
+        </button>
+        <button type="button" class="nav-tab-btn ${currentTab === 'scraps-matrix' ? 'active' : ''}" data-tab="scraps-matrix" id="nav-tab-matrix">
+          <span>🥕 Ingredients Catalog</span>
+        </button>
+        <button type="button" class="nav-tab-btn ${currentTab === 'ngo-dispatch' ? 'active' : ''}" data-tab="ngo-dispatch" id="nav-tab-ngo-dispatch">
+          <span>🍲 Dispatch Surplus to NGOs</span>
+        </button>
+      `;
+
+      rightAuth.innerHTML = `
+        <button type="button" class="btn-publish-recipe-cta" id="btn-publish-recipe" title="Publish New Zero-Waste Recipe">
+          <span>➕ Publish New Recipe</span>
+        </button>
+        <div class="role-pill-badge master-chef-pill" title="Signed in as Master Chef">
+          <span>👨‍🍳 Master Chef • ${escapeHtml(displayName)}</span>
+        </div>
+        <button type="button" class="btn-auth-signout" id="btn-header-signout" title="Sign Out">Sign Out</button>
+      `;
+
+      const btnPublish = rightAuth.querySelector('#btn-publish-recipe');
+      if (btnPublish) {
+        btnPublish.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchTab('master-chef', true);
+          setTimeout(() => {
+            const picker = document.getElementById('master-scrap-picker-card');
+            if (picker) picker.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 80);
+        });
+      }
+
+      const btnSignOut = rightAuth.querySelector('#btn-header-signout');
+      if (btnSignOut) btnSignOut.addEventListener('click', handleSignOut);
+    }
+
+    // =========================================================================
+    // STATE D: Logged in as "NGO Representative" (e.g., No Food Waste)
+    // Center: [ ☀️ Home & Impact ], [ 🍲 Live Surplus Feed ], [ 📋 Claimed Batches & OTPs ]
+    // Right: Role Pill Badge 🤝 NGO • No Food Waste + [ Sign Out ]
+    // =========================================================================
+    else if (user.role === 'ngo_rep') {
+      let orgName = 'No Food Waste';
+      if (user.affiliation) {
+        orgName = user.affiliation.split('/')[0].replace('(Chennai Chapter)', '').trim();
+      }
+
+      centerNav.innerHTML = `
+        <button type="button" class="nav-tab-btn ${currentTab === 'home-overview' ? 'active' : ''}" data-tab="home-overview" id="nav-tab-home">
+          <span>☀️ Home & Impact</span>
+        </button>
+        <button type="button" class="nav-tab-btn ${currentTab === 'ngo-dispatch' ? 'active' : ''}" data-action="ngo-feed" id="nav-tab-ngo-feed">
+          <span>🍲 Live Surplus Feed</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-action="ngo-claimed" id="nav-tab-ngo-claimed">
+          <span>📋 Claimed Batches & OTPs</span>
+        </button>
+      `;
+
+      rightAuth.innerHTML = `
+        <div class="role-pill-badge ngo-pill" title="Signed in as NGO Representative">
+          <span>🤝 NGO • ${escapeHtml(orgName)}</span>
+        </div>
+        <button type="button" class="btn-auth-signout" id="btn-header-signout" title="Sign Out">Sign Out</button>
+      `;
+
+      const btnFeed = centerNav.querySelector('#nav-tab-ngo-feed');
+      if (btnFeed) {
+        btnFeed.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchTab('ngo-dispatch', true);
+          setTimeout(() => {
+            const feedList = document.getElementById('ngo-dispatches-list');
+            if (feedList) feedList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 80);
+        });
+      }
+
+      const btnClaimed = centerNav.querySelector('#nav-tab-ngo-claimed');
+      if (btnClaimed) {
+        btnClaimed.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchTab('ngo-dispatch', true);
+          setTimeout(() => {
+            const feedList = document.getElementById('ngo-dispatches-list');
+            if (feedList) {
+              feedList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              const claimedCard = feedList.querySelector('.dispatch-item-card.claimed') || feedList.querySelector('.otp-claimed-badge');
+              if (claimedCard) {
+                claimedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }
+          }, 80);
+        });
+      }
+
+      const btnSignOut = rightAuth.querySelector('#btn-header-signout');
+      if (btnSignOut) btnSignOut.addEventListener('click', handleSignOut);
+    }
+
+    // Attach click listeners to data-tab buttons
+    centerNav.querySelectorAll('.nav-tab-btn[data-tab]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tab = btn.dataset.tab;
+        if (tab) switchTab(tab, true);
+      });
+    });
+
+    // Keep DOM cache in sync
+    DOM.navTabButtons = centerNav.querySelectorAll('.nav-tab-btn');
+  }
+
   function updateNavbarVisibility() {
-    const homeTabBtn = document.getElementById('nav-tab-home-chef');
-    const masterTabBtn = document.getElementById('nav-tab-master-chef');
+    renderDynamicNavbar();
 
     if (!state.currentUser) {
-      // Hidden in navbar when logged out
-      if (homeTabBtn) homeTabBtn.style.display = 'none';
-      if (masterTabBtn) masterTabBtn.style.display = 'none';
       if (DOM.btnHeroContribute) DOM.btnHeroContribute.style.display = 'inline-flex';
-
-      // Redirect if on an authenticated tab
       if (state.activeTab === 'master-chef') {
         switchTab('home-overview');
       }
     } else {
-      // Visible after login based on role
       const role = state.currentUser.role;
       if (role === 'master_chef') {
-        if (masterTabBtn) masterTabBtn.style.display = 'inline-flex';
-        if (homeTabBtn) homeTabBtn.style.display = 'inline-flex';
         if (DOM.btnHeroContribute) {
           DOM.btnHeroContribute.style.display = 'inline-flex';
           DOM.btnHeroContribute.innerHTML = '<span>👨‍🍳 + Upload Recipe (Studio)</span>';
         }
-      } else if (role === 'ngo_rep') {
-        if (masterTabBtn) masterTabBtn.style.display = 'none';
-        if (homeTabBtn) homeTabBtn.style.display = 'inline-flex';
-        if (DOM.btnHeroContribute) DOM.btnHeroContribute.style.display = 'none';
       } else {
-        // Home Chef role - strictly remove upload recipe options
-        if (homeTabBtn) homeTabBtn.style.display = 'inline-flex';
-        if (masterTabBtn) masterTabBtn.style.display = 'none';
+        // Home Chef or NGO role - strictly remove upload recipe options
         if (DOM.btnHeroContribute) DOM.btnHeroContribute.style.display = 'none';
         if (state.activeTab === 'master-chef') {
-          switchTab('home-chef');
+          switchTab(role === 'ngo_rep' ? 'ngo-dispatch' : 'home-chef');
         }
       }
     }
   }
 
-  // ==========================================================================
-  // AUTHENTICATION LOGIC (MASTER CHEF VS HOME CHEF)
-  // ==========================================================================
   function renderAuthHeader() {
-    DOM.headerAuth.innerHTML = '';
-
-    if (!state.currentUser) {
-      const btn = document.createElement('button');
-      btn.className = 'btn-auth-signin';
-      btn.id = 'btn-open-auth';
-      btn.innerHTML = `<span>🔐 Sign In / Register</span>`;
-      btn.addEventListener('click', openAuthModal);
-      DOM.headerAuth.appendChild(btn);
-    } else {
-      const u = state.currentUser;
-      const isMaster = u.role === 'master_chef';
-      const isNgo = u.role === 'ngo_rep';
-
-      let roleLabel = '🏡 Home Chef';
-      let roleClass = 'home';
-      if (isMaster) {
-        roleLabel = '👨‍🍳 Master Chef';
-        roleClass = 'master';
-      } else if (isNgo) {
-        roleLabel = '🏢 NGO Representative';
-        roleClass = 'ngo';
-      }
-
-      const wrap = document.createElement('div');
-      wrap.className = 'user-profile-badge';
-
-      let extraBtnsHtml = '';
-      if (u.role === 'home_chef') {
-        extraBtnsHtml = `
-          <button type="button" class="btn-header-scanner" id="btn-header-scan" title="Scan Kitchen Scraps Photo">📸 Scan Scraps</button>
-          <button type="button" class="btn-header-favorites" id="btn-header-favs" title="View Saved Recipes">❤️ Saved (<span id="header-fav-count">${state.favorites.length}</span>)</button>
-          <button type="button" class="btn-header-creations" id="btn-header-my-creations" title="View My Upcycled Creations">🌟 My Creations</button>
-        `;
-      } else if (isNgo) {
-        extraBtnsHtml = `
-          <button type="button" class="btn-header-hub" id="btn-header-ngo-hub" title="View NGO Surplus Batches">🤝 Surplus Feed</button>
-        `;
-      }
-
-      wrap.innerHTML = `
-        ${extraBtnsHtml}
-        <span class="user-role-pill ${roleClass}">
-          ${roleLabel}
-        </span>
-        <span class="user-name-text">${escapeHtml(u.name)}</span>
-        <button class="btn-auth-signout" title="Sign Out">Sign Out</button>
-      `;
-
-      const scanBtn = wrap.querySelector('#btn-header-scan');
-      if (scanBtn) {
-        scanBtn.addEventListener('click', () => {
-          switchTab('home-chef');
-          const scannerCard = document.getElementById('scrap-scanner-card');
-          if (scannerCard) {
-            scannerCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        });
-      }
-
-      const favBtn = wrap.querySelector('#btn-header-favs');
-      if (favBtn) favBtn.addEventListener('click', openFavoritesModal);
-
-      const creationsBtn = wrap.querySelector('#btn-header-my-creations');
-      if (creationsBtn) {
-        creationsBtn.addEventListener('click', () => {
-          switchTab('home-chef');
-          const gal = document.getElementById('cooked-creations-gallery-section');
-          if (gal) gal.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      }
-
-      const ngoHubBtn = wrap.querySelector('#btn-header-ngo-hub');
-      if (ngoHubBtn) {
-        ngoHubBtn.addEventListener('click', () => {
-          switchTab('ngo-dispatch');
-        });
-      }
-
-      wrap.querySelector('.btn-auth-signout').addEventListener('click', handleSignOut);
-      DOM.headerAuth.appendChild(wrap);
-    }
+    renderDynamicNavbar();
   }
 
   function openAuthModal() {
