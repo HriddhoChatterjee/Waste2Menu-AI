@@ -366,7 +366,7 @@
               <span class="pulse-indicator-emerald"></span>
               <span class="section-kicker">HOME CHEF PERSONAL PORTFOLIO</span>
             </div>
-            <h3 class="section-heading">🌟 My Upcycled Creations</h3>
+            <h3 class="section-heading">🌟 My Upcycled Dish Gallery</h3>
             <p class="section-subtitle">Dishes you have cooked using kitchen scraps, documented with photos, star ratings, and grandma's secret twists.</p>
           </div>
           <div class="creations-badge-pill">
@@ -679,6 +679,17 @@
         </div>
       </div>
 
+      <!-- Category Filter Pills -->
+      <div class="catalog-category-pills-bar" id="catalog-category-pills-bar">
+        <button type="button" class="cat-filter-pill active" data-cat-id="all">✨ All Categories (35)</button>
+        <button type="button" class="cat-filter-pill" data-cat-id="1">🥔 Category 1: Vegetable Peels (9)</button>
+        <button type="button" class="cat-filter-pill" data-cat-id="2">🌿 Category 2: Stems & Leaves (6)</button>
+        <button type="button" class="cat-filter-pill" data-cat-id="3">🍉 Category 3: Seeds & Rinds (5)</button>
+        <button type="button" class="cat-filter-pill" data-cat-id="4">🍚 Category 4: Leftover Staples (5)</button>
+        <button type="button" class="cat-filter-pill" data-cat-id="5">🥛 Category 5: Dairy & Spice (5)</button>
+        <button type="button" class="cat-filter-pill" data-cat-id="6">🍗 Category 6: Non-Veg Discards (5)</button>
+      </div>
+
       <!-- 6 EXPANDABLE VISUAL CATEGORY SECTIONS CONTAINER (PRE-LOADED 35 SCRAPS) -->
       <div class="categories-catalog-container" id="categories-catalog-container">
         <!-- 6 Expandable category accordions with rich scrap cards injected dynamically by JS -->
@@ -724,10 +735,10 @@
               <span>👨‍🍳 Master Chef Demo</span>
             </button>
             <button class="btn-demo-pill home" id="btn-quick-demo-home">
-              <span>🏡 Home Chef Demo</span>
+              <span>🏡 Home Chef (Annapurna) Demo</span>
             </button>
             <button class="btn-demo-pill ngo" id="btn-quick-demo-ngo">
-              <span>🏢 NGO Representative Demo</span>
+              <span>🏢 NGO / Community Shelter Demo</span>
             </button>
           </div>
         </div>
@@ -773,9 +784,9 @@
           <div class="form-group">
             <label for="reg-role">Account Role *</label>
             <select id="reg-role" required>
-              <option value="home_chef">🏡 Home Chef (Cook, select scraps, view recipes, upload dish photos)</option>
-              <option value="master_chef">👨‍🍳 Master Chef (Author & upload byproduct recipes, dispatch surplus bulk batches)</option>
-              <option value="ngo_rep">🏢 NGO / Community Shelter Representative (View surplus dishes, claim batches, track logistics)</option>
+              <option value="home_chef">🏡 Home Chef (Annapurna) — Explores recipes, selects scraps from the slab, views cooking methods & uploads dish photos</option>
+              <option value="master_chef">👨‍🍳 Master Chef — Author & upload recipes (+ Upload Recipe), log bulk byproduct batches for NGOs</option>
+              <option value="ngo_rep">🏢 NGO / Community Shelter — Access Live Community Surplus Feed, claim hot food batches with 1-click verification</option>
             </select>
           </div>
 
@@ -897,7 +908,7 @@
             <div class="creation-header-title">
               <span class="creation-icon">📸</span>
               <div>
-                <h4 class="creation-heading">Snap / Upload My Dish Creation</h4>
+                <h4 class="creation-heading">📸 Snap / Upload My Cooked Dish</h4>
                 <p class="creation-subheading">Cooked this upcycled dish? Share your zero-waste creation with the community!</p>
               </div>
             </div>
@@ -926,7 +937,7 @@
           <!-- Optional Fields: Grandma's Twist note & Star Rating -->
           <div class="dish-creation-fields">
             <div class="form-group">
-              <label for="dish-creation-note">Add a Note / Grandma's Twist (Optional)</label>
+              <label for="dish-creation-note">Grandma's Secret Twist Note (Optional)</label>
               <input type="text" id="dish-creation-note" placeholder="e.g. Added toasted sesame seeds and a dash of hing for extra crunch!" />
             </div>
 
@@ -943,13 +954,13 @@
             </div>
 
             <button type="button" class="btn-save-dish-creation" id="btn-save-dish-creation">
-              <span>🌟 Save to My Cooked Creations</span>
+              <span>🌟 Save to My Creations</span>
             </button>
 
             <!-- Micro-badge on successful upload -->
             <div class="dish-success-badge" id="dish-success-badge" style="display:none;">
               <span class="badge-icon">🌿</span>
-              <span>Zero Waste Hero: You diverted kitchen scrap into delicious food!</span>
+              <span>Zero Waste Hero: Scrap diverted from landfill!</span>
             </div>
           </div>
         </div>

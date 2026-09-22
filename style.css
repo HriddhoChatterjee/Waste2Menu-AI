@@ -7,41 +7,42 @@
 
 :root {
   --bg-base: #FBF9F5;
-  --bg-base-alt: #F7F4EE;
+  --bg-base-alt: #F4EFE6;
   --bg-surface: #FFFFFF;
   --bg-surface-elevated: #FFFFFF;
+  --bg-surface-secondary: #F4EFE6;
   --bg-surface-hover: #F8F5EE;
-  --bg-surface-subtle: #F5EFE6;
+  --bg-surface-subtle: #F4EFE6;
 
-  --border-color: #EADBCE;
-  --border-dark: #D8C7B5;
-  --border-light: #F2E9DF;
+  --border-color: #E8E1D5;
+  --border-dark: #D4CBBE;
+  --border-light: #F2ECE1;
 
-  --emerald-primary: #2E7D32;
-  --emerald-hover: #1B5E20;
-  --emerald-light: #E8F5E9;
+  --emerald-primary: #1B5E20;
+  --emerald-hover: #144718;
+  --emerald-light: #F1F8F4;
   --emerald-border: #A5D6A7;
 
-  --saffron-primary: #D97706;
-  --saffron-hover: #C25E00;
-  --saffron-light: #FFF8EE;
+  --saffron-primary: #B45309;
+  --saffron-hover: #92400E;
+  --saffron-light: #FEF3C7;
   --saffron-border: #FCD34D;
 
-  --terracotta: #C25E00;
-  --terracotta-light: rgba(194, 94, 0, 0.08);
+  --terracotta: #B45309;
+  --terracotta-light: rgba(180, 83, 9, 0.08);
 
-  --text-primary: #221F1B;
-  --text-secondary: #6B635B;
+  --text-primary: #1F1B16;
+  --text-secondary: #5C554D;
   --text-muted: #8C827A;
 
   --radius-sm: 8px;
-  --radius-md: 12px;
+  --radius-md: 14px;
   --radius-lg: 16px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 2px 8px rgba(92, 64, 40, 0.04);
-  --shadow-md: 0 4px 20px -2px rgba(92, 64, 40, 0.05);
-  --shadow-lg: 0 10px 30px -4px rgba(92, 64, 40, 0.08);
+  --shadow-sm: 0 2px 8px rgba(31, 27, 22, 0.04);
+  --shadow-md: 0 6px 16px -2px rgba(31, 27, 22, 0.06);
+  --shadow-lg: 0 10px 20px -3px rgba(31, 27, 22, 0.08);
 
   --transition-fast: 0.15s ease;
   --transition-normal: 0.25s ease;
@@ -68,20 +69,24 @@ body.theme-light-creme {
    APP HEADER & NAVIGATION
    ========================================================================== */
 .app-header {
-  background: rgba(255, 253, 249, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
-  z-index: 50;
-  box-shadow: var(--shadow-sm);
+  z-index: 1000;
+  height: 72px;
+  background: rgba(251, 249, 245, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid #E8E1D5;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 12px rgba(31, 27, 22, 0.03);
 }
 
 .header-container {
-  max-width: 1320px;
+  max-width: 1200px;
+  width: 92%;
   margin: 0 auto;
-  padding: 0.85rem 1.5rem;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -309,11 +314,12 @@ body.theme-light-creme {
    MAIN CONTENT WRAPPER & TAB PANELS
    ========================================================================== */
 .main-content {
-  max-width: 1320px;
+  padding-top: 2.5rem;
+  padding-bottom: 5rem;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 5rem;
+  width: 92%;
   flex: 1;
-  width: 100%;
 }
 
 .tab-panel {
@@ -4355,4 +4361,133 @@ dialog[open] .modal-card {
   padding: 0.85rem;
   border: 1px solid var(--border-light);
   margin-bottom: 1.25rem;
+}
+
+/* ==========================================================================
+   MASTER OVERHAUL: CATEGORY FILTER PILLS & RESPONSIVE CARD GRIDS
+   ========================================================================== */
+.catalog-category-pills-bar,
+.categories-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin: 1.5rem 0;
+}
+
+.cat-filter-pill {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.5rem 1.15rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.cat-filter-pill:hover {
+  border-color: var(--emerald-primary);
+  color: var(--emerald-primary);
+  background: var(--bg-surface-hover);
+  transform: translateY(-1px);
+}
+
+.cat-filter-pill.active {
+  background: #1B5E20 !important;
+  border-color: #1B5E20 !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.25) !important;
+}
+
+/* Standardized Responsive Auto-Fill Grid (340px) */
+.recipes-grid,
+.scraps-grid,
+.catalog-category-grid,
+.master-scraps-grid,
+.matrix-items-grid,
+.cooked-creations-grid,
+.chennai-ngos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.25rem;
+}
+
+@media (max-width: 540px) {
+  .recipes-grid,
+  .scraps-grid,
+  .catalog-category-grid,
+  .master-scraps-grid,
+  .matrix-items-grid,
+  .cooked-creations-grid,
+  .chennai-ngos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Generous Line-Height (1.55) to eliminate squished typography */
+.recipe-card,
+.scrap-item-rich-card,
+.cooked-creation-card,
+.chennai-ngo-card,
+.dispatch-item-card {
+  line-height: 1.55;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.recipe-card p,
+.scrap-item-rich-card p,
+.cooked-creation-card p,
+.chennai-ngo-card p,
+.dispatch-item-card p,
+.recipe-desc,
+.chef-lore,
+.scrap-uses-text,
+.ngo-focus-text,
+.disp-notes {
+  line-height: 1.55 !important;
+}
+
+/* Card Hover Transitions */
+.recipe-card:hover,
+.scrap-item-rich-card:hover,
+.cooked-creation-card:hover,
+.chennai-ngo-card:hover,
+.dispatch-item-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px -3px rgba(31, 27, 22, 0.08);
+}
+
+/* Selection Feedback: Emerald border (#1B5E20) and soft green tint (#F1F8F4) */
+.scrap-item-rich-card.selected,
+.master-scrap-card.selected,
+.scrap-card.selected {
+  border-color: #1B5E20 !important;
+  background-color: #F1F8F4 !important;
+  box-shadow: 0 0 0 2px rgba(27, 94, 32, 0.25) !important;
+}
+
+/* Quote banner line-height & spacing fix */
+.quote-banner {
+  background: var(--bg-surface-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 2.25rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: visible;
+}
+
+.quote-text {
+  line-height: 1.45 !important;
+}
+
+.hero-heading {
+  line-height: 1.3 !important;
 }

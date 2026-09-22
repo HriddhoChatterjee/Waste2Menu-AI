@@ -232,37 +232,37 @@
     {
       id: 31,
       category_id: 6,
-      name_en: "Bone Frames & Knuckles",
+      name_en: "Mutton & Chicken Bone Knuckles",
       name_regional: "Mutton Nalli, Chicken Haddi, Elumbu",
-      common_uses: "Slow-simmered with crushed ginger, peppercorns, and turmeric into nutrient-dense bone broth (Nalli Soup / Paya Yakhni broth)."
+      common_uses: "Slow-simmered with peppercorns, crushed ginger, and turmeric into nutrient-dense bone broth (Nalli Soup / Yakhni)."
     },
     {
       id: 32,
       category_id: 6,
       name_en: "Fish Head & Cartilage Trimmings",
       name_regional: "Machher Matha, Meen Thala",
-      common_uses: "Fried with turmeric and slow-cooked into rich Bengali Muri Ghonto with fragrant rice, or simmered in spicy Assamese/South Indian sour gravies."
+      common_uses: "Fried with turmeric and simmered with fragrant rice into Bengali Muri Ghonto or rich South Indian Meen Thala Curry."
     },
     {
       id: 33,
       category_id: 6,
       name_en: "Prawn Shells & Heads",
       name_regional: "Chingri Khosha, Eral Odu",
-      common_uses: "Roasted dry, crushed, and simmered with onions, garlic, and chillies to extract aromatic seafood broth or ground into spicy prawn shell chutney powder."
+      common_uses: "Dry-roasted and simmered to extract aromatic seafood broth, or blended into spiced prawn-shell thogayal powder."
     },
     {
       id: 34,
       category_id: 6,
       name_en: "Chicken Skin & Fat Trimmings",
       name_regional: "Chicken Charbi",
-      common_uses: "Rendered over low flame into natural cooking fat (schmaltz), and the crispy cracklings used as a crunchy garnish for pulav or dal."
+      common_uses: "Rendered over low heat into natural cooking fat, with cracklings used as a crispy topping for rice dishes."
     },
     {
       id: 35,
       category_id: 6,
       name_en: "Fish Roe / Egg Sacs",
       name_regional: "Machher Deem, Meen Muttai",
-      common_uses: "Lightly seasoned with turmeric, salt, chopped green chillies, and onions, then pan-fried into crispy fish egg pakoras (Machher Deem-er Bora)."
+      common_uses: "Mixed with chopped onions, green chillies, and besan, then shallow-fried into crispy fish egg fritters (Machher Deem-er Bora)."
     }
   ];
 
@@ -2041,6 +2041,40 @@
     // Initialize Home Chef Dish Creation Uploader & Gallery
     initDishCreationUpload();
 
+    // Category Filter Pills Handler in Ingredients Catalog
+    const catPillsBar = document.getElementById('catalog-category-pills-bar');
+    if (catPillsBar) {
+      catPillsBar.addEventListener('click', (e) => {
+        const btn = e.target.closest('.cat-filter-pill');
+        if (!btn) return;
+        catPillsBar.querySelectorAll('.cat-filter-pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+
+        const catId = btn.dataset.catId;
+        const accordions = document.querySelectorAll('.catalog-category-accordion');
+        accordions.forEach(acc => {
+          if (catId === 'all' || acc.dataset.categoryId === catId) {
+            acc.style.display = 'block';
+            acc.classList.add('open');
+            const body = acc.querySelector('.catalog-category-body');
+            if (body) body.style.display = 'block';
+            const icon = acc.querySelector('.cat-header-toggle-icon');
+            if (icon) icon.textContent = '▲';
+          } else {
+            acc.style.display = 'none';
+          }
+        });
+
+        if (catId !== 'all') {
+          const targetAcc = document.querySelector(`.catalog-category-accordion[data-category-id="${catId}"]`);
+          if (targetAcc) {
+            targetAcc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }
+      });
+    }
+
+
     // Initialize Chennai Local NGO Directory
     renderChennaiNgosDirectory('');
 
@@ -3810,7 +3844,7 @@
         </div>
 
         <button type="button" class="btn-direct-dispatch-ngo" data-ngo-id="${ngo.id}">
-          <span>🤝 Direct Dispatch to this Shelter ➔</span>
+          <span>🤝 Dispatch to this Shelter ➔</span>
         </button>
       `;
 
@@ -4322,12 +4356,12 @@
     DOM.guideSelectionBar.style.display = 'flex';
 
     if (DOM.selBarCount) {
-      DOM.selBarCount.textContent = `${count} Selected`;
+      DOM.selBarCount.textContent = `${count} Scraps Selected`;
     }
 
     if (DOM.selBarNames) {
       if (count === state.scraps.length) {
-        DOM.selBarNames.textContent = 'All 30 household ingredients selected';
+        DOM.selBarNames.textContent = 'All 35 household ingredients selected';
       } else {
         const names = state.scraps
           .filter(s => state.selectedScrapIds.has(s.id))
