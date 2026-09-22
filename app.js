@@ -2078,6 +2078,17 @@
     // Initialize Chennai Local NGO Directory
     renderChennaiNgosDirectory('');
 
+    // Chennai Community Partners Click to NGO Dispatch
+    const partnersGrid = document.getElementById('partners-cards-grid');
+    if (partnersGrid) {
+      partnersGrid.addEventListener('click', (e) => {
+        const actionBtn = e.target.closest('.btn-partner-action') || e.target.closest('.partner-card');
+        if (actionBtn) {
+          switchTab('ngo-dispatch', true);
+        }
+      });
+    }
+
     // Floating Action Dock in Ingredients Catalog
     if (DOM.btnGuideSelectAll) DOM.btnGuideSelectAll.addEventListener('click', selectAllIngredientsFromCatalog);
     if (DOM.btnGuideClear) DOM.btnGuideClear.addEventListener('click', clearIngredientsFromCatalog);
@@ -2164,6 +2175,9 @@
     const aliasMap = {
       'home': 'home-overview',
       'overview': 'home-overview',
+      'home-section': 'home-overview',
+      'partners': 'home-overview',
+      'community-partners': 'home-overview',
       'catalog': 'scraps-matrix',
       'matrix': 'scraps-matrix',
       'scraps': 'scraps-matrix',

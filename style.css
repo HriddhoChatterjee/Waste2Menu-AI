@@ -33,7 +33,8 @@
 
   --text-primary: #1F1B16;
   --text-secondary: #5C554D;
-  --text-muted: #8C827A;
+  --text-muted: #8C8277;
+  --text-label: #8C8277;
 
   --radius-sm: 8px;
   --radius-md: 14px;
@@ -1901,24 +1902,24 @@ body.theme-light-creme {
   gap: 1rem;
   box-shadow: 0 12px 36px rgba(46, 125, 50, 0.18), 0 4px 16px rgba(34, 31, 27, 0.08);
   z-index: 100;
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: dockSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes slideUp {
+@keyframes dockSlideUp {
   from {
+    transform: translate(-50%, 60px);
     opacity: 0;
-    transform: translate(-50%, 100%);
   }
   to {
-    opacity: 1;
     transform: translate(-50%, 0);
+    opacity: 1;
   }
 }
 
 @keyframes modalScaleIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.97);
   }
   to {
     opacity: 1;
@@ -2029,9 +2030,9 @@ dialog.app-modal {
 }
 
 dialog.app-modal::backdrop {
-  background: rgba(40, 30, 20, 0.45);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(31, 27, 22, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .modal-card {
@@ -4432,37 +4433,89 @@ dialog[open] .modal-card {
   }
 }
 
-/* Generous Line-Height (1.55) to eliminate squished typography */
-.recipe-card,
-.scrap-item-rich-card,
-.cooked-creation-card,
-.chennai-ngo-card,
-.dispatch-item-card {
-  line-height: 1.55;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
+/* Generous Line-Height (1.6) on all descriptive paragraphs */
+p,
 .recipe-card p,
 .scrap-item-rich-card p,
 .cooked-creation-card p,
 .chennai-ngo-card p,
 .dispatch-item-card p,
+.partner-card p,
+.partner-mission-text,
 .recipe-desc,
 .chef-lore,
 .scrap-uses-text,
 .ngo-focus-text,
-.disp-notes {
-  line-height: 1.55 !important;
+.disp-notes,
+.hero-lead,
+.section-subtitle,
+.quote-subtext,
+.achieve-desc,
+.step-card p,
+.wisdom-banner-text p {
+  line-height: 1.6 !important;
 }
 
-/* Card Hover Transitions */
+/* Section Separation (margin-bottom: 4rem) */
+.hero-showcase-card,
+.achievements-grid,
+.how-it-works-section,
+.home-partners-section,
+.ancestral-showcase-section,
+.heritage-wisdom-banner {
+  margin-bottom: 4rem;
+}
+
+/* Tactile Micro-Animations: Card Hover Transitions */
+.recipe-card,
+.scrap-item-rich-card,
+.cooked-creation-card,
+.chennai-ngo-card,
+.dispatch-item-card,
+.partner-card,
+.achievement-card,
+.step-card,
+.master-scrap-card,
+.scrap-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
 .recipe-card:hover,
 .scrap-item-rich-card:hover,
 .cooked-creation-card:hover,
 .chennai-ngo-card:hover,
-.dispatch-item-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px -3px rgba(31, 27, 22, 0.08);
+.dispatch-item-card:hover,
+.partner-card:hover,
+.achievement-card:hover,
+.step-card:hover,
+.master-scrap-card:hover,
+.scrap-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -4px rgba(31, 27, 22, 0.07);
+  border-color: #D5CBB9;
+}
+
+/* Badge & Button Transitions */
+.cat-filter-pill,
+.btn-filter-pill,
+.nav-tab-btn,
+.btn-primary,
+.btn-secondary,
+.btn-hero-primary,
+.btn-hero-secondary,
+.btn-hero-tertiary,
+.btn-demo-pill,
+.btn-sel-action,
+.btn-sel-view-recipes,
+.btn-direct-dispatch-ngo,
+.btn-claim-dispatch,
+.btn-toggle-favorite,
+.btn-auth-signin,
+.partner-type-badge,
+.partner-verification-tag,
+.partner-zone-tag,
+.btn-partner-action {
+  transition: all 0.2s ease-in-out;
 }
 
 /* Selection Feedback: Emerald border (#1B5E20) and soft green tint (#F1F8F4) */
@@ -4490,4 +4543,162 @@ dialog[open] .modal-card {
 
 .hero-heading {
   line-height: 1.3 !important;
+}
+
+/* ==========================================================================
+   HOMEPAGE: CHENNAI COMMUNITY IMPACT PARTNERS SECTION
+   ========================================================================== */
+.home-partners-section {
+  margin-bottom: 4rem;
+}
+
+.partners-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.partner-card {
+  background: #FFFFFF;
+  border: 1px solid #E8E1D5;
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 16px -2px rgba(31, 27, 22, 0.04);
+  position: relative;
+}
+
+.partner-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.partner-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.partner-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1F1B16;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.active-partner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(27, 94, 32, 0.08);
+  border: 1px solid rgba(27, 94, 32, 0.2);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.partner-status-text {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #1B5E20;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.partner-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.partner-type-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #B45309;
+  background: #FEF3C7;
+  border: 1px solid #FCD34D;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+.partner-verification-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #1B5E20;
+  background: #F1F8F4;
+  border: 1px solid #A5D6A7;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+.partner-zone-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #5C554D;
+  background: #F4EFE6;
+  border: 1px solid #E8E1D5;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+.partner-mission-text {
+  font-size: 0.9rem;
+  color: #5C554D;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+}
+
+.partner-card-footer {
+  border-top: 1px solid #F2ECE1;
+  padding-top: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.partner-metric-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: #1B5E20;
+  font-weight: 600;
+  background: rgba(27, 94, 32, 0.06);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(27, 94, 32, 0.15);
+}
+
+.btn-partner-action {
+  background: transparent;
+  border: 1px solid #E8E1D5;
+  color: #1F1B16;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-partner-action:hover {
+  background: #1B5E20;
+  color: #FFFFFF;
+  border-color: #1B5E20;
+  transform: translateY(-1px);
 }
