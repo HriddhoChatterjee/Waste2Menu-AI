@@ -1891,34 +1891,47 @@
 
     // Hero Action CTAs & Wisdom Banner CTA
     DOM.btnHeroExplore.addEventListener('click', () => {
-      const homeTabBtn = document.getElementById('nav-tab-home-chef');
-      if (homeTabBtn) homeTabBtn.style.display = 'inline-flex';
-      switchTab('home-chef');
-      applyFiltersAndRenderRecipes();
+      if (!state.currentUser || state.currentUser.role !== 'home_chef') {
+        executeDemoLogin('home_chef');
+      } else {
+        switchTab('home-chef');
+        applyFiltersAndRenderRecipes();
+      }
     });
 
     DOM.btnHeroContribute.addEventListener('click', () => {
-      if (state.currentUser && state.currentUser.role === 'master_chef') {
-        switchTab('master-chef');
-      } else if (state.currentUser && state.currentUser.role === 'home_chef') {
-        showToast('Recipe upload is exclusive to Master Chefs. Home Chefs can view and cook all recipes!', 'info');
+      if (!state.currentUser || state.currentUser.role !== 'master_chef') {
+        executeDemoLogin('master_chef');
       } else {
-        openAuthModal();
-        showToast('Master Chef recipe authoring studio is available after signing in. Use 1-Click Demo!', 'info');
+        switchTab('master-chef');
       }
     });
 
     const bannerCookBtn = document.getElementById('btn-banner-cook');
     if (bannerCookBtn) {
       bannerCookBtn.addEventListener('click', () => {
-        const homeTabBtn = document.getElementById('nav-tab-home-chef');
-        if (homeTabBtn) homeTabBtn.style.display = 'inline-flex';
-        switchTab('home-chef');
-        applyFiltersAndRenderRecipes();
+        if (!state.currentUser || state.currentUser.role !== 'home_chef') {
+          executeDemoLogin('home_chef');
+        } else {
+          switchTab('home-chef');
+          applyFiltersAndRenderRecipes();
+        }
       });
     }
 
     DOM.btnHeroMatrix.addEventListener('click', () => switchTab('scraps-matrix'));
+
+    // Hero Role Quick Switcher Buttons
+    document.querySelectorAll('.btn-role-switch').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const role = btn.dataset.role;
+        if (role === 'guest') {
+          handleSignOut();
+        } else {
+          executeDemoLogin(role);
+        }
+      });
+    });
 
     // Auth Modal Triggers
     DOM.authModalClose.addEventListener('click', () => DOM.authModal.close());
@@ -2462,13 +2475,28 @@
 
     // Keep DOM cache in sync
     DOM.navTabButtons = centerNav.querySelectorAll('.nav-tab-btn');
+    syncRoleSwitcherActive();
+  }
+
+  function syncRoleSwitcherActive() {
+    const currentRole = state.currentUser ? state.currentUser.role : 'guest';
+    document.querySelectorAll('.btn-role-switch').forEach(btn => {
+      if (btn.dataset.role === currentRole) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
   }
 
   function updateNavbarVisibility() {
     renderDynamicNavbar();
 
     if (!state.currentUser) {
-      if (DOM.btnHeroContribute) DOM.btnHeroContribute.style.display = 'inline-flex';
+      if (DOM.btnHeroContribute) {
+        DOM.btnHeroContribute.style.display = 'inline-flex';
+        DOM.btnHeroContribute.innerHTML = '<span>👨‍🍳 Upload Recipes as Master Chef</span>';
+      }
       if (state.activeTab === 'master-chef') {
         switchTab('home-overview');
       }
@@ -2480,8 +2508,10 @@
           DOM.btnHeroContribute.innerHTML = '<span>👨‍🍳 + Upload Recipe (Studio)</span>';
         }
       } else {
-        // Home Chef or NGO role - strictly remove upload recipe options
-        if (DOM.btnHeroContribute) DOM.btnHeroContribute.style.display = 'none';
+        if (DOM.btnHeroContribute) {
+          DOM.btnHeroContribute.style.display = 'inline-flex';
+          DOM.btnHeroContribute.innerHTML = '<span>👨‍🍳 Upload Recipes as Master Chef</span>';
+        }
         if (state.activeTab === 'master-chef') {
           switchTab(role === 'ngo_rep' ? 'ngo-dispatch' : 'home-chef');
         }
@@ -2535,8 +2565,9 @@
       if (res.ok) {
         const user = await res.json();
         setCurrentUser(user);
-        DOM.authModal.close();
-        showToast(`✨ Welcome ${user.name}! Switched to ${user.role === 'master_chef' ? 'Master Chef' : 'Home Chef'} mode.`, 'success');
+        if (DOM.authModal && DOM.authModal.open) DOM.authModal.close();
+        const roleLabel = user.role === 'master_chef' ? 'Master Chef' : (user.role === 'ngo_rep' ? 'NGO Representative' : 'Home Chef');
+        showToast(`✨ Welcome ${user.name}! Switched to ${roleLabel} mode.`, 'success');
         return;
       }
     } catch (err) {
@@ -2545,8 +2576,9 @@
 
     // Fallback for static Git deployment
     setCurrentUser(demoUser);
-    DOM.authModal.close();
-    showToast(`✨ Welcome ${demoUser.name}! (${role === 'master_chef' ? 'Master Chef' : 'Home Chef'})`, 'success');
+    if (DOM.authModal && DOM.authModal.open) DOM.authModal.close();
+    const roleLabel = demoUser.role === 'master_chef' ? 'Master Chef' : (demoUser.role === 'ngo_rep' ? 'NGO Representative' : 'Home Chef');
+    showToast(`✨ Welcome ${demoUser.name}! (${roleLabel})`, 'success');
   }
 
   async function handleSigninSubmit(e) {
