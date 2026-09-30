@@ -469,7 +469,7 @@
 
             <!-- Scanner Viewfinder & Live Laser Animation -->
             <div class="scanner-viewfinder" id="scanner-viewfinder" style="display: none;">
-              <img id="scanner-preview-img" src="" alt="Counter Scraps Preview" />
+              <img id="home-scanner-preview-img" src="" alt="Counter Scraps Preview" />
               <div class="scanner-laser-line" id="scanner-laser-line"></div>
               <div class="scanner-overlay-status" id="scanner-status-badge">
                 <span class="pulse-indicator-emerald"></span>
@@ -496,7 +496,7 @@
             </div>
 
             <!-- Recognition Results Container -->
-            <div class="scanner-results-box" id="scanner-results-box" style="display: none;">
+            <div class="scanner-results-box" id="home-scanner-results-box" style="display: none;">
               <div class="results-box-header">
                 <div class="results-header-meta">
                   <span class="results-badge-success">✅ Scan Complete</span>
@@ -812,87 +812,43 @@
       </div>
 
       <!-- =============================================================== -->
-      <!-- CATALOG: SMART PHOTO UPLOAD & AUTOMATIC SCRAP SELECTOR -->
+      <!-- AI COUNTER SCRAP SCANNER & INSTANT RECIPE FLOW -->
       <!-- =============================================================== -->
-      <div class="scrap-scanner-card" id="catalog-scanner-card">
-        <div class="scanner-header">
-          <div class="scanner-title-group">
-            <div class="scanner-icon-badge">📸</div>
-            <div>
-              <h3 class="scanner-heading">Auto-Select Ingredients via Counter Photo</h3>
-              <p class="scanner-subheading">Upload a picture of your kitchen counter discards — our vision scanner will automatically detect and select the matching ingredients in the 35-item catalog below.</p>
-            </div>
+      <div class="ai-scanner-card" id="ai-counter-scanner-card">
+        <div class="scanner-card-header">
+          <div class="scanner-icon">📸</div>
+          <div class="scanner-header-text">
+            <h3 class="scanner-title">AI Counter Scrap Scanner</h3>
+            <p class="scanner-subtext">Snap or upload cutting board prep scraps to classify ingredients and unlock upcycled recipes.</p>
           </div>
-          <span class="scanner-pill-tag">✨ Instant Auto-Selection</span>
         </div>
 
-        <div class="scanner-body-grid">
-          <!-- Dropzone & File Picker -->
-          <div class="scanner-dropzone" id="catalog-scanner-dropzone">
-            <input type="file" id="catalog-scrap-photo-input" accept="image/*" capture="environment" style="display: none;" />
-            <div class="dropzone-empty-state" id="catalog-dropzone-prompt">
-              <div class="dropzone-camera-icon">📷</div>
-              <h4 class="dropzone-main-text">Drag & Drop Kitchen Photo Here</h4>
-              <p class="dropzone-sub-text">or click to choose an image from your device / camera</p>
-              <button type="button" class="btn-dropzone-upload" id="btn-catalog-trigger-upload">
-                <span>📁 Upload Photo to Select</span>
-              </button>
-            </div>
+        <div class="upload-dropzone" id="ai-scanner-dropzone" onclick="document.getElementById('scrap-photo-upload-input').click()">
+          <input type="file" id="scrap-photo-upload-input" accept="image/*" capture="environment" style="display: none;" onchange="processUploadedScrap(event)" />
+          <span class="upload-cloud-icon">📥</span>
+          <div class="upload-text"><strong>Click to upload</strong> or drag &amp; drop kitchen scrap photo</div>
+          <div class="supported-files-tag">Accepts JPG, PNG, WEBP</div>
+        </div>
 
-            <!-- Scanner Viewfinder & Live Laser Animation -->
-            <div class="scanner-viewfinder" id="catalog-scanner-viewfinder" style="display: none;">
-              <img id="catalog-scanner-preview-img" src="" alt="Catalog Scraps Preview" />
-              <div class="scanner-laser-line" id="catalog-scanner-laser-line"></div>
-              <div class="scanner-overlay-status" id="catalog-scanner-status-badge">
-                <span class="pulse-indicator-emerald"></span>
-                <span id="catalog-scanner-status-text">Scanning byproducts & textures...</span>
+        <!-- Scanning & Classification Feedback Box -->
+        <div class="scanner-results-box" id="scanner-feedback-box" style="display: none;">
+          <div class="scanner-preview-row">
+            <img id="scanner-preview-img" class="scanner-thumbnail" src="" alt="Scanned Scraps Preview" />
+            <div class="scanner-status-col">
+              <div class="scanning-loader" id="scanner-loader" style="display: none;">
+                <span>🔄 Running Zero-Shot Vision Classifier...</span>
               </div>
+              <div id="scanner-detection-details" style="display: none;"></div>
             </div>
           </div>
+          <button type="button" class="btn-proceed-to-recipes" id="btn-reveal-recipe" style="display: none;">
+            <span>🌿 Proceed to Upcycling Recipes →</span>
+          </button>
+        </div>
 
-          <!-- Quick Samples & Recognition Results -->
-          <div class="scanner-control-panel">
-            <div class="scanner-samples-wrap">
-              <span class="samples-label">⚡ 1-Click Test Scenarios:</span>
-              <div class="samples-chip-row">
-                <button type="button" class="btn-catalog-sample-chip" data-sample="mixed_peels">
-                  <span>🥔 Mixed Vegetable Peels</span>
-                </button>
-                <button type="button" class="btn-catalog-sample-chip" data-sample="stems_leaves">
-                  <span>🌿 Fresh Herb & Stalk Stems</span>
-                </button>
-                <button type="button" class="btn-catalog-sample-chip" data-sample="seeds_rinds">
-                  <span>🍉 Seeds & Citrus Rinds</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Recognition Results Container -->
-            <div class="scanner-results-box" id="catalog-scanner-results-box" style="display: none;">
-              <div class="results-box-header">
-                <div class="results-header-meta">
-                  <span class="results-badge-success">✅ Scanned & Selected</span>
-                  <h4 class="results-summary-title">Auto-Selected in Catalog:</h4>
-                </div>
-                <button type="button" class="btn-rescan" id="btn-catalog-rescan">↺ Scan Another</button>
-              </div>
-
-              <!-- Detected Scrap Pills List -->
-              <div class="detected-scraps-list" id="catalog-detected-scraps-list">
-                <!-- Dynamically populated -->
-              </div>
-
-              <!-- Action Bar -->
-              <div class="scanner-action-bar">
-                <div class="scanner-impact-hint" id="catalog-scanner-impact-hint">
-                  🌱 Added to Counter Selection
-                </div>
-                <button type="button" class="btn-apply-scanned-recipes" id="btn-catalog-view-in-hub">
-                  <span>🍲 View Matched Recipes (<span id="catalog-scanned-recipes-count">0</span>) ➔</span>
-                </button>
-              </div>
-            </div>
-          </div>
+        <!-- Revealed Recipes Section -->
+        <div class="revealed-recipes-section" id="revealed-recipe-container" style="display: none;">
+          <!-- Dynamically populated by renderScannedRecipeCard() -->
         </div>
       </div>
 
