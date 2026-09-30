@@ -2984,36 +2984,101 @@
     }
   }
 
-  // 2. Multi-Signal Detection Handler
+  // =========================================================================
+  // GUARANTEED CHENNAI ZERO-WASTE RECIPES FOR DEMO ITEMS #3 AND #8
+  // =========================================================================
+  const CHENNAI_RECIPES = {
+    3: {
+      id: 301,
+      scrapId: 3,
+      title: "Urulaikizhangu Thol Milagu Varuval (உருளைக்கிழங்கு தோல் மிளகு வறுவல்)",
+      tamilName: "உருளைக்கிழங்கு தோல் (Potato Peels)",
+      chef: "Chef Sundaram (Mylapore)",
+      time: "12 Mins",
+      course: "South Indian Poriyal / Varuval",
+      spices: [
+        "Gingelly oil (Nallennai)",
+        "Mustard seeds (Kadugu)",
+        "Urad dal (Ulutham paruppu)",
+        "Curry leaves (Karuveppilai)",
+        "Crushed black pepper (Milagu)",
+        "Turmeric powder (Manjal podi)",
+        "Asafoetida (Perungayam)",
+        "Sea salt"
+      ],
+      steps: [
+        "Wash potato peels thoroughly in salted lukewarm water to remove dirt; pat completely dry on a clean kitchen cloth.",
+        "Heat 1.5 tbsp cold-pressed gingelly oil (nallennai) in an iron vadachatti (kadai).",
+        "Splutter mustard seeds, urad dal, a pinch of perungayam, and fresh curry leaves.",
+        "Add dried potato peels with manjal podi and sea salt. Sauté uncovered on medium-high heat for 7-8 minutes until crisp and golden brown.",
+        "Toss with freshly crushed black pepper (milagu thool) right before turning off heat. Serve hot with Rasam or Mor Kuzhambu."
+      ],
+      tip: "Keep the pan uncovered! Sautéing in nallennai without a lid gives potato peels an authentic chips-like crunch without deep frying."
+    },
+    8: {
+      id: 801,
+      scrapId: 8,
+      title: "Parambariya Carrot Thol Thogayal (பாரம்பரிய கேரட் தோல் துவையல்)",
+      tamilName: "கேரட் தோல் (Carrot Peels & Tops)",
+      chef: "Chef Meenakshi (T. Nagar)",
+      time: "14 Mins",
+      course: "Traditional Chennai Thogayal",
+      spices: [
+        "Gingelly oil (Nallennai)",
+        "Urad dal (Ulutham paruppu)",
+        "Chana dal (Kadalai paruppu)",
+        "Dry red chillies (Gundu Milagai)",
+        "Asafoetida (Perungayam)",
+        "Tamarind (Puli)",
+        "Curry leaves",
+        "Rock salt"
+      ],
+      steps: [
+        "Rinse carrot peel ribbons and crown trimmings thoroughly; chop roughly.",
+        "Heat 1 tbsp nallennai in a pan. Roast urad dal, chana dal, dry red chillies, and perungayam until golden and aromatic.",
+        "Add the chopped carrot peels and sauté for 3-4 minutes until tender.",
+        "Cool slightly, then grind in a mixie with a marble-sized piece of tamarind (puli) and rock salt using minimal water.",
+        "Serve coarse, thick thogayal with piping hot Ponni rice and a generous spoonful of nallennai or ghee."
+      ],
+      tip: "Carrot skins retain maximum beta-carotene and natural sugars; roasted lentils and tangy tamarind provide an earthy, authentic balance."
+    }
+  };
+
+  const CHENNAI_DEMO_RECIPES = CHENNAI_RECIPES;
+
+  // 2. Self-Contained Upload / Scan Callback Routine
   function processUploadedScrap(event) {
     const file = event && event.target && event.target.files ? event.target.files[0] : (event && event.files ? event.files[0] : event);
     if (!file) return;
 
     const preview = document.getElementById("scanner-preview-img");
-    const feedbackBox = document.getElementById("scanner-feedback-box") || document.getElementById("scanner-results-box");
-    const loader = document.getElementById("scanner-loader") || document.getElementById("scanner-scanning-indicator");
-    const details = document.getElementById("scanner-detection-details") || document.getElementById("scanner-detected-tags-box");
-    const proceedBtn = document.getElementById("btn-reveal-recipe") || document.getElementById("btn-proceed-cooking");
-    const recipeContainer = document.getElementById("revealed-recipe-container") || document.getElementById("scanned-recipes-reveal-container");
+    const feedbackBox = document.getElementById("scanner-feedback-box");
+    const loader = document.getElementById("scanner-loader");
+    const details = document.getElementById("scanner-detection-details");
+    const proceedBtn = document.getElementById("btn-reveal-recipe");
+    const recipeContainer = document.getElementById("revealed-recipe-container");
 
+    if (!feedbackBox || !preview) return;
+
+    if (proceedBtn) proceedBtn.style.display = "none";
     if (recipeContainer) {
       recipeContainer.style.display = "none";
       recipeContainer.innerHTML = "";
     }
+
+    feedbackBox.style.display = "block";
+    if (loader) loader.style.display = "flex";
     if (details) {
       details.style.display = "none";
       details.innerHTML = "";
     }
-    if (proceedBtn) proceedBtn.style.display = "none";
-    if (feedbackBox) feedbackBox.style.display = "block";
-    if (loader) loader.style.display = "flex";
 
     const fileUrl = URL.createObjectURL(file);
-    if (preview) preview.src = fileUrl;
+    preview.src = fileUrl;
 
     const fileName = (file.name || "").toLowerCase();
 
-    // Create an offscreen image to inspect RGB chroma
+    // Chromatic color test via offscreen canvas
     const img = new Image();
     img.src = fileUrl;
     img.onload = () => {
@@ -3030,170 +3095,140 @@
         g += data[i + 1];
         b += data[i + 2];
       }
-      const totalPixels = data.length / 4;
-      const avgR = r / totalPixels;
-      const avgG = g / totalPixels;
-      const avgB = b / totalPixels;
+      const count = data.length / 4;
+      const avgR = r / count;
+      const avgG = g / count;
+      const avgB = b / count;
 
-      // Classification decision:
-      // Carrot peel ribbons: Vibrant orange profile (avgR > 120, Red >> Green & Blue)
-      // Potato peels: Muted earthy tan / brown / cream (Red ≈ Green)
-      let detectedId = 3;
-      let detectedTamilName = "உருளைக்கிழங்கு தோல் (Urulaikizhangu Thol / Potato Peels)";
+      // Detect Carrot vs Potato
+      let scrapId = 3;
       let confidence = "97.4%";
 
-      const isCarrot = (fileName.includes("carrot") || fileName.includes("gajar") || (avgR > 120 && avgR > avgG * 1.25 && avgR > avgB * 1.3)) && !fileName.includes("potato") && !fileName.includes("aloo");
+      const isCarrot = (fileName.includes("carrot") || fileName.includes("gajar") || (avgR > 120 && avgR > avgG * 1.25 && avgR > avgB * 1.25)) && !fileName.includes("potato") && !fileName.includes("aloo");
 
       if (isCarrot) {
-        detectedId = 8;
-        detectedTamilName = "கேரட் தோல் (Carrot Thol & Trimmings)";
+        scrapId = 8;
         confidence = "98.2%";
-      } else {
-        detectedId = 3;
-        detectedTamilName = "உருளைக்கிழங்கு தோல் (Urulaikizhangu Thol / Potato Peels)";
-        confidence = "97.4%";
       }
 
-      // Realistic inference delay
+      const recipe = CHENNAI_RECIPES[scrapId] || CHENNAI_RECIPES[3];
+
+      // Trigger UI presentation after 500ms inference simulation
       setTimeout(() => {
         if (loader) loader.style.display = "none";
-        if (details) {
-          details.style.display = "block";
-          details.innerHTML = `
-            <div style="font-size: 0.8rem; font-weight: 700; color: #8C8277; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.25rem;">Vision Inference (Chennai Kitchen Module):</div>
+        if (proceedBtn) proceedBtn.style.display = "none";
+        if (!details) return;
+
+        details.style.display = "block";
+
+        // Inject BOTH the detection badge AND the full recipe card directly here:
+        details.innerHTML = `
+          <div style="margin-bottom: 1.15rem; padding-bottom: 0.85rem; border-bottom: 1px solid #E8E1D5;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #8C8277; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.35rem;">
+              Inference Match (Chennai Regional Model):
+            </div>
             <div style="display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;">
-              <span style="font-size: 1.15rem; font-weight: 800; color: #1B5E20;">✓ ${detectedTamilName}</span>
+              <span style="font-size: 1.15rem; font-weight: 800; color: #1B5E20;">✓ ${recipe.tamilName}</span>
               <span style="font-size: 0.82rem; font-weight: 700; color: #B45309; background: #FEF3C7; padding: 0.2rem 0.6rem; border-radius: 9999px;">(Confidence: ${confidence})</span>
             </div>
-          `;
+          </div>
+
+          <div class="revealed-recipe-card" style="background: #FFFFFF; border: 1px solid #E8E1D5; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 16px -2px rgba(31, 27, 22, 0.06); animation: fadeInDown 0.35s ease-out; margin-top: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+              <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <span style="background: #E8F5E9; color: #1B5E20; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">${recipe.course}</span>
+                <span style="background: #FEF3C7; color: #B45309; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">⏱️ ${recipe.time}</span>
+              </div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: #8C8277;">Curated by ${recipe.chef}</span>
+            </div>
+
+            <h4 style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 800; color: #1F1B16; margin: 0 0 1rem 0; line-height: 1.3;">${recipe.title}</h4>
+
+            <div style="margin-bottom: 1.25rem;">
+              <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Pantry Spices Required:</h5>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                ${recipe.spices.map(s => `<span style="background: #F4EFE6; border: 1px solid #E8E1D5; color: #5C554D; font-size: 0.82rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px;">✓ ${s}</span>`).join("")}
+              </div>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+              <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Traditional Preparation Steps:</h5>
+              <ol style="margin: 0; padding-left: 1.25rem; color: #5C554D; font-size: 0.92rem; line-height: 1.65;">
+                ${recipe.steps.map(step => `<li style="margin-bottom: 0.5rem;">${step}</li>`).join("")}
+              </ol>
+            </div>
+
+            <div style="background: #FFFBEB; border-left: 4px solid #B45309; padding: 0.85rem 1rem; border-radius: 0 8px 8px 0; font-size: 0.86rem; color: #92400E; font-style: italic; line-height: 1.5;">
+              💡 <strong>Chennai Kitchen Wisdom:</strong> ${recipe.tip}
+            </div>
+          </div>
+        `;
+
+        // Synchronize with scrap checkboxes if present
+        if (typeof SELECTED_SCRAP_IDS !== "undefined" && typeof renderScrapsGrid === "function") {
+          SELECTED_SCRAP_IDS.clear();
+          SELECTED_SCRAP_IDS.add(scrapId);
+          renderScrapsGrid();
+        } else if (state && state.selectedScrapIds && typeof renderScrapsGrid === "function") {
+          state.selectedScrapIds.clear();
+          state.selectedScrapIds.add(scrapId);
+          renderScrapsGrid();
         }
 
-        // Sync selection with catalog state
-        const selectedSet = window.SELECTED_SCRAP_IDS || state.selectedScrapIds;
-        if (selectedSet) {
-          selectedSet.clear();
-          selectedSet.add(detectedId);
-        }
-        renderScrapsGrid();
-
-        if (proceedBtn) {
-          proceedBtn.style.setProperty("display", "block", "important");
-          proceedBtn.onclick = () => showRecipeForScrap(detectedId);
-        }
-
-        // Auto reveal recipe immediately for guaranteed seamless demo experience
-        showRecipeForScrap(detectedId);
-      }, 600);
+        // Smoothly scroll details into view
+        details.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 500);
     };
   }
 
-  // =========================================================================
-  // GUARANTEED CHENNAI ZERO-WASTE RECIPES FOR DEMO ITEMS #3 AND #8
-  // =========================================================================
-  const CHENNAI_DEMO_RECIPES = {
-    3: {
-      id: 301,
-      scrapId: 3,
-      title: "Urulaikizhangu Thol Milagu Varuval (உருளைக்கிழங்கு தோல் மிளகு வறுவல்)",
-      tamilName: "உருளைக்கிழங்கு தோல் (Urulaikizhangu Thol / Potato Peels)",
-      chef: "Chef Sundaram (Mylapore Kitchens)",
-      time: 12,
-      course: "South Indian Poriyal / Varuval",
-      spices: [
-        "Gingelly oil (Nallennai)",
-        "Mustard seeds (Kadugu)",
-        "Urad dal (Ulutham paruppu)",
-        "Curry leaves (Karuveppilai)",
-        "Crushed black pepper (Milagu)",
-        "Turmeric powder (Manjal podi)",
-        "Asafoetida (Perungayam)",
-        "Sea salt"
-      ],
-      steps: [
-        "Wash potato peelings thoroughly in salted lukewarm water to strip away dirt and surface starch; pat completely dry on a clean kitchen cloth.",
-        "Heat 1.5 tbsp cold-pressed gingelly oil (nallennai) in an iron vadachatti (kadai).",
-        "Splutter mustard seeds, ulutham paruppu, a generous pinch of perungayam, and fresh karuveppilai.",
-        "Toss in the dried potato peels with manjal podi and sea salt. Sauté on medium-high heat for 7-8 minutes uncovered until dark golden and crackling.",
-        "Finish by sprinkling freshly pounded black pepper (karuppu milagu thool) right before turning off the stove. Serve as a crunchy side for Rasam Sadam or Mor Kuzhambu."
-      ],
-      tip: "Keep the pan uncovered! Sautéing without a lid in nallennai yields an authentic chip-like crunch without deep frying."
-    },
-    8: {
-      id: 801,
-      scrapId: 8,
-      title: "Parambariya Carrot Thol Thogayal (பாரம்பரிய கேரட் தோல் துவையல்)",
-      tamilName: "கேரட் தோல் (Carrot Thol & Trimmings)",
-      chef: "Chef Meenakshi (T. Nagar)",
-      time: 14,
-      course: "Traditional Chennai Thogayal",
-      spices: [
-        "Gingelly oil (Nallennai)",
-        "Urad dal (Ulutham paruppu)",
-        "Chana dal (Kadalai paruppu)",
-        "Dry red chillies (Gundu Milagai)",
-        "Asafoetida (Perungayam)",
-        "Tamarind (Puli)",
-        "Curry leaves",
-        "Rock salt"
-      ],
-      steps: [
-        "Rinse carrot peel ribbons and crown trimmings thoroughly; chop roughly.",
-        "Heat 1 tbsp nallennai in a pan. Roast ulutham paruppu, kadalai paruppu, dry red chillies, and perungayam until golden and aromatic.",
-        "Add the chopped carrot skins and sauté for 3-4 minutes until tender.",
-        "Let cool, then transfer to a mixie jar with a marble-sized piece of puli (tamarind) and rock salt.",
-        "Pulse with minimal water into a coarse, thick thogayal. Serve hot with steamed Ponni rice and a spoon of nallennai or ghee."
-      ],
-      tip: "Carrot skins contain concentrated beta-carotene and sweetness; the roasted lentils and tamarind provide a balanced, earthy flavor."
-    }
-  };
-
-  // Update showRecipeForScrap to directly render from CHENNAI_DEMO_RECIPES
+  // Standalone showRecipeForScrap renderer that also renders directly into #scanner-detection-details or container
   function showRecipeForScrap(scrapId) {
-    const container = document.getElementById("revealed-recipe-container") || document.getElementById("scanned-recipes-reveal-container");
-    if (!container) return;
+    const idNum = Number(scrapId) || 3;
+    const recipe = CHENNAI_RECIPES[idNum] || CHENNAI_RECIPES[3];
+    const details = document.getElementById("scanner-detection-details");
+    const container = document.getElementById("revealed-recipe-container");
 
-    const idNum = Number(scrapId);
-    const recipe = CHENNAI_DEMO_RECIPES[idNum] || CHENNAI_DEMO_RECIPES[3];
-
-    const safeCourse = typeof escapeHtml === 'function' ? escapeHtml(recipe.course) : recipe.course;
-    const safeChef = typeof escapeHtml === 'function' ? escapeHtml(recipe.chef) : recipe.chef;
-    const safeTitle = typeof escapeHtml === 'function' ? escapeHtml(recipe.title) : recipe.title;
-    const safeTip = typeof escapeHtml === 'function' ? escapeHtml(recipe.tip) : recipe.tip;
-
-    container.innerHTML = `
-      <div class="revealed-recipe-card" style="background: #FFFFFF; border: 1px solid #E8E1D5; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 16px -2px rgba(31, 27, 22, 0.06); animation: fadeInDown 0.35s ease-out; margin-top: 1rem;">
+    const recipeHtml = `
+      <div class="revealed-recipe-card" style="background: #FFFFFF; border: 1px solid #E8E1D5; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 16px -2px rgba(31, 27, 22, 0.06); animation: fadeInDown 0.35s ease-out; margin-top: 0.75rem;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
           <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-            <span style="background: #E8F5E9; color: #1B5E20; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">${safeCourse}</span>
-            <span style="background: #FEF3C7; color: #B45309; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">⏱️ ${recipe.time} Mins</span>
+            <span style="background: #E8F5E9; color: #1B5E20; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">${recipe.course}</span>
+            <span style="background: #FEF3C7; color: #B45309; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">⏱️ ${recipe.time}</span>
           </div>
-          <span style="font-size: 0.82rem; font-weight: 600; color: #8C8277;">Curated by ${safeChef}</span>
+          <span style="font-size: 0.82rem; font-weight: 600; color: #8C8277;">Curated by ${recipe.chef}</span>
         </div>
 
-        <h4 style="font-family: 'Outfit', sans-serif; font-size: 1.35rem; font-weight: 800; color: #1F1B16; margin: 0 0 1rem 0; line-height: 1.3;">${safeTitle}</h4>
+        <h4 style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 800; color: #1F1B16; margin: 0 0 1rem 0; line-height: 1.3;">${recipe.title}</h4>
 
         <div style="margin-bottom: 1.25rem;">
-          <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Required Chennai Pantry Spices:</h5>
+          <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Pantry Spices Required:</h5>
           <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
-            ${recipe.spices.map(s => `<span style="background: #F4EFE6; border: 1px solid #E8E1D5; color: #5C554D; font-size: 0.82rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px;">✓ ${typeof escapeHtml === 'function' ? escapeHtml(s) : s}</span>`).join("")}
+            ${recipe.spices.map(s => `<span style="background: #F4EFE6; border: 1px solid #E8E1D5; color: #5C554D; font-size: 0.82rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px;">✓ ${s}</span>`).join("")}
           </div>
         </div>
 
         <div style="margin-bottom: 1.25rem;">
-          <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Traditional Step-by-Step Method:</h5>
+          <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Traditional Preparation Steps:</h5>
           <ol style="margin: 0; padding-left: 1.25rem; color: #5C554D; font-size: 0.92rem; line-height: 1.65;">
-            ${recipe.steps.map(step => `<li style="margin-bottom: 0.5rem;">${typeof escapeHtml === 'function' ? escapeHtml(step) : step}</li>`).join("")}
+            ${recipe.steps.map(step => `<li style="margin-bottom: 0.5rem;">${step}</li>`).join("")}
           </ol>
         </div>
 
         <div style="background: #FFFBEB; border-left: 4px solid #B45309; padding: 0.85rem 1rem; border-radius: 0 8px 8px 0; font-size: 0.86rem; color: #92400E; font-style: italic; line-height: 1.5;">
-          💡 <strong>South Indian Culinary Wisdom:</strong> ${safeTip}
+          💡 <strong>Chennai Kitchen Wisdom:</strong> ${recipe.tip}
         </div>
       </div>
     `;
 
-    container.style.display = "block";
-    container.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (details) {
+      details.style.display = "block";
+      details.innerHTML = recipeHtml;
+      details.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    } else if (container) {
+      container.style.display = "block";
+      container.innerHTML = recipeHtml;
+      container.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
 
   // Dual alias functions
@@ -3206,7 +3241,8 @@
   }
 
   // Global exports for inline HTML handlers & external script accessibility
-  window.CHENNAI_DEMO_RECIPES = CHENNAI_DEMO_RECIPES;
+  window.CHENNAI_RECIPES = CHENNAI_RECIPES;
+  window.CHENNAI_DEMO_RECIPES = CHENNAI_RECIPES;
   window.showRecipeForScrap = showRecipeForScrap;
   window.renderScannedRecipeCard = showRecipeForScrap;
   window.revealScannedRecipe = showRecipeForScrap;

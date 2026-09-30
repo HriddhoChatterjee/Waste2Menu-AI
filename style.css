@@ -3849,7 +3849,7 @@ dialog[open] .modal-card {
 .scanner-preview-row {
   display: flex;
   gap: 1.25rem;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 1rem;
 }
 
