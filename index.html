@@ -510,6 +510,9 @@
                 <!-- Dynamically populated -->
               </div>
 
+              <!-- Dedicated Scanned Upcycled Recipe Box (Chennai Regional) -->
+              <div class="home-scanner-recipe-box" id="home-scanner-recipe-box" style="margin-top: 1.25rem; display: none;"></div>
+
               <!-- Action Bar -->
               <div class="scanner-action-bar">
                 <div class="scanner-impact-hint" id="scanner-impact-hint">
@@ -824,7 +827,7 @@
         </div>
 
         <div class="upload-dropzone" id="ai-scanner-dropzone" onclick="document.getElementById('scrap-photo-upload-input').click()">
-          <input type="file" id="scrap-photo-upload-input" accept="image/*" capture="environment" style="display: none;" onchange="processUploadedScrap(event)" />
+          <input type="file" id="scrap-photo-upload-input" accept="image/*" capture="environment" style="display: none;" onchange="processUploadedScrap(event)" onclick="this.value=''" />
           <span class="upload-cloud-icon">📥</span>
           <div class="upload-text"><strong>Click to upload</strong> or drag &amp; drop kitchen scrap photo</div>
           <div class="supported-files-tag">Accepts JPG, PNG, WEBP</div>

@@ -2857,6 +2857,10 @@
         DOM.scrapPhotoInput.click();
       });
 
+      DOM.scrapPhotoInput.addEventListener('click', function() {
+        this.value = '';
+      });
+
       DOM.scrapPhotoInput.addEventListener('change', (e) => {
         if (e.target.files && e.target.files[0]) {
           processUploadedScrapPhoto(e.target.files[0], false);
@@ -3046,149 +3050,22 @@
 
   const CHENNAI_DEMO_RECIPES = CHENNAI_RECIPES;
 
-  // 2. Self-Contained Upload / Scan Callback Routine
-  function processUploadedScrap(event) {
-    const file = event && event.target && event.target.files ? event.target.files[0] : (event && event.files ? event.files[0] : event);
-    if (!file) return;
+  // 1. Reusable Rich Recipe Card Generator
+  function buildChennaiRecipeCardHtml(recipe, confidence = "97.4%", showBanner = true) {
+    const bannerHtml = showBanner ? `
+      <div style="margin-bottom: 1.15rem; padding-bottom: 0.85rem; border-bottom: 1px solid #E8E1D5;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: #8C8277; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.35rem;">
+          Inference Match (Chennai Regional Model):
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;">
+          <span style="font-size: 1.15rem; font-weight: 800; color: #1B5E20;">✓ ${recipe.tamilName}</span>
+          <span style="font-size: 0.82rem; font-weight: 700; color: #B45309; background: #FEF3C7; padding: 0.2rem 0.6rem; border-radius: 9999px;">(Confidence: ${confidence})</span>
+        </div>
+      </div>
+    ` : '';
 
-    const preview = document.getElementById("scanner-preview-img");
-    const feedbackBox = document.getElementById("scanner-feedback-box");
-    const loader = document.getElementById("scanner-loader");
-    const details = document.getElementById("scanner-detection-details");
-    const proceedBtn = document.getElementById("btn-reveal-recipe");
-    const recipeContainer = document.getElementById("revealed-recipe-container");
-
-    if (!feedbackBox || !preview) return;
-
-    if (proceedBtn) proceedBtn.style.display = "none";
-    if (recipeContainer) {
-      recipeContainer.style.display = "none";
-      recipeContainer.innerHTML = "";
-    }
-
-    feedbackBox.style.display = "block";
-    if (loader) loader.style.display = "flex";
-    if (details) {
-      details.style.display = "none";
-      details.innerHTML = "";
-    }
-
-    const fileUrl = URL.createObjectURL(file);
-    preview.src = fileUrl;
-
-    const fileName = (file.name || "").toLowerCase();
-
-    // Chromatic color test via offscreen canvas
-    const img = new Image();
-    img.src = fileUrl;
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = 40;
-      canvas.height = 40;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, 40, 40);
-      const data = ctx.getImageData(0, 0, 40, 40).data;
-
-      let r = 0, g = 0, b = 0;
-      for (let i = 0; i < data.length; i += 4) {
-        r += data[i];
-        g += data[i + 1];
-        b += data[i + 2];
-      }
-      const count = data.length / 4;
-      const avgR = r / count;
-      const avgG = g / count;
-      const avgB = b / count;
-
-      // Detect Carrot vs Potato
-      let scrapId = 3;
-      let confidence = "97.4%";
-
-      const isCarrot = (fileName.includes("carrot") || fileName.includes("gajar") || (avgR > 120 && avgR > avgG * 1.25 && avgR > avgB * 1.25)) && !fileName.includes("potato") && !fileName.includes("aloo");
-
-      if (isCarrot) {
-        scrapId = 8;
-        confidence = "98.2%";
-      }
-
-      const recipe = CHENNAI_RECIPES[scrapId] || CHENNAI_RECIPES[3];
-
-      // Trigger UI presentation after 500ms inference simulation
-      setTimeout(() => {
-        if (loader) loader.style.display = "none";
-        if (proceedBtn) proceedBtn.style.display = "none";
-        if (!details) return;
-
-        details.style.display = "block";
-
-        // Inject BOTH the detection badge AND the full recipe card directly here:
-        details.innerHTML = `
-          <div style="margin-bottom: 1.15rem; padding-bottom: 0.85rem; border-bottom: 1px solid #E8E1D5;">
-            <div style="font-size: 0.8rem; font-weight: 700; color: #8C8277; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.35rem;">
-              Inference Match (Chennai Regional Model):
-            </div>
-            <div style="display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;">
-              <span style="font-size: 1.15rem; font-weight: 800; color: #1B5E20;">✓ ${recipe.tamilName}</span>
-              <span style="font-size: 0.82rem; font-weight: 700; color: #B45309; background: #FEF3C7; padding: 0.2rem 0.6rem; border-radius: 9999px;">(Confidence: ${confidence})</span>
-            </div>
-          </div>
-
-          <div class="revealed-recipe-card" style="background: #FFFFFF; border: 1px solid #E8E1D5; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 16px -2px rgba(31, 27, 22, 0.06); animation: fadeInDown 0.35s ease-out; margin-top: 0.75rem;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
-              <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-                <span style="background: #E8F5E9; color: #1B5E20; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">${recipe.course}</span>
-                <span style="background: #FEF3C7; color: #B45309; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">⏱️ ${recipe.time}</span>
-              </div>
-              <span style="font-size: 0.82rem; font-weight: 600; color: #8C8277;">Curated by ${recipe.chef}</span>
-            </div>
-
-            <h4 style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 800; color: #1F1B16; margin: 0 0 1rem 0; line-height: 1.3;">${recipe.title}</h4>
-
-            <div style="margin-bottom: 1.25rem;">
-              <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Pantry Spices Required:</h5>
-              <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
-                ${recipe.spices.map(s => `<span style="background: #F4EFE6; border: 1px solid #E8E1D5; color: #5C554D; font-size: 0.82rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px;">✓ ${s}</span>`).join("")}
-              </div>
-            </div>
-
-            <div style="margin-bottom: 1.25rem;">
-              <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Traditional Preparation Steps:</h5>
-              <ol style="margin: 0; padding-left: 1.25rem; color: #5C554D; font-size: 0.92rem; line-height: 1.65;">
-                ${recipe.steps.map(step => `<li style="margin-bottom: 0.5rem;">${step}</li>`).join("")}
-              </ol>
-            </div>
-
-            <div style="background: #FFFBEB; border-left: 4px solid #B45309; padding: 0.85rem 1rem; border-radius: 0 8px 8px 0; font-size: 0.86rem; color: #92400E; font-style: italic; line-height: 1.5;">
-              💡 <strong>Chennai Kitchen Wisdom:</strong> ${recipe.tip}
-            </div>
-          </div>
-        `;
-
-        // Synchronize with scrap checkboxes if present
-        if (typeof SELECTED_SCRAP_IDS !== "undefined" && typeof renderScrapsGrid === "function") {
-          SELECTED_SCRAP_IDS.clear();
-          SELECTED_SCRAP_IDS.add(scrapId);
-          renderScrapsGrid();
-        } else if (state && state.selectedScrapIds && typeof renderScrapsGrid === "function") {
-          state.selectedScrapIds.clear();
-          state.selectedScrapIds.add(scrapId);
-          renderScrapsGrid();
-        }
-
-        // Smoothly scroll details into view
-        details.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      }, 500);
-    };
-  }
-
-  // Standalone showRecipeForScrap renderer that also renders directly into #scanner-detection-details or container
-  function showRecipeForScrap(scrapId) {
-    const idNum = Number(scrapId) || 3;
-    const recipe = CHENNAI_RECIPES[idNum] || CHENNAI_RECIPES[3];
-    const details = document.getElementById("scanner-detection-details");
-    const container = document.getElementById("revealed-recipe-container");
-
-    const recipeHtml = `
+    return `
+      ${bannerHtml}
       <div class="revealed-recipe-card" style="background: #FFFFFF; border: 1px solid #E8E1D5; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 16px -2px rgba(31, 27, 22, 0.06); animation: fadeInDown 0.35s ease-out; margin-top: 0.75rem;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
           <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
@@ -3219,15 +3096,199 @@
         </div>
       </div>
     `;
+  }
+
+  // 2. Bulletproof Classification Routine (combines filename inspection, canvas chromatic test, and immediate safety fallback)
+  function classifyScrapImage(source, fileName, callback) {
+    let executed = false;
+    const finish = (scrapId, confidence) => {
+      if (executed) return;
+      executed = true;
+      callback(scrapId, confidence);
+    };
+
+    const name = (fileName || (source && source.name) || "").toLowerCase();
+    const isCarrotByName = (name.includes("carrot") || name.includes("gajar")) && !name.includes("potato") && !name.includes("aloo");
+
+    // Fast safety fallback: guarantees recipe is rendered within 200ms even if canvas throws or hangs
+    const fallbackTimer = setTimeout(() => {
+      finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.4%");
+    }, 200);
+
+    try {
+      let src = "";
+      if (typeof source === "string") {
+        src = source;
+      } else if (source instanceof Blob || source instanceof File) {
+        src = URL.createObjectURL(source);
+      }
+
+      if (!src) {
+        clearTimeout(fallbackTimer);
+        finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.4%");
+        return;
+      }
+
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.src = src;
+
+      img.onload = () => {
+        clearTimeout(fallbackTimer);
+        try {
+          const canvas = document.createElement("canvas");
+          canvas.width = 40;
+          canvas.height = 40;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, 40, 40);
+          const data = ctx.getImageData(0, 0, 40, 40).data;
+
+          let r = 0, g = 0, b = 0;
+          for (let i = 0; i < data.length; i += 4) {
+            r += data[i];
+            g += data[i + 1];
+            b += data[i + 2];
+          }
+          const count = data.length / 4;
+          const avgR = r / count;
+          const avgG = g / count;
+          const avgB = b / count;
+
+          const isCarrot = (name.includes("carrot") || name.includes("gajar") || (avgR > 120 && avgR > avgG * 1.25 && avgR > avgB * 1.25)) && !name.includes("potato") && !name.includes("aloo");
+
+          if (isCarrot) {
+            finish(8, "98.2%");
+          } else {
+            finish(3, "97.4%");
+          }
+        } catch (canvasErr) {
+          // If canvas tainted SecurityError or cross-origin restrictions occur, use safe fallback
+          finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.4%");
+        }
+      };
+
+      img.onerror = () => {
+        clearTimeout(fallbackTimer);
+        finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.4%");
+      };
+    } catch (err) {
+      clearTimeout(fallbackTimer);
+      finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.4%");
+    }
+  }
+
+  // 3. Self-Contained Upload / Scan Callback Routine (Guaranteed recipe display)
+  function processUploadedScrap(event) {
+    const file = event && event.target && event.target.files ? event.target.files[0] : (event && event.files ? event.files[0] : event);
+    if (!file) return;
+
+    // Reset input value so selecting the same file again triggers change event
+    if (event && event.target && event.target.value !== undefined) {
+      event.target.value = '';
+    }
+
+    const preview = document.getElementById("scanner-preview-img");
+    const feedbackBox = document.getElementById("scanner-feedback-box");
+    const loader = document.getElementById("scanner-loader");
+    const details = document.getElementById("scanner-detection-details");
+    const proceedBtn = document.getElementById("btn-reveal-recipe");
+    const recipeContainer = document.getElementById("revealed-recipe-container");
+
+    if (feedbackBox) feedbackBox.style.display = "block";
+    if (preview) {
+      try {
+        preview.src = URL.createObjectURL(file);
+      } catch (e) {
+        // object url fallback
+      }
+    }
+    if (loader) loader.style.display = "flex";
+    if (details) {
+      details.style.display = "none";
+      details.innerHTML = "";
+    }
+    if (recipeContainer) {
+      recipeContainer.style.display = "none";
+      recipeContainer.innerHTML = "";
+    }
+    if (proceedBtn) proceedBtn.style.display = "none";
+
+    classifyScrapImage(file, file.name, (scrapId, confidence) => {
+      const recipe = CHENNAI_RECIPES[scrapId] || CHENNAI_RECIPES[3];
+
+      setTimeout(() => {
+        if (loader) loader.style.display = "none";
+
+        const cardHtml = buildChennaiRecipeCardHtml(recipe, confidence, true);
+
+        // 1. Render directly inside scanner-detection-details immediately
+        if (details) {
+          details.style.display = "block";
+          details.innerHTML = cardHtml;
+        }
+
+        // 2. ALSO render into revealed-recipe-container for full visibility
+        if (recipeContainer) {
+          recipeContainer.style.display = "block";
+          recipeContainer.innerHTML = cardHtml;
+        }
+
+        // 3. Ensure proceed button is visible and smoothly scrolls to recipes
+        if (proceedBtn) {
+          proceedBtn.style.display = "inline-flex";
+          proceedBtn.onclick = () => {
+            const target = recipeContainer || details;
+            if (target) {
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          };
+        }
+
+        // 4. Synchronize with scrap checkboxes if present
+        if (typeof SELECTED_SCRAP_IDS !== "undefined" && typeof renderScrapsGrid === "function") {
+          SELECTED_SCRAP_IDS.clear();
+          SELECTED_SCRAP_IDS.add(scrapId);
+          renderScrapsGrid();
+        } else if (state && state.selectedScrapIds && typeof renderScrapsGrid === "function") {
+          state.selectedScrapIds.clear();
+          state.selectedScrapIds.add(scrapId);
+          renderScrapsGrid();
+        }
+
+        // Smoothly scroll details into view
+        if (details) {
+          details.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      }, 350);
+    });
+  }
+
+  // Standalone showRecipeForScrap renderer that renders directly into details, revealed-container, and home-scanner
+  function showRecipeForScrap(scrapId) {
+    const idNum = Number(scrapId) || 3;
+    const recipe = CHENNAI_RECIPES[idNum] || CHENNAI_RECIPES[3];
+    const details = document.getElementById("scanner-detection-details");
+    const container = document.getElementById("revealed-recipe-container");
+    const homeBox = document.getElementById("home-scanner-recipe-box");
+
+    const recipeHtml = buildChennaiRecipeCardHtml(recipe, "98.2%", false);
 
     if (details) {
       details.style.display = "block";
       details.innerHTML = recipeHtml;
-      details.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    } else if (container) {
+    }
+    if (container) {
       container.style.display = "block";
       container.innerHTML = recipeHtml;
-      container.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    if (homeBox) {
+      homeBox.style.display = "block";
+      homeBox.innerHTML = recipeHtml;
+    }
+
+    const scrollTarget = details || container || homeBox;
+    if (scrollTarget) {
+      scrollTarget.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }
 
@@ -3243,6 +3304,8 @@
   // Global exports for inline HTML handlers & external script accessibility
   window.CHENNAI_RECIPES = CHENNAI_RECIPES;
   window.CHENNAI_DEMO_RECIPES = CHENNAI_RECIPES;
+  window.buildChennaiRecipeCardHtml = buildChennaiRecipeCardHtml;
+  window.classifyScrapImage = classifyScrapImage;
   window.showRecipeForScrap = showRecipeForScrap;
   window.renderScannedRecipeCard = showRecipeForScrap;
   window.revealScannedRecipe = showRecipeForScrap;
@@ -3325,6 +3388,34 @@
       scanResult = generateClientSideScanResult(imageName, sampleType);
     }
 
+    if (!sampleType && imageSrc) {
+      classifyScrapImage(imageSrc, imageName, (refinedId, refinedConf) => {
+        if (scanResult && scanResult.detected_scraps) {
+          const matchIdx = scanResult.detected_scraps.findIndex(s => s.id === refinedId);
+          if (matchIdx > 0) {
+            const [item] = scanResult.detected_scraps.splice(matchIdx, 1);
+            item.confidence = parseFloat(refinedConf) / 100 || 0.98;
+            item.confidence_pct = refinedConf;
+            scanResult.detected_scraps.unshift(item);
+          } else if (matchIdx === -1) {
+            const sc = state.scraps.find(s => s.id === refinedId) || { id: refinedId, name_en: refinedId === 8 ? "Carrot & Radish Skins" : "Potato Peels", category_id: 1, common_uses: "" };
+            scanResult.detected_scraps.unshift({
+              id: sc.id,
+              scrap_id: sc.id,
+              name_en: sc.name_en,
+              category_id: sc.category_id,
+              confidence: parseFloat(refinedConf) / 100 || 0.98,
+              confidence_pct: refinedConf,
+              common_uses: sc.common_uses,
+              matching_recipes: 1
+            });
+          }
+        }
+        renderScanResults(scanResult, isCatalog);
+      });
+      return;
+    }
+
     renderScanResults(scanResult, isCatalog);
   }
 
@@ -3332,7 +3423,7 @@
     let scrapIdsWithConf = [];
 
     if (sampleType === 'mixed_peels') {
-      scrapIdsWithConf = [{ id: 1, conf: 0.96 }, { id: 3, conf: 0.93 }, { id: 2, conf: 0.88 }];
+      scrapIdsWithConf = [{ id: 3, conf: 0.97 }, { id: 1, conf: 0.94 }, { id: 2, conf: 0.88 }];
     } else if (sampleType === 'stems_leaves') {
       scrapIdsWithConf = [{ id: 10, conf: 0.95 }, { id: 11, conf: 0.92 }, { id: 13, conf: 0.87 }];
     } else if (sampleType === 'seeds_rinds') {
@@ -3341,12 +3432,13 @@
       const lower = (imageName || '').toLowerCase();
       const detected = [];
       const rules = [
+        { regex: /carrot|gajar/, id: 8, conf: 0.98 },
+        { regex: /potato|aloo/, id: 3, conf: 0.97 },
         { regex: /bottle|lauki|gourd/, id: 1, conf: 0.95 },
         { regex: /ridge|turai|jhinge/, id: 2, conf: 0.92 },
-        { regex: /potato|aloo/, id: 3, conf: 0.96 },
         { regex: /banana|kele/, id: 4, conf: 0.91 },
         { regex: /pumpkin|kaddu/, id: 6, conf: 0.93 },
-        { regex: /radish|mooli|carrot/, id: 8, conf: 0.90 },
+        { regex: /radish|mooli/, id: 8, conf: 0.90 },
         { regex: /cauliflower|gobhi|gobi/, id: 10, conf: 0.96 },
         { regex: /coriander|dhaniya|herb/, id: 11, conf: 0.94 },
         { regex: /watermelon|tarbooj|rind/, id: 16, conf: 0.97 },
@@ -3366,7 +3458,7 @@
       if (detected.length > 0) {
         scrapIdsWithConf = detected.slice(0, 4);
       } else {
-        scrapIdsWithConf = [{ id: 1, conf: 0.95 }, { id: 3, conf: 0.92 }, { id: 11, conf: 0.87 }];
+        scrapIdsWithConf = [{ id: 3, conf: 0.97 }, { id: 1, conf: 0.93 }, { id: 8, conf: 0.90 }];
       }
     }
 
@@ -3478,6 +3570,15 @@
       DOM.catalogScannerImpactHint.textContent = `🌱 Auto-selected ${items.length} ingredients in catalog below`;
     }
 
+    // Render the dedicated Chennai Upcycled Recipe directly inside Home Scanner Result Box
+    const homeRecipeBox = document.getElementById("home-scanner-recipe-box");
+    if (homeRecipeBox && items.length > 0) {
+      const topScrap = items[0];
+      const recipe = CHENNAI_RECIPES[topScrap.id] || CHENNAI_RECIPES[3];
+      homeRecipeBox.style.display = "block";
+      homeRecipeBox.innerHTML = buildChennaiRecipeCardHtml(recipe, topScrap.confidence_pct || "97.4%", true);
+    }
+
     updateAfterScanSelection();
     showToast(`✨ Scanned photo! Auto-selected ${items.length} kitchen ingredients.`, 'success');
   }
@@ -3498,6 +3599,12 @@
   }
 
   function resetPhotoScanner(isCatalog = false) {
+    const homeRecipeBox = document.getElementById("home-scanner-recipe-box");
+    if (homeRecipeBox) {
+      homeRecipeBox.style.display = "none";
+      homeRecipeBox.innerHTML = "";
+    }
+
     if (isCatalog) {
       if (DOM.catalogScrapPhotoInput) DOM.catalogScrapPhotoInput.value = '';
       if (DOM.catalogScannerPreviewImg) DOM.catalogScannerPreviewImg.src = '';

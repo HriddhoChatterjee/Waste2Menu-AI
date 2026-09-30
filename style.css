@@ -3900,6 +3900,11 @@ dialog[open] .modal-card {
   animation: fadeInDown 0.35s ease-out;
 }
 
+.home-scanner-recipe-box {
+  width: 100%;
+  animation: fadeInDown 0.35s ease-out;
+}
+
 @keyframes fadeInDown {
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
