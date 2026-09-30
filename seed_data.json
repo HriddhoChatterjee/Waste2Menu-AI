@@ -61,9 +61,9 @@
     {
       "id": 3,
       "category_id": 1,
-      "name_en": "Potato Peels",
-      "name_regional": "Aloo Chilka, Aloo Khosha, Urulaikizhangu Thol",
-      "common_uses": "Shallow-fried with poppy seeds (Posto Aloo Khosha Bhaja) or seasoned with chaat masala into crispy chips."
+      "name_en": "Potato Peels (உருளைக்கிழங்கு தோல் / Urulaikizhangu Thol)",
+      "name_regional": "Urulaikizhangu Thol, Aloo Chilka, Aloo Khosha",
+      "common_uses": "Roasted crisp in cold-pressed gingelly oil with black pepper (Urulaikizhangu Thol Milagu Varuval) or seasoned with chaat masala into crispy chips."
     },
     {
       "id": 4,
@@ -96,9 +96,9 @@
     {
       "id": 8,
       "category_id": 1,
-      "name_en": "Carrot & Radish Skins",
-      "name_regional": "Gajar / Mooli Chilka, Mulo Khosha",
-      "common_uses": "Sautéed into quick dry subzis with mustard seeds or blended into mixed-peel chutneys."
+      "name_en": "Carrot Peels & Tops (கேரட் தோல் / Carrot Thol)",
+      "name_regional": "Carrot Thol, Gajar Chilka, Mulo Khosha",
+      "common_uses": "Roasted with lentils and tamarind into thick Chennai-style Thogayal (Parambariya Carrot Thol Thogayal) or sautéed into quick dry subzis."
     },
     {
       "id": 9,
@@ -349,31 +349,32 @@
     },
     {
       "id": 3,
-      "title": "Posto Aloo Khosha Bhaja (Potato Peel Poppy Seed Fry)",
+      "title": "Urulaikizhangu Thol Milagu Varuval (Crispy Pepper Potato Peel Roast)",
       "scrap_id": 3,
-      "chef_name": "Chef Sourav Ganguly",
-      "chef_affiliation": "Kolkata Heritage Kitchen",
-      "prep_time_minutes": 15,
+      "chef_name": "Chef Sundaram (Mylapore Kitchens)",
+      "chef_affiliation": "Mylapore Heritage Kitchens",
+      "prep_time_minutes": 12,
       "difficulty": "Easy",
-      "course_type": "Crispy Bhaja/Side",
+      "course_type": "South Indian Poriyal / Varuval",
       "dietary_type": "Pure Veg",
       "pantry_staples": [
-        "Mustard oil",
-        "Whole poppy seeds (Posto)",
-        "Dry red chilli",
-        "Turmeric powder",
-        "Kashmiri red chilli",
-        "Salt"
+        "Gingelly oil (Nallennai)",
+        "Mustard seeds (Kadugu)",
+        "Urad dal (Ulutham paruppu)",
+        "Curry leaves (Karuveppilai)",
+        "Crushed black pepper (Milagu)",
+        "Turmeric powder (Manjal podi)",
+        "Asafoetida (Perungayam)",
+        "Sea salt"
       ],
       "step_by_step_instructions": [
-        "Scrub whole potatoes with a brush before peeling. Keep the peeled skins submerged in cold water to wash away residual starch.",
-        "Dry the potato peels completely between clean kitchen towels.",
-        "Heat 2 tablespoons mustard oil in a heavy-bottomed skillet until pungent and clear.",
-        "Add one broken dry red chilli and immediately toss in the dried potato peels. Fry on high flame for 3 minutes with turmeric and salt.",
-        "Reduce heat to medium and sprinkle 1.5 tablespoons of raw whole white poppy seeds (posto) over the crispy peels.",
-        "Toss for 60 seconds until the poppy seeds turn fragrant and nutty. Serve immediately alongside rice and Biulir Dal."
+        "Wash the thick potato peelings thoroughly in salted lukewarm water to strip away dirt and extra starch; pat completely dry with a clean cloth.",
+        "Heat 1.5 tbsp authentic cold-pressed gingelly oil (nallennai) in an iron vadachatti (kadai).",
+        "Splutter mustard seeds, ulutham paruppu (urad dal), a generous pinch of perungayam, and fresh karuveppilai.",
+        "Toss in the dried potato peels with manjal podi and sea salt. Sauté on medium-high heat for 7-8 minutes uncovered until dark golden and crackling.",
+        "Finish by sprinkling freshly pounded black pepper (karuppu milagu thool) right before turning off the stove. Serve as a crunchy side for Mor Kuzhambu or Rasam Sadam."
       ],
-      "chef_wisdom_tip": "Chef Tip: Over 60% of a potato's potassium and iron reside in the skin. Never discard skins of organically grown potatoes!",
+      "chef_wisdom_tip": "Do not put a lid on the kadai. Sautéing uncovered in an iron pan with nallennai gives potato skins an irresistible, chip-like crunch without deep frying.",
       "servings": 4
     },
     {
@@ -491,29 +492,32 @@
     },
     {
       "id": 8,
-      "title": "Gajar Mooli Chilka Rai Ki Subzi (Crunchy Mustard Tossed Peel Sauté)",
+      "title": "Parambariya Carrot Thol Thogayal (Ancestral Carrot Peel & Lentil Chutney)",
       "scrap_id": 8,
-      "chef_name": "Nani Sushila Devi",
-      "chef_affiliation": "Mathura Braj Rasoi",
-      "prep_time_minutes": 12,
+      "chef_name": "Chef Meenakshi (T. Nagar)",
+      "chef_affiliation": "T. Nagar Traditional Kitchens",
+      "prep_time_minutes": 14,
       "difficulty": "Easy",
-      "course_type": "Crispy Bhaja/Side",
+      "course_type": "Traditional Chennai Thogayal",
       "dietary_type": "Pure Veg",
       "pantry_staples": [
-        "Mustard seeds (Rai)",
-        "Green chillies",
-        "Turmeric powder",
-        "Amchur (Dry mango powder)",
-        "Mustard oil",
-        "Salt"
+        "Gingelly oil (Nallennai)",
+        "Urad dal (Ulutham paruppu)",
+        "Chana dal (Kadalai paruppu)",
+        "Dry red chillies (Gundu Milagai)",
+        "Asafoetida (Perungayam)",
+        "Tamarind (Puli)",
+        "Curry leaves",
+        "Rock salt"
       ],
       "step_by_step_instructions": [
-        "Wash carrots and radishes with a vegetable brush before peeling into long strips.",
-        "Heat mustard oil in a pan, crackle black mustard seeds and slit green chillies.",
-        "Add the peels, turmeric, and salt. Sauté on medium flame for 5 minutes without covering so they stay crunchy.",
-        "Finish with a pinch of amchur powder and serve as a tangy side accompaniment with dal and phulkas."
+        "Rinse the carrot peel ribbons and tender top crown trimmings thoroughly; chop roughly.",
+        "Heat 1 tbsp nallennai in a pan. Roast ulutham paruppu, kadalai paruppu, dry red chillies, and a generous pinch of perungayam until golden and aromatic.",
+        "Add the chopped carrot skins and sauté for 3-4 minutes until wilted and tender.",
+        "Let the mixture cool down. Transfer to a mixie jar with a marble-sized piece of puli (tamarind) and rock salt.",
+        "Pulse with minimal water into a coarse, thick thogayal. Serve piping hot with steamed Ponni rice and a generous dollop of nallennai or ghee."
       ],
-      "chef_wisdom_tip": "Carrot skins hold high beta-carotene while radish skins possess natural pungency that softens beautifully when flash-sautéed.",
+      "chef_wisdom_tip": "Carrot skins contain maximum dietary fiber and beta-carotene. The sour tamarind and toasted dals balance the natural sweetness of the carrot ribbons.",
       "servings": 4
     },
     {

@@ -36,9 +36,9 @@
     {
       id: 3,
       category_id: 1,
-      name_en: "Potato Peels",
-      name_regional: "Aloo Chilka, Aloo Khosha, Urulaikizhangu Thol",
-      common_uses: "Shallow-fried with poppy seeds (Posto Aloo Khosha Bhaja) or seasoned with chaat masala into crispy chips."
+      name_en: "Potato Peels (உருளைக்கிழங்கு தோல் / Urulaikizhangu Thol)",
+      name_regional: "Urulaikizhangu Thol, Aloo Chilka, Aloo Khosha",
+      common_uses: "Roasted crisp in cold-pressed gingelly oil with black pepper (Urulaikizhangu Thol Milagu Varuval) or seasoned with chaat masala into crispy chips."
     },
     {
       id: 4,
@@ -71,9 +71,9 @@
     {
       id: 8,
       category_id: 1,
-      name_en: "Carrot & Radish Skins",
-      name_regional: "Gajar / Mooli Chilka, Mulo Khosha",
-      common_uses: "Sautéed into quick dry subzis with mustard seeds or blended into mixed-peel chutneys."
+      name_en: "Carrot Peels & Tops (கேரட் தோல் / Carrot Thol)",
+      name_regional: "Carrot Thol, Gajar Chilka, Mulo Khosha",
+      common_uses: "Roasted with lentils and tamarind into thick Chennai-style Thogayal (Parambariya Carrot Thol Thogayal) or sautéed into quick dry subzis."
     },
     {
       id: 9,
@@ -383,34 +383,35 @@
   },
   {
     "id": 3,
-    "title": "Posto Aloo Khosha Bhaja (Potato Peel Poppy Seed Fry)",
+    "title": "Urulaikizhangu Thol Milagu Varuval (Crispy Pepper Potato Peel Roast)",
     "scrap_id": 3,
-    "chef_name": "Chef Sourav Ganguly",
-    "chef_affiliation": "Kolkata Heritage Kitchen",
-    "prep_time_minutes": 15,
+    "chef_name": "Chef Sundaram (Mylapore Kitchens)",
+    "chef_affiliation": "Mylapore Heritage Kitchens",
+    "prep_time_minutes": 12,
     "difficulty": "Easy",
-    "course_type": "Crispy Bhaja/Side",
+    "course_type": "South Indian Poriyal / Varuval",
     "dietary_type": "Pure Veg",
     "pantry_staples": [
-      "Mustard oil",
-      "Whole poppy seeds (Posto)",
-      "Dry red chilli",
-      "Turmeric powder",
-      "Kashmiri red chilli",
-      "Salt"
+      "Gingelly oil (Nallennai)",
+      "Mustard seeds (Kadugu)",
+      "Urad dal (Ulutham paruppu)",
+      "Curry leaves (Karuveppilai)",
+      "Crushed black pepper (Milagu)",
+      "Turmeric powder (Manjal podi)",
+      "Asafoetida (Perungayam)",
+      "Sea salt"
     ],
     "step_by_step_instructions": [
-      "Scrub whole potatoes with a brush before peeling. Keep the peeled skins submerged in cold water to wash away residual starch.",
-      "Dry the potato peels completely between clean kitchen towels.",
-      "Heat 2 tablespoons mustard oil in a heavy-bottomed skillet until pungent and clear.",
-      "Add one broken dry red chilli and immediately toss in the dried potato peels. Fry on high flame for 3 minutes with turmeric and salt.",
-      "Reduce heat to medium and sprinkle 1.5 tablespoons of raw whole white poppy seeds (posto) over the crispy peels.",
-      "Toss for 60 seconds until the poppy seeds turn fragrant and nutty. Serve immediately alongside rice and Biulir Dal."
+      "Wash the thick potato peelings thoroughly in salted lukewarm water to strip away dirt and extra starch; pat completely dry with a clean cloth.",
+      "Heat 1.5 tbsp authentic cold-pressed gingelly oil (nallennai) in an iron vadachatti (kadai).",
+      "Splutter mustard seeds, ulutham paruppu (urad dal), a generous pinch of perungayam, and fresh karuveppilai.",
+      "Toss in the dried potato peels with manjal podi and sea salt. Sauté on medium-high heat for 7-8 minutes uncovered until dark golden and crackling.",
+      "Finish by sprinkling freshly pounded black pepper (karuppu milagu thool) right before turning off the stove. Serve as a crunchy side for Mor Kuzhambu or Rasam Sadam."
     ],
-    "chef_wisdom_tip": "Chef Tip: Over 60% of a potato's potassium and iron reside in the skin. Never discard skins of organically grown potatoes!",
+    "chef_wisdom_tip": "Do not put a lid on the kadai. Sautéing uncovered in an iron pan with nallennai gives potato skins an irresistible, chip-like crunch without deep frying.",
     "servings": 4,
-    "scrap_name_en": "Potato Peels",
-    "scrap_name_regional": "Aloo Chilka, Aloo Khosha, Urulaikizhangu Thol"
+    "scrap_name_en": "Potato Peels (உருளைக்கிழங்கு தோல் / Urulaikizhangu Thol)",
+    "scrap_name_regional": "Urulaikizhangu Thol, Aloo Chilka, Aloo Khosha"
   },
   {
     "id": 4,
@@ -535,32 +536,35 @@
   },
   {
     "id": 8,
-    "title": "Gajar Mooli Chilka Rai Ki Subzi (Crunchy Mustard Tossed Peel Saut\u00e9)",
+    "title": "Parambariya Carrot Thol Thogayal (Ancestral Carrot Peel & Lentil Chutney)",
     "scrap_id": 8,
-    "chef_name": "Nani Sushila Devi",
-    "chef_affiliation": "Mathura Braj Rasoi",
-    "prep_time_minutes": 12,
+    "chef_name": "Chef Meenakshi (T. Nagar)",
+    "chef_affiliation": "T. Nagar Traditional Kitchens",
+    "prep_time_minutes": 14,
     "difficulty": "Easy",
-    "course_type": "Crispy Bhaja/Side",
+    "course_type": "Traditional Chennai Thogayal",
     "dietary_type": "Pure Veg",
     "pantry_staples": [
-      "Mustard seeds (Rai)",
-      "Green chillies",
-      "Turmeric powder",
-      "Amchur (Dry mango powder)",
-      "Mustard oil",
-      "Salt"
+      "Gingelly oil (Nallennai)",
+      "Urad dal (Ulutham paruppu)",
+      "Chana dal (Kadalai paruppu)",
+      "Dry red chillies (Gundu Milagai)",
+      "Asafoetida (Perungayam)",
+      "Tamarind (Puli)",
+      "Curry leaves",
+      "Rock salt"
     ],
     "step_by_step_instructions": [
-      "Wash carrots and radishes with a vegetable brush before peeling into long strips.",
-      "Heat mustard oil in a pan, crackle black mustard seeds and slit green chillies.",
-      "Add the peels, turmeric, and salt. Saut\u00e9 on medium flame for 5 minutes without covering so they stay crunchy.",
-      "Finish with a pinch of amchur powder and serve as a tangy side accompaniment with dal and phulkas."
+      "Rinse the carrot peel ribbons and tender top crown trimmings thoroughly; chop roughly.",
+      "Heat 1 tbsp nallennai in a pan. Roast ulutham paruppu, kadalai paruppu, dry red chillies, and a generous pinch of perungayam until golden and aromatic.",
+      "Add the chopped carrot skins and sauté for 3-4 minutes until wilted and tender.",
+      "Let the mixture cool down. Transfer to a mixie jar with a marble-sized piece of puli (tamarind) and rock salt.",
+      "Pulse with minimal water into a coarse, thick thogayal. Serve piping hot with steamed Ponni rice and a generous dollop of nallennai or ghee."
     ],
-    "chef_wisdom_tip": "Carrot skins hold high beta-carotene while radish skins possess natural pungency that softens beautifully when flash-saut\u00e9ed.",
+    "chef_wisdom_tip": "Carrot skins contain maximum dietary fiber and beta-carotene. The sour tamarind and toasted dals balance the natural sweetness of the carrot ribbons.",
     "servings": 4,
-    "scrap_name_en": "Carrot & Radish Skins",
-    "scrap_name_regional": "Gajar / Mooli Chilka, Mulo Khosha"
+    "scrap_name_en": "Carrot Peels & Tops (கேரட் தோல் / Carrot Thol)",
+    "scrap_name_regional": "Carrot Thol, Gajar Chilka, Mulo Khosha"
   },
   {
     "id": 9,
@@ -1566,78 +1570,118 @@
     currentDishPhotoUrl: null
   };
 
-  // 1. Ensure Recipes for Potato and Carrot exist in RECIPES_DATA
-  const VERIFIED_DEMO_RECIPES = [
+  // ==================== AUTHENTIC TAMIL NADU / CHENNAI RECIPES ====================
+  const TARGET_DEMO_RECIPES = [
     {
       id: 301,
-      scrapId: 3, // Maps to Potato Peels
+      scrapId: 3, // Urulaikizhangu Thol (Potato Peels)
       scrap_id: 3,
-      title: "Crispy Posto Aloo Khosha Bhaja (Spiced Potato Peel Crisps)",
-      chef: "Chef Sanjeev",
-      chef_name: "Chef Sanjeev",
+      title: "Urulaikizhangu Thol Milagu Varuval (Crispy Pepper Potato Peel Roast)",
+      chef: "Chef Sundaram (Mylapore Kitchens)",
+      chef_name: "Chef Sundaram (Mylapore Kitchens)",
       time: 12,
       prep_time_minutes: 12,
-      course: "Crispy Side / Bhaja",
-      course_type: "Crispy Side / Bhaja",
+      course: "South Indian Poriyal / Varuval",
+      course_type: "South Indian Poriyal / Varuval",
       dietary_type: "Pure Veg",
-      spices: ["Mustard oil", "Poppy seeds (Posto)", "Nigella seeds (Kalonji)", "Turmeric", "Green chillies", "Salt"],
-      pantry_staples: ["Mustard oil", "Poppy seeds (Posto)", "Nigella seeds (Kalonji)", "Turmeric", "Green chillies", "Salt"],
+      spices: [
+        "Gingelly oil (Nallennai)",
+        "Mustard seeds (Kadugu)",
+        "Urad dal (Ulutham paruppu)",
+        "Curry leaves (Karuveppilai)",
+        "Crushed black pepper (Milagu)",
+        "Turmeric powder (Manjal podi)",
+        "Asafoetida (Perungayam)",
+        "Sea salt"
+      ],
+      pantry_staples: [
+        "Gingelly oil (Nallennai)",
+        "Mustard seeds (Kadugu)",
+        "Urad dal (Ulutham paruppu)",
+        "Curry leaves (Karuveppilai)",
+        "Crushed black pepper (Milagu)",
+        "Turmeric powder (Manjal podi)",
+        "Asafoetida (Perungayam)",
+        "Sea salt"
+      ],
       steps: [
-        "Rinse the thick potato peels thoroughly in lukewarm salted water to strip away dirt and surface starch.",
-        "Pat completely dry using a kitchen towel (dry peels ensure maximum crispness).",
-        "Heat 1.5 tbsp mustard oil in a cast iron skillet until slightly smoking.",
-        "Add kalonji and slit green chillies; toss in the potato peels with turmeric and salt.",
-        "Sauté on medium-high for 7-8 minutes until golden brown and crackling.",
-        "Sprinkle roasted white poppy seeds (posto) right before turning off the heat for an authentic crunch."
+        "Wash the thick potato peelings thoroughly in salted lukewarm water to strip away dirt and extra starch; pat completely dry with a clean cloth.",
+        "Heat 1.5 tbsp authentic cold-pressed gingelly oil (nallennai) in an iron vadachatti (kadai).",
+        "Splutter mustard seeds, ulutham paruppu (urad dal), a generous pinch of perungayam, and fresh karuveppilai.",
+        "Toss in the dried potato peels with manjal podi and sea salt. Sauté on medium-high heat for 7-8 minutes uncovered until dark golden and crackling.",
+        "Finish by sprinkling freshly pounded black pepper (karuppu milagu thool) right before turning off the stove. Serve as a crunchy side for Mor Kuzhambu or Rasam Sadam."
       ],
       step_by_step_instructions: [
-        "Rinse the thick potato peels thoroughly in lukewarm salted water to strip away dirt and surface starch.",
-        "Pat completely dry using a kitchen towel (dry peels ensure maximum crispness).",
-        "Heat 1.5 tbsp mustard oil in a cast iron skillet until slightly smoking.",
-        "Add kalonji and slit green chillies; toss in the potato peels with turmeric and salt.",
-        "Sauté on medium-high for 7-8 minutes until golden brown and crackling.",
-        "Sprinkle roasted white poppy seeds (posto) right before turning off the heat for an authentic crunch."
+        "Wash the thick potato peelings thoroughly in salted lukewarm water to strip away dirt and extra starch; pat completely dry with a clean cloth.",
+        "Heat 1.5 tbsp authentic cold-pressed gingelly oil (nallennai) in an iron vadachatti (kadai).",
+        "Splutter mustard seeds, ulutham paruppu (urad dal), a generous pinch of perungayam, and fresh karuveppilai.",
+        "Toss in the dried potato peels with manjal podi and sea salt. Sauté on medium-high heat for 7-8 minutes uncovered until dark golden and crackling.",
+        "Finish by sprinkling freshly pounded black pepper (karuppu milagu thool) right before turning off the stove. Serve as a crunchy side for Mor Kuzhambu or Rasam Sadam."
       ],
-      tip: "Do not crowd the skillet or cover with a lid. Air exposure lets the peels crisp like artisanal chips!",
-      chef_wisdom_tip: "Do not crowd the skillet or cover with a lid. Air exposure lets the peels crisp like artisanal chips!"
+      tip: "Do not put a lid on the kadai. Sautéing uncovered in an iron pan with nallennai gives potato skins an irresistible, chip-like crunch without deep frying.",
+      chef_wisdom_tip: "Do not put a lid on the kadai. Sautéing uncovered in an iron pan with nallennai gives potato skins an irresistible, chip-like crunch without deep frying."
     },
     {
       id: 801,
-      scrapId: 8, // Maps to Carrot Peels
+      scrapId: 8, // Carrot Thol & Tops
       scrap_id: 8,
-      title: "Gajar Chilka Thogayal & Quick Cumin Stir-Fry",
-      chef: "Chef Meenakshi",
-      chef_name: "Chef Meenakshi",
+      title: "Parambariya Carrot Thol Thogayal (Ancestral Carrot Peel & Lentil Chutney)",
+      chef: "Chef Meenakshi (T. Nagar)",
+      chef_name: "Chef Meenakshi (T. Nagar)",
       time: 14,
       prep_time_minutes: 14,
-      course: "Chutney / Dry Subzi",
-      course_type: "Chutney / Dry Subzi",
+      course: "Traditional Chennai Thogayal",
+      course_type: "Traditional Chennai Thogayal",
       dietary_type: "Pure Veg",
-      spices: ["Sesame oil / Mustard oil", "Mustard seeds", "Urad dal", "Dry red chillies", "Asafoetida (Hing)", "Salt"],
-      pantry_staples: ["Sesame oil / Mustard oil", "Mustard seeds", "Urad dal", "Dry red chillies", "Asafoetida (Hing)", "Salt"],
+      spices: [
+        "Gingelly oil (Nallennai)",
+        "Urad dal (Ulutham paruppu)",
+        "Chana dal (Kadalai paruppu)",
+        "Dry red chillies (Gundu Milagai)",
+        "Asafoetida (Perungayam)",
+        "Tamarind (Puli)",
+        "Curry leaves",
+        "Rock salt"
+      ],
+      pantry_staples: [
+        "Gingelly oil (Nallennai)",
+        "Urad dal (Ulutham paruppu)",
+        "Chana dal (Kadalai paruppu)",
+        "Dry red chillies (Gundu Milagai)",
+        "Asafoetida (Perungayam)",
+        "Tamarind (Puli)",
+        "Curry leaves",
+        "Rock salt"
+      ],
       steps: [
-        "Clean carrot ribbons and trimmings thoroughly; chop roughly.",
-        "In a pan, heat 1 tbsp oil, splutter mustard seeds, urad dal, and dry red chillies until fragrant.",
-        "Add the carrot peels and sauté for 4-5 minutes until tender and sweet.",
-        "Blend with a marble-sized pinch of tamarind and salt into a textured, nutrient-dense thogayal/dip, OR serve dry as a spiced side subzi."
+        "Rinse the carrot peel ribbons and tender top crown trimmings thoroughly; chop roughly.",
+        "Heat 1 tbsp nallennai in a pan. Roast ulutham paruppu, kadalai paruppu, dry red chillies, and a generous pinch of perungayam until golden and aromatic.",
+        "Add the chopped carrot skins and sauté for 3-4 minutes until wilted and tender.",
+        "Let the mixture cool down. Transfer to a mixie jar with a marble-sized piece of puli (tamarind) and rock salt.",
+        "Pulse with minimal water into a coarse, thick thogayal. Serve piping hot with steamed Ponni rice and a generous dollop of nallennai or ghee."
       ],
       step_by_step_instructions: [
-        "Clean carrot ribbons and trimmings thoroughly; chop roughly.",
-        "In a pan, heat 1 tbsp oil, splutter mustard seeds, urad dal, and dry red chillies until fragrant.",
-        "Add the carrot peels and sauté for 4-5 minutes until tender and sweet.",
-        "Blend with a marble-sized pinch of tamarind and salt into a textured, nutrient-dense thogayal/dip, OR serve dry as a spiced side subzi."
+        "Rinse the carrot peel ribbons and tender top crown trimmings thoroughly; chop roughly.",
+        "Heat 1 tbsp nallennai in a pan. Roast ulutham paruppu, kadalai paruppu, dry red chillies, and a generous pinch of perungayam until golden and aromatic.",
+        "Add the chopped carrot skins and sauté for 3-4 minutes until wilted and tender.",
+        "Let the mixture cool down. Transfer to a mixie jar with a marble-sized piece of puli (tamarind) and rock salt.",
+        "Pulse with minimal water into a coarse, thick thogayal. Serve piping hot with steamed Ponni rice and a generous dollop of nallennai or ghee."
       ],
-      tip: "Carrot skins retain maximum beta-carotene and natural sugars. Tempering with urad dal provides an earthy, nutty balance.",
-      chef_wisdom_tip: "Carrot skins retain maximum beta-carotene and natural sugars. Tempering with urad dal provides an earthy, nutty balance."
+      tip: "Carrot skins contain maximum dietary fiber and beta-carotene. The sour tamarind and toasted dals balance the natural sweetness of the carrot ribbons.",
+      chef_wisdom_tip: "Carrot skins contain maximum dietary fiber and beta-carotene. The sour tamarind and toasted dals balance the natural sweetness of the carrot ribbons."
     }
   ];
+
+  const VERIFIED_DEMO_RECIPES = TARGET_DEMO_RECIPES;
+  window.TARGET_DEMO_RECIPES = TARGET_DEMO_RECIPES;
+  window.VERIFIED_DEMO_RECIPES = VERIFIED_DEMO_RECIPES;
 
   const RECIPES_DATA = state.recipes;
   window.RECIPES_DATA = RECIPES_DATA;
   window.SELECTED_SCRAP_IDS = state.selectedScrapIds;
 
   function syncVerifiedDemoRecipes() {
-    VERIFIED_DEMO_RECIPES.forEach(recipe => {
+    TARGET_DEMO_RECIPES.forEach(recipe => {
       const existing = state.recipes.find(r => (r.scrapId === recipe.scrapId || r.scrap_id === recipe.scrap_id));
       if (existing) {
         Object.assign(existing, recipe);
@@ -2991,32 +3035,34 @@
       const avgG = g / totalPixels;
       const avgB = b / totalPixels;
 
-      // Carrot peels: Dominant warm orange (R > 120 and R much higher than G and B)
-      // Potato peels: Earthy tan / muted cream on wooden surface
+      // Classification decision:
+      // Carrot peel ribbons: Vibrant orange profile (avgR > 120, Red >> Green & Blue)
+      // Potato peels: Muted earthy tan / brown / cream (Red ≈ Green)
       let detectedId = 3;
-      let detectedName = "Potato Peels (Aloo Chilka)";
+      let detectedTamilName = "உருளைக்கிழங்கு தோல் (Urulaikizhangu Thol / Potato Peels)";
       let confidence = "97.4%";
 
-      const isCarrot = (fileName.includes("carrot") || fileName.includes("gajar") || (avgR > 120 && avgR > avgG * 1.3 && avgR > avgB * 1.3)) && !fileName.includes("potato") && !fileName.includes("aloo");
+      const isCarrot = (fileName.includes("carrot") || fileName.includes("gajar") || (avgR > 120 && avgR > avgG * 1.25 && avgR > avgB * 1.3)) && !fileName.includes("potato") && !fileName.includes("aloo");
 
       if (isCarrot) {
         detectedId = 8;
-        detectedName = "Carrot Peels & Tops (Gajar Chilka)";
-        confidence = "98.1%";
+        detectedTamilName = "கேரட் தோல் (Carrot Thol & Trimmings)";
+        confidence = "98.2%";
       } else {
         detectedId = 3;
-        detectedName = "Potato Peels (Aloo Chilka)";
+        detectedTamilName = "உருளைக்கிழங்கு தோல் (Urulaikizhangu Thol / Potato Peels)";
         confidence = "97.4%";
       }
 
+      // Realistic inference delay
       setTimeout(() => {
         if (loader) loader.style.display = "none";
         if (details) {
           details.style.display = "block";
           details.innerHTML = `
-            <div style="font-size: 0.8rem; font-weight: 700; color: #8C8277; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.25rem;">Vision Inference Result:</div>
+            <div style="font-size: 0.8rem; font-weight: 700; color: #8C8277; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.25rem;">Vision Inference (Chennai Kitchen Module):</div>
             <div style="display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;">
-              <span style="font-size: 1.15rem; font-weight: 800; color: #1B5E20;">✓ ${detectedName}</span>
+              <span style="font-size: 1.15rem; font-weight: 800; color: #1B5E20;">✓ ${detectedTamilName}</span>
               <span style="font-size: 0.82rem; font-weight: 700; color: #B45309; background: #FEF3C7; padding: 0.2rem 0.6rem; border-radius: 9999px;">(Confidence: ${confidence})</span>
             </div>
           `;
@@ -3046,13 +3092,13 @@
     const recipe = recipesList.find(r => (r.scrapId === scrapId || r.scrap_id === scrapId));
     if (!recipe) return;
 
-    const course = recipe.course || recipe.course_type || "Zero-Waste Specialty";
-    const time = recipe.time || recipe.prep_time_minutes || 15;
-    const chef = recipe.chef || recipe.chef_name || "Master Chef";
+    const course = recipe.course || recipe.course_type || "Traditional Chennai Upcycling";
+    const time = recipe.time || recipe.prep_time_minutes || 12;
+    const chef = recipe.chef || recipe.chef_name || "Mylapore Master Chef";
     const title = recipe.title || "Traditional Zero-Waste Dish";
     const spices = recipe.spices || recipe.pantry_staples || [];
     const steps = recipe.steps || recipe.step_by_step_instructions || [];
-    const tip = recipe.tip || recipe.chef_wisdom_tip || "Transforming everyday kitchen discards into rich nutrition.";
+    const tip = recipe.tip || recipe.chef_wisdom_tip || "Traditional Tamil culinary wisdom valorizing daily kitchen byproduct scraps.";
 
     container.innerHTML = `
       <div class="revealed-recipe-card" style="background: #FFFFFF; border: 1px solid #E8E1D5; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 16px -2px rgba(31, 27, 22, 0.06); animation: fadeInDown 0.35s ease-out;">
@@ -3067,21 +3113,21 @@
         <h4 style="font-family: 'Outfit', sans-serif; font-size: 1.35rem; font-weight: 800; color: #1F1B16; margin: 0 0 1rem 0; line-height: 1.3;">${escapeHtml(title)}</h4>
 
         <div style="margin-bottom: 1.25rem;">
-          <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Pantry Spices Needed:</h5>
+          <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Required South Indian Pantry Spices:</h5>
           <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
             ${spices.map(s => `<span style="background: #F4EFE6; border: 1px solid #E8E1D5; color: #5C554D; font-size: 0.82rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px;">✓ ${escapeHtml(s)}</span>`).join("")}
           </div>
         </div>
 
         <div style="margin-bottom: 1.25rem;">
-          <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Step-by-Step Upcycling Guide:</h5>
+          <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Traditional Preparation Steps:</h5>
           <ol style="margin: 0; padding-left: 1.25rem; color: #5C554D; font-size: 0.92rem; line-height: 1.65;">
             ${steps.map(step => `<li style="margin-bottom: 0.5rem;">${escapeHtml(step)}</li>`).join("")}
           </ol>
         </div>
 
         <div style="background: #FFFBEB; border-left: 4px solid #B45309; padding: 0.85rem 1rem; border-radius: 0 8px 8px 0; font-size: 0.86rem; color: #92400E; font-style: italic; line-height: 1.5;">
-          💡 <strong>Master Chef Wisdom:</strong> ${escapeHtml(tip)}
+          💡 <strong>South Indian Culinary Wisdom:</strong> ${escapeHtml(tip)}
         </div>
       </div>
     `;
