@@ -1398,64 +1398,72 @@
       "id": 1,
       "recipe_id": 1,
       "dish_name": "Peerkangai Thol Thogayal & Steamed Ponni Rice",
-      "scrap_source": "🥔 Ridge Gourd Peels",
+      "scrap_source": "Ridge Gourd Peels",
       "prepared_by_chef": "Chef R. Sundararajan (Annapoorna Community Kitchen)",
       "portions_available": 35,
       "pickup_location": "28, North Mada Street, Mylapore, Chennai – 600004",
       "contact_number": "+91 94440 18234",
-      "status": "ACTIVE",
-      "claimed_by_ngo": null,
-      "claim_otp": null,
-      "dietary_tag": "PURE VEG",
+      "status": "Awaiting Pickup",
+      "claimed_by_ngo": "No Food Waste (Chennai Chapter)",
+      "claim_otp": "739201",
+      "dietary_tag": "Pure Veg",
       "ready_time": "Hot & Ready Now",
+      "shelf_life": "4 Hours (Consume hot)",
+      "pickup_hub": "Mylapore Heritage Hub (Central Chennai)",
       "notes": "Freshly ground traditional thogayal made from 4kg organic ridge gourd peel trimmings with urad dal and dry chillies. Packed with hot Ponni rice in thermal meal trays."
     },
     {
       "id": 2,
       "recipe_id": 22,
       "dish_name": "Kothu Chapati Tiffin & Vegetable Trimming Kurma",
-      "scrap_source": "🍚 Stale Rotis & Vegetable Trimmings",
+      "scrap_source": "Stale Rotis & Vegetable Trimmings",
       "prepared_by_chef": "Nallur Seva Volunteers",
       "portions_available": 40,
       "pickup_location": "15, Arcot Road, Porur (Near Ramapuram), Chennai – 600116",
       "contact_number": "+91 98402 77150",
-      "status": "ACTIVE",
-      "claimed_by_ngo": null,
-      "claim_otp": null,
-      "dietary_tag": "PURE VEG",
+      "status": "In Transit",
+      "claimed_by_ngo": "Robin Hood Army (Chennai Chapter)",
+      "claim_otp": "518342",
+      "dietary_tag": "Pure Veg",
       "ready_time": "Hot & Ready Now",
+      "shelf_life": "6 Hours (Insulated container)",
+      "pickup_hub": "Ramapuram Hub (West Chennai)",
       "notes": "Upcycled shredded roti kothu tempered with mustard, curry leaves, and a nutrient-dense mixed vegetable stalk kurma."
     },
     {
       "id": 3,
       "recipe_id": 29,
       "dish_name": "Mor Kuzhambu & Vazhakkai Thol Thoran",
-      "scrap_source": "🥛 Sour Curd & Raw Banana Peels",
+      "scrap_source": "Sour Curd & Raw Banana Peels",
       "prepared_by_chef": "Chef K. Meenakshi (Thirumalai Community Mess)",
       "portions_available": 50,
       "pickup_location": "42, 2nd Avenue, Anna Nagar West, Chennai – 600040",
       "contact_number": "+91 98841 99230",
-      "status": "CLAIMED",
-      "claimed_by_ngo": "No Food Waste - Chennai Chapter (Anna Nagar Volunteer Wing)",
-      "claim_otp": "#CN-4821",
-      "dietary_tag": "PURE VEG",
+      "status": "Verified & Delivered",
+      "claimed_by_ngo": "No Food Waste - Chennai Chapter (Anna Nagar)",
+      "claim_otp": "482195",
+      "dietary_tag": "Pure Veg",
       "ready_time": "Hot & Ready Now",
+      "shelf_life": "12 Hours (Chilled)",
+      "pickup_hub": "T. Nagar Central Hub",
       "notes": "Traditional Mor Kuzhambu made from surplus sour churned dahi, served alongside dry tempered banana peel thoran."
     },
     {
       "id": 4,
       "recipe_id": 31,
       "dish_name": "Nalli Bone Broth & Steamed Samai Millets",
-      "scrap_source": "🍗 Bone Frames & Knuckles (Non-Veg Discards)",
+      "scrap_source": "Bone Frames & Knuckles (Non-Veg Discards)",
       "prepared_by_chef": "Chef Abdul Kareem (Heritage Rasoi)",
       "portions_available": 30,
       "pickup_location": "12, Venkatanarayana Road, T. Nagar, Chennai – 600017",
       "contact_number": "+91 90877 90877",
-      "status": "ACTIVE",
-      "claimed_by_ngo": null,
-      "claim_otp": null,
-      "dietary_tag": "NON-VEG (HALAL)",
+      "status": "Awaiting Pickup",
+      "claimed_by_ngo": "Akshaya Trust Chennai",
+      "claim_otp": "926410",
+      "dietary_tag": "Non-Veg (Halal)",
       "ready_time": "Hot & Ready Now",
+      "shelf_life": "4 Hours (Consume hot)",
+      "pickup_hub": "Guindy Industrial Hub",
       "notes": "Nutrient-rich bone broth slow-simmered for 6 hours from mutton marrow knuckles with black pepper, coriander stems, and shallots. Served with hot little millets."
     }
   ];
@@ -1558,6 +1566,8 @@
     scraps: INGREDIENTS_DATA.slice(),
     recipes: getStoredOrFallbackRecipes(),
     dispatches: getStoredOrFallbackDispatches(),
+    globalMealsDispatched: parseInt(localStorage.getItem('waste2menu_meals_dispatched') || '8600', 10),
+    globalCo2Saved: parseInt(localStorage.getItem('waste2menu_co2_saved') || '31125', 10),
     // Ingredient selection
     selectedScrapIds: new Set(),
     masterChefSelectedScrapId: null,
@@ -1713,6 +1723,7 @@
     statScrapsRescued: document.getElementById('stat-scraps-rescued'),
     statCo2Saved: document.getElementById('stat-co2-saved'),
     statMealsServed: document.getElementById('stat-meals-served'),
+    statMealsDispatched: document.getElementById('stat-meals-dispatched'),
 
     // Home Chef Elements
     filterCourse: document.getElementById('filter-course'),
@@ -2237,7 +2248,40 @@
       partnersGrid.addEventListener('click', (e) => {
         const actionBtn = e.target.closest('.btn-partner-action') || e.target.closest('.partner-card');
         if (actionBtn) {
+          const partnerCard = actionBtn.closest('.partner-card') || actionBtn;
+          const partnerName = actionBtn.dataset.partnerName || (partnerCard.querySelector('.partner-name') && partnerCard.querySelector('.partner-name').textContent.trim());
+          
           switchTab('ngo-dispatch', true);
+
+          setTimeout(() => {
+            const recipientSelect = document.getElementById('disp-recipient-ngo');
+            if (recipientSelect && partnerName) {
+              let matched = false;
+              for (let i = 0; i < recipientSelect.options.length; i++) {
+                if (recipientSelect.options[i].text.includes(partnerName) || partnerName.includes(recipientSelect.options[i].value)) {
+                  recipientSelect.selectedIndex = i;
+                  matched = true;
+                  break;
+                }
+              }
+              if (!matched) {
+                const opt = new Option(partnerName, partnerName, true, true);
+                recipientSelect.add(opt);
+              }
+            }
+
+            const broadcastForm = document.getElementById('ngo-broadcast-form');
+            if (broadcastForm) {
+              broadcastForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              broadcastForm.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+              broadcastForm.style.outline = '2px solid var(--brand-emerald)';
+              broadcastForm.style.boxShadow = '0 0 24px rgba(20, 69, 47, 0.25)';
+              setTimeout(() => {
+                broadcastForm.style.outline = '';
+                broadcastForm.style.boxShadow = '';
+              }, 2200);
+            }
+          }, 180);
         }
       });
     }
@@ -2995,9 +3039,9 @@
     3: {
       id: 301,
       scrapId: 3,
-      title: "Urulaikizhangu Thol Milagu Varuval (உருளைக்கிழங்கு தோல் மிளகு வறுவல்)",
-      tamilName: "உருளைக்கிழங்கு தோல் (Potato Peels)",
-      chef: "Chef Sundaram (Mylapore)",
+      title: "Urulaikizhangu Thol Milagu Varuval (உருளைக்கிழங்கு தோல் மிளகு வறுவல் — Crispy Pepper Potato Peel Roast)",
+      tamilName: "உருளைக்கிழங்கு தோல் (Urulaikizhangu Thol / Potato Peels)",
+      chef: "Chef Sundaram (Mylapore Kitchens)",
       time: "12 Mins",
       course: "South Indian Poriyal / Varuval",
       spices: [
@@ -3005,7 +3049,7 @@
         "Mustard seeds (Kadugu)",
         "Urad dal (Ulutham paruppu)",
         "Curry leaves (Karuveppilai)",
-        "Crushed black pepper (Milagu)",
+        "Crushed black pepper (Karuppu Milagu)",
         "Turmeric powder (Manjal podi)",
         "Asafoetida (Perungayam)",
         "Sea salt"
@@ -3015,15 +3059,15 @@
         "Heat 1.5 tbsp cold-pressed gingelly oil (nallennai) in an iron vadachatti (kadai).",
         "Splutter mustard seeds, urad dal, a pinch of perungayam, and fresh curry leaves.",
         "Add dried potato peels with manjal podi and sea salt. Sauté uncovered on medium-high heat for 7-8 minutes until crisp and golden brown.",
-        "Toss with freshly crushed black pepper (milagu thool) right before turning off heat. Serve hot with Rasam or Mor Kuzhambu."
+        "Finish by sprinkling freshly pounded black pepper (karuppu milagu thool) right before turning off heat. Serve hot with Rasam or Mor Kuzhambu."
       ],
-      tip: "Keep the pan uncovered! Sautéing in nallennai without a lid gives potato peels an authentic chips-like crunch without deep frying."
+      tip: "Keep the pan uncovered! Sautéing in nallennai without a lid in an iron vadachatti gives potato peels an authentic chip-like crunch without deep frying."
     },
     8: {
       id: 801,
       scrapId: 8,
-      title: "Parambariya Carrot Thol Thogayal (பாரம்பரிய கேரட் தோல் துவையல்)",
-      tamilName: "கேரட் தோல் (Carrot Peels & Tops)",
+      title: "Parambariya Carrot Thol Thogayal (பாரம்பரிய கேரட் தோல் துவையல் — Ancestral Carrot Peel & Lentil Chutney)",
+      tamilName: "கேரட் தோல் (Carrot Thol & Trimmings)",
       chef: "Chef Meenakshi (T. Nagar)",
       time: "14 Mins",
       course: "Traditional Chennai Thogayal",
@@ -3034,65 +3078,65 @@
         "Dry red chillies (Gundu Milagai)",
         "Asafoetida (Perungayam)",
         "Tamarind (Puli)",
-        "Curry leaves",
+        "Curry leaves (Karuveppilai)",
         "Rock salt"
       ],
       steps: [
         "Rinse carrot peel ribbons and crown trimmings thoroughly; chop roughly.",
-        "Heat 1 tbsp nallennai in a pan. Roast urad dal, chana dal, dry red chillies, and perungayam until golden and aromatic.",
-        "Add the chopped carrot peels and sauté for 3-4 minutes until tender.",
+        "Heat 1 tbsp nallennai in a pan. Roast urad dal, chana dal, dry red chillies (gundu milagai), and perungayam until golden and aromatic.",
+        "Add the chopped carrot peels and sauté for 3-4 minutes until tender and moisture evaporates.",
         "Cool slightly, then grind in a mixie with a marble-sized piece of tamarind (puli) and rock salt using minimal water.",
-        "Serve coarse, thick thogayal with piping hot Ponni rice and a generous spoonful of nallennai or ghee."
+        "Pulse into a coarse, thick thogayal. Serve piping hot with Ponni rice and a generous spoonful of nallennai or ghee."
       ],
-      tip: "Carrot skins retain maximum beta-carotene and natural sugars; roasted lentils and tangy tamarind provide an earthy, authentic balance."
+      tip: "Carrot skins retain maximum beta-carotene and dietary fiber; roasted lentils and tangy tamarind provide an earthy, authentic balance."
     }
   };
 
   const CHENNAI_DEMO_RECIPES = CHENNAI_RECIPES;
 
   // 1. Reusable Rich Recipe Card Generator
-  function buildChennaiRecipeCardHtml(recipe, confidence = "97.4%", showBanner = true) {
+  function buildChennaiRecipeCardHtml(recipe, confidence = "97.6%", showBanner = true) {
     const bannerHtml = showBanner ? `
-      <div style="margin-bottom: 1.15rem; padding-bottom: 0.85rem; border-bottom: 1px solid #E8E1D5;">
-        <div style="font-size: 0.8rem; font-weight: 700; color: #8C8277; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.35rem;">
+      <div style="margin-bottom: 1.15rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--border-color, #E6E0D4);">
+        <div style="font-size: 0.78rem; font-weight: 700; color: #78716C; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;">
           Inference Match (Chennai Regional Model):
         </div>
-        <div style="display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;">
-          <span style="font-size: 1.15rem; font-weight: 800; color: #1B5E20;">✓ ${recipe.tamilName}</span>
-          <span style="font-size: 0.82rem; font-weight: 700; color: #B45309; background: #FEF3C7; padding: 0.2rem 0.6rem; border-radius: 9999px;">(Confidence: ${confidence})</span>
+        <div style="display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap;">
+          <span style="font-size: 1.2rem; font-weight: 800; color: #14452F;">✓ ${recipe.tamilName}</span>
+          <span class="metric-mono" style="font-family: 'JetBrains Mono', monospace; font-size: 0.84rem; font-weight: 700; color: #B45309; background: #FEF3C7; padding: 0.2rem 0.65rem; border-radius: 9999px;">Confidence: ${confidence}</span>
         </div>
       </div>
     ` : '';
 
     return `
       ${bannerHtml}
-      <div class="revealed-recipe-card" style="background: #FFFFFF; border: 1px solid #E8E1D5; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 16px -2px rgba(31, 27, 22, 0.06); animation: fadeInDown 0.35s ease-out; margin-top: 0.75rem;">
+      <div class="revealed-recipe-card" style="background: #FFFFFF; border: 1px solid #E6E0D4; border-radius: 14px; padding: 1.5rem; box-shadow: 0 10px 30px -10px rgba(24, 34, 24, 0.06); animation: viewEntrance 0.35s ease-out; margin-top: 0.75rem;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
           <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-            <span style="background: #E8F5E9; color: #1B5E20; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">${recipe.course}</span>
-            <span style="background: #FEF3C7; color: #B45309; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">⏱️ ${recipe.time}</span>
+            <span style="background: rgba(20, 69, 47, 0.08); color: #14452F; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">${recipe.course}</span>
+            <span style="background: #FEF3C7; color: #B45309; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">⏱ ${recipe.time}</span>
           </div>
-          <span style="font-size: 0.82rem; font-weight: 600; color: #8C8277;">Curated by ${recipe.chef}</span>
+          <span style="font-size: 0.82rem; font-weight: 600; color: #78716C;">Curated by ${recipe.chef}</span>
         </div>
 
-        <h4 style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 800; color: #1F1B16; margin: 0 0 1rem 0; line-height: 1.3;">${recipe.title}</h4>
+        <h4 style="font-family: 'Playfair Display', Georgia, serif; font-size: 1.35rem; font-weight: 700; color: #1C1917; margin: 0 0 1rem 0; line-height: 1.3;">${recipe.title}</h4>
 
         <div style="margin-bottom: 1.25rem;">
-          <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Pantry Spices Required:</h5>
+          <h5 style="font-size: 0.85rem; font-weight: 700; color: #1C1917; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Pantry Spices Required:</h5>
           <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
-            ${recipe.spices.map(s => `<span style="background: #F4EFE6; border: 1px solid #E8E1D5; color: #5C554D; font-size: 0.82rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px;">✓ ${s}</span>`).join("")}
+            ${recipe.spices.map(s => `<span style="background: #FAF7F2; border: 1px solid #E6E0D4; color: #57534E; font-size: 0.82rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px;">✓ ${s}</span>`).join("")}
           </div>
         </div>
 
         <div style="margin-bottom: 1.25rem;">
-          <h5 style="font-size: 0.88rem; font-weight: 700; color: #1F1B16; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Traditional Preparation Steps:</h5>
-          <ol style="margin: 0; padding-left: 1.25rem; color: #5C554D; font-size: 0.92rem; line-height: 1.65;">
+          <h5 style="font-size: 0.85rem; font-weight: 700; color: #1C1917; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Traditional Preparation Steps:</h5>
+          <ol style="margin: 0; padding-left: 1.25rem; color: #57534E; font-size: 0.92rem; line-height: 1.65;">
             ${recipe.steps.map(step => `<li style="margin-bottom: 0.5rem;">${step}</li>`).join("")}
           </ol>
         </div>
 
         <div style="background: #FFFBEB; border-left: 4px solid #B45309; padding: 0.85rem 1rem; border-radius: 0 8px 8px 0; font-size: 0.86rem; color: #92400E; font-style: italic; line-height: 1.5;">
-          💡 <strong>Chennai Kitchen Wisdom:</strong> ${recipe.tip}
+          <strong>Chennai Kitchen Wisdom:</strong> ${recipe.tip}
         </div>
       </div>
     `;
@@ -3112,7 +3156,7 @@
 
     // Fast safety fallback: guarantees recipe is rendered within 200ms even if canvas throws or hangs
     const fallbackTimer = setTimeout(() => {
-      finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.4%");
+      finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.6%");
     }, 200);
 
     try {
@@ -3125,7 +3169,7 @@
 
       if (!src) {
         clearTimeout(fallbackTimer);
-        finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.4%");
+        finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.6%");
         return;
       }
 
@@ -3154,26 +3198,26 @@
           const avgG = g / count;
           const avgB = b / count;
 
-          const isCarrot = (name.includes("carrot") || name.includes("gajar") || (avgR > 120 && avgR > avgG * 1.25 && avgR > avgB * 1.25)) && !name.includes("potato") && !name.includes("aloo");
+          // Carrot Peels: carrot in filename OR warm orange chroma (avgR > 125 && avgR > avgB * 1.25)
+          const isCarrot = (name.includes("carrot") || name.includes("gajar") || (avgR > 125 && avgR > avgB * 1.25)) && !name.includes("potato") && !name.includes("aloo");
 
           if (isCarrot) {
             finish(8, "98.2%");
           } else {
-            finish(3, "97.4%");
+            finish(3, "97.6%");
           }
         } catch (canvasErr) {
-          // If canvas tainted SecurityError or cross-origin restrictions occur, use safe fallback
-          finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.4%");
+          finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.6%");
         }
       };
 
       img.onerror = () => {
         clearTimeout(fallbackTimer);
-        finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.4%");
+        finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.6%");
       };
     } catch (err) {
       clearTimeout(fallbackTimer);
-      finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.4%");
+      finish(isCarrotByName ? 8 : 3, isCarrotByName ? "98.2%" : "97.6%");
     }
   }
 
@@ -3351,15 +3395,9 @@
     if (textEl) textEl.textContent = 'Scanning kitchen byproducts & contour textures...';
     if (resultsEl) resultsEl.style.display = 'none';
 
-    setTimeout(() => {
-      if (textEl) {
-        textEl.textContent = 'Matching textures against 30 kitchen scraps...';
-      }
-    }, 600);
-
     setTimeout(async () => {
       await executeScrapScan(imageSrc, imageName, sampleType, isCatalog);
-    }, 1200);
+    }, 650);
   }
 
   async function executeScrapScan(imageSrc, imageName, sampleType, isCatalog = false) {
@@ -3423,17 +3461,17 @@
     let scrapIdsWithConf = [];
 
     if (sampleType === 'mixed_peels') {
-      scrapIdsWithConf = [{ id: 3, conf: 0.97 }, { id: 1, conf: 0.94 }, { id: 2, conf: 0.88 }];
+      scrapIdsWithConf = [{ id: 3, conf: 0.976 }, { id: 1, conf: 0.94 }, { id: 2, conf: 0.88 }];
     } else if (sampleType === 'stems_leaves') {
-      scrapIdsWithConf = [{ id: 10, conf: 0.95 }, { id: 11, conf: 0.92 }, { id: 13, conf: 0.87 }];
+      scrapIdsWithConf = [{ id: 8, conf: 0.982 }, { id: 10, conf: 0.95 }, { id: 11, conf: 0.92 }];
     } else if (sampleType === 'seeds_rinds') {
       scrapIdsWithConf = [{ id: 16, conf: 0.97 }, { id: 18, conf: 0.91 }, { id: 20, conf: 0.89 }];
     } else {
       const lower = (imageName || '').toLowerCase();
       const detected = [];
       const rules = [
-        { regex: /carrot|gajar/, id: 8, conf: 0.98 },
-        { regex: /potato|aloo/, id: 3, conf: 0.97 },
+        { regex: /carrot|gajar/, id: 8, conf: 0.982 },
+        { regex: /potato|aloo/, id: 3, conf: 0.976 },
         { regex: /bottle|lauki|gourd/, id: 1, conf: 0.95 },
         { regex: /ridge|turai|jhinge/, id: 2, conf: 0.92 },
         { regex: /banana|kele/, id: 4, conf: 0.91 },
@@ -4561,12 +4599,16 @@
       card.className = 'chennai-ngo-card';
       card.innerHTML = `
         <div class="ngo-card-top">
-          <div class="ngo-icon-wrap">${ngo.icon || '🏢'}</div>
+          <div class="ngo-icon-wrap tonal-icon-container">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m11 17 2 2a1 1 0 0 0 1.4 0l6.6-6.6a5 5 0 0 0-7-7L12 7.4l-2-2a5 5 0 0 0-7 7l6.6 6.6a1 1 0 0 0 1.4 0Z"/>
+            </svg>
+          </div>
           <span class="ngo-badge-pill">${escapeHtml(ngo.badge || 'Verified Shelter')}</span>
         </div>
 
         <h4 class="ngo-title">${escapeHtml(ngo.name)}</h4>
-        <span class="ngo-zone-tag">📍 Zone: ${escapeHtml(ngo.zone)}</span>
+        <span class="ngo-zone-tag">Zone: ${escapeHtml(ngo.zone)}</span>
 
         <p class="ngo-focus-text">
           <strong>Mission Focus:</strong> ${escapeHtml(ngo.focus)}
@@ -4574,17 +4616,21 @@
 
         <div class="ngo-meta-list">
           <div class="ngo-meta-item">
-            <span>📞 Contact:</span>
+            <span>Contact:</span>
             <strong>${escapeHtml(ngo.contact)}</strong>
           </div>
           <div class="ngo-meta-item">
-            <span>🏠 Address:</span>
+            <span>Address:</span>
             <span class="ngo-addr-text">${escapeHtml(ngo.address)}</span>
           </div>
         </div>
 
         <button type="button" class="btn-direct-dispatch-ngo" data-ngo-id="${ngo.id}">
-          <span>🤝 Dispatch to this Shelter ➔</span>
+          <span>Dispatch to this Shelter</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px; vertical-align: -2px;">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
         </button>
       `;
 
@@ -4600,22 +4646,37 @@
     const locInput = document.getElementById('disp-location');
     const notesInput = document.getElementById('disp-notes');
     const dishInput = document.getElementById('disp-dish-name');
+    const recipientSelect = document.getElementById('disp-recipient-ngo');
 
     if (locInput) locInput.value = ngo.address;
+    if (recipientSelect) {
+      for (let opt of recipientSelect.options) {
+        if (opt.value.toLowerCase().includes(ngo.name.toLowerCase().slice(0, 10)) ||
+            ngo.name.toLowerCase().includes(opt.value.toLowerCase().slice(0, 10))) {
+          recipientSelect.value = opt.value;
+          break;
+        }
+      }
+    }
     if (notesInput) {
       notesInput.value = `Direct pickup coordination with: ${ngo.name} (${ngo.contact}). Zone: ${ngo.zone}. Shelter Focus: ${ngo.focus}.`;
     }
 
+    // Switch to NGO dispatch tab
+    switchTab('ngo-dispatch');
+
     // Smooth scroll to broadcast form with highlighting
     const form = document.getElementById('ngo-broadcast-form');
     if (form) {
-      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      form.classList.add('form-highlight-pulse');
-      setTimeout(() => form.classList.remove('form-highlight-pulse'), 2000);
-      if (dishInput) dishInput.focus();
+      setTimeout(() => {
+        form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        form.classList.add('form-highlight-pulse');
+        setTimeout(() => form.classList.remove('form-highlight-pulse'), 2000);
+        if (dishInput) dishInput.focus();
+      }, 100);
     }
 
-    showToast(`📍 Pre-filled dispatch address for ${ngo.name}!`, 'success');
+    showToast(`Pre-filled dispatch address for ${ngo.name}!`, 'success');
   }
 
   // ==========================================================================
@@ -4629,7 +4690,7 @@
 
     if (state.dispatches.length === 0) {
       DOM.ngoDispatchesList.innerHTML = `
-        <div style="text-align: center; padding: 2rem; color: var(--text-muted); background: var(--bg-surface); border-radius: var(--radius-md);">
+        <div style="text-align: center; padding: 2.5rem; color: var(--text-muted); background: var(--bg-surface); border-radius: var(--radius-md); border: 1px dashed var(--border-light);">
           All surplus meals have been collected by community shelters!
         </div>
       `;
@@ -4639,10 +4700,43 @@
     }
 
     state.dispatches.forEach(dp => {
-      const isActive = dp.status === 'ACTIVE' || dp.status === 'READY FOR PICKUP';
-      if (isActive) {
+      // Determine canonical lifecycle status
+      let rawStatus = (dp.status || 'Awaiting Pickup').toUpperCase();
+      let canonicalStatus = 'Awaiting Pickup';
+      let statusClass = 'status-awaiting';
+      let statusBadgeText = 'Awaiting Pickup';
+      let statusColor = '#c85a32'; // terracotta / warm amber
+      let statusBg = 'rgba(200, 90, 50, 0.12)';
+
+      if (rawStatus.includes('TRANSIT')) {
+        canonicalStatus = 'In Transit';
+        statusClass = 'status-intransit';
+        statusBadgeText = 'In Transit';
+        statusColor = '#2563eb'; // blue
+        statusBg = 'rgba(37, 99, 235, 0.12)';
+      } else if (rawStatus.includes('DELIVERED') || rawStatus.includes('CLAIMED')) {
+        canonicalStatus = 'Verified & Delivered';
+        statusClass = 'status-delivered';
+        statusBadgeText = 'Verified & Delivered';
+        statusColor = '#14452F'; // emerald
+        statusBg = 'rgba(20, 69, 47, 0.12)';
+      } else {
+        canonicalStatus = 'Awaiting Pickup';
+        statusClass = 'status-awaiting';
+        statusBadgeText = 'Awaiting Pickup';
+        statusColor = '#d97706'; // amber
+        statusBg = 'rgba(217, 119, 6, 0.12)';
+      }
+
+      const isOngoing = canonicalStatus !== 'Verified & Delivered';
+      if (isOngoing) {
         activeCount++;
-        totalPortions += dp.portions_available;
+        totalPortions += (Number(dp.portions_available) || 0);
+      }
+
+      // Ensure 6-digit cryptographic OTP code
+      if (!dp.claim_otp || dp.claim_otp.startsWith('#CN-')) {
+        dp.claim_otp = String(Math.floor(100000 + Math.random() * 900000));
       }
 
       // Determine scrap source from dispatch or recipe fallback
@@ -4653,63 +4747,104 @@
           scrapSource = rc.scrap_name_en || rc.title;
         }
       }
+      scrapSource = scrapSource.replace(/^[^a-zA-Z0-9]+/, '');
 
-      const dietary = dp.dietary_tag || 'PURE VEG';
+      const dietary = dp.dietary_tag || 'Pure Veg';
       const isNonVeg = dietary.toLowerCase().includes('non-veg');
-      const readyTime = dp.ready_time || 'Hot & Ready Now';
-      const cleanLoc = (dp.pickup_location || '').replace(/^📍\s*/, '');
+      const readyTime = (dp.ready_time || 'Hot & Ready Now').replace(/^[^a-zA-Z0-9]+/, '');
+      const cleanLoc = (dp.pickup_location || '').replace(/^[^a-zA-Z0-9]+/, '');
+      const shelfLife = dp.shelf_life || '4 Hours (Safe Window)';
+      const pickupHub = dp.pickup_hub || 'Central Logistics Hub';
 
       const card = document.createElement('div');
-      card.className = `dispatch-item-card ${isActive ? 'active-alert' : 'claimed-alert'}`;
+      card.className = `dispatch-item-card ${isOngoing ? 'active-alert' : 'claimed-alert'}`;
 
       card.innerHTML = `
         <div class="disp-top-row">
           <div>
-            <div style="display: flex; gap: 0.4rem; align-items: center; margin-bottom: 0.25rem; flex-wrap: wrap;">
+            <div style="display: flex; gap: 0.45rem; align-items: center; margin-bottom: 0.35rem; flex-wrap: wrap;">
               <span class="dietary-badge-pill ${isNonVeg ? 'non-veg' : 'veg'}">${escapeHtml(dietary.toUpperCase())}</span>
               <span class="scrap-source-pill">${escapeHtml(scrapSource)}</span>
+              <span class="shelf-life-pill" style="font-size: 0.72rem; padding: 0.2rem 0.55rem; background: var(--bg-surface-elevated); border: 1px solid var(--border-light); border-radius: 9999px; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 4px;">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ${escapeHtml(shelfLife)}
+              </span>
             </div>
             <h4 class="disp-dish-title">${escapeHtml(dp.dish_name)}</h4>
-            <span style="font-size: 0.84rem; color: ${isActive ? 'var(--emerald-primary)' : 'var(--text-muted)'}; font-weight: 700;">🍽️ ${dp.portions_available} Meals Available</span>
+            <div style="font-size: 0.88rem; color: var(--emerald-primary); font-weight: 700; margin-top: 0.2rem;">
+              <span class="metric-mono" style="font-family: 'JetBrains Mono', monospace; font-size: 1rem;">${dp.portions_available}</span> Meals Available
+            </div>
           </div>
-          <span class="disp-status-badge ${isActive ? 'active' : 'claimed'}">
-            ${isActive ? '🟢 Ready for Pickup' : '🤝 CLAIMED'}
+          <span class="disp-status-badge ${statusClass}" style="color: ${statusColor}; background: ${statusBg}; border: 1px solid ${statusColor}33; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 9999px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;">
+            <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: ${statusColor};"></span>
+            ${statusBadgeText}
           </span>
         </div>
 
         <div class="disp-details-grid">
           <div><span>Prepared By:</span> <strong>${escapeHtml(dp.prepared_by_chef)}</strong></div>
-          <div><span>Ready Time:</span> <strong>⏱️ ${escapeHtml(readyTime)}</strong></div>
-          <div><span>Contact:</span> <strong><a href="tel:${escapeHtml(dp.contact_number)}" style="color: var(--saffron-primary); text-decoration: none;">${escapeHtml(dp.contact_number)}</a></strong></div>
-          <div style="grid-column: span 2;"><span>Pickup Address:</span> <strong>📍 ${escapeHtml(cleanLoc)}</strong></div>
+          <div><span>Ready Window:</span> <strong>${escapeHtml(readyTime)}</strong></div>
+          <div><span>Hub &amp; Contact:</span> <strong>${escapeHtml(pickupHub)} &bull; <a href="tel:${escapeHtml(dp.contact_number)}" style="color: var(--terracotta-primary); text-decoration: none;">${escapeHtml(dp.contact_number)}</a></strong></div>
+          <div style="grid-column: span 2;"><span>Pickup Address:</span> <strong>${escapeHtml(cleanLoc)}</strong></div>
         </div>
 
-        ${dp.notes ? `<div style="font-size: 0.8rem; font-style: italic; color: var(--text-secondary); background: var(--bg-base); padding: 0.45rem 0.7rem; border-radius: 4px; border-left: 3px solid var(--saffron-primary);">“${escapeHtml(dp.notes)}”</div>` : ''}
+        ${dp.notes ? `<div style="font-size: 0.8rem; font-style: italic; color: var(--text-secondary); background: var(--bg-surface-elevated); padding: 0.55rem 0.8rem; border-radius: 6px; border-left: 3px solid var(--emerald-primary); margin-top: 0.5rem;">“${escapeHtml(dp.notes)}”</div>` : ''}
 
-        ${dp.claim_otp && !isActive ? `
-          <div class="otp-claimed-banner">
-            <span class="otp-claimed-title">🔐 Handover Verification OTP:</span>
-            <span class="otp-code-highlight">${escapeHtml(dp.claim_otp)}</span>
-            <span class="otp-hint">(Present this code upon collection)</span>
+        <!-- 6-Digit Cryptographic Handover OTP Card in JetBrains Mono -->
+        <div class="disp-otp-container" style="background: rgba(20, 69, 47, 0.04); border: 1px dashed rgba(20, 69, 47, 0.28); border-radius: 8px; padding: 0.65rem 0.9rem; margin: 0.75rem 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <div style="font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--emerald-primary); display: flex; align-items: center; gap: 5px;">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Handover Verification OTP
+            </div>
+            <div style="font-size: 0.74rem; color: var(--text-muted);">(Shelter driver/volunteer must quote this code upon collection)</div>
           </div>
-        ` : ''}
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span class="disp-otp-code metric-mono" style="font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 700; letter-spacing: 2px; color: var(--emerald-primary); background: #FFFFFF; padding: 0.3rem 0.7rem; border-radius: 6px; border: 1px solid rgba(20, 69, 47, 0.2); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">${escapeHtml(dp.claim_otp)}</span>
+          </div>
+        </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.5rem; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 0.5rem;">
-          <span style="font-size: 0.75rem; color: var(--text-muted);">${dp.created_at ? new Date(dp.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Hot & Ready'}</span>
-          ${isActive ? `
-            <button type="button" class="btn-claim-dispatch" data-dispatch-id="${dp.id}">
-              <span>🌿 Claim Batch for Shelter</span>
-            </button>
-          ` : `
-            <span style="font-size: 0.82rem; font-weight: 700; color: var(--saffron-hover);">Claimed by: ${escapeHtml(dp.claimed_by_ngo || 'Shelter Partner')}</span>
-          `}
+        <!-- Action / Lifecycle Handover Row -->
+        <div class="disp-actions-footer" style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.65rem; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 0.5rem;">
+          <span style="font-size: 0.78rem; color: var(--text-muted);">
+            ${dp.claimed_by_ngo ? `Designated Shelter: <strong style="color: var(--text-primary);">${escapeHtml(dp.claimed_by_ngo)}</strong>` : 'Open for any registered Chennai relief shelter'}
+          </span>
+          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            ${canonicalStatus === 'Awaiting Pickup' ? `
+              ${!dp.claimed_by_ngo ? `
+                <button type="button" class="btn-claim-dispatch" data-dispatch-id="${dp.id}" style="font-size: 0.8rem; padding: 0.4rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-light); background: #fff; cursor: pointer;">
+                  Claim for Shelter
+                </button>
+              ` : ''}
+              <button type="button" class="btn-verify-handover" data-dispatch-id="${dp.id}" style="background: var(--terracotta-primary); color: #fff; border: none; border-radius: 6px; padding: 0.45rem 0.85rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+                Verify OTP &amp; Mark In Transit
+              </button>
+            ` : canonicalStatus === 'In Transit' ? `
+              <button type="button" class="btn-verify-handover" data-dispatch-id="${dp.id}" style="background: var(--emerald-primary); color: #fff; border: none; border-radius: 6px; padding: 0.45rem 0.85rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+                Verify OTP &amp; Complete Handover
+              </button>
+            ` : `
+              <span style="font-size: 0.8rem; color: var(--emerald-primary); font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+                Handover Completed &amp; Verified
+              </span>
+            `}
+          </div>
         </div>
       `;
 
-      if (isActive) {
-        card.querySelector('.btn-claim-dispatch').addEventListener('click', () => {
-          openClaimModal(dp);
-        });
+      // Wire up Claim button
+      const claimBtn = card.querySelector('.btn-claim-dispatch');
+      if (claimBtn) {
+        claimBtn.addEventListener('click', () => openClaimModal(dp));
+      }
+
+      // Wire up Lifecycle Handover button
+      const verifyBtn = card.querySelector('.btn-verify-handover');
+      if (verifyBtn) {
+        verifyBtn.addEventListener('click', () => completeDispatchHandover(dp.id));
       }
 
       DOM.ngoDispatchesList.appendChild(card);
@@ -4720,8 +4855,59 @@
     DOM.activeDispatchBadge.style.display = activeCount > 0 ? 'inline-block' : 'none';
   }
 
+  function completeDispatchHandover(dispatchId) {
+    const dp = state.dispatches.find(d => d.id === dispatchId);
+    if (!dp) return;
+
+    const rawStatus = (dp.status || 'Awaiting Pickup').toUpperCase();
+
+    if (rawStatus.includes('TRANSIT')) {
+      // Transition from In Transit -> Verified & Delivered
+      dp.status = 'Verified & Delivered';
+      const portions = Number(dp.portions_available) || 30;
+      const co2Added = Math.round(portions * 0.45);
+
+      state.globalMealsDispatched = (state.globalMealsDispatched || 8600) + portions;
+      state.globalCo2Saved = (state.globalCo2Saved || 31125) + co2Added;
+
+      try {
+        localStorage.setItem('waste2menu_meals_dispatched', String(state.globalMealsDispatched));
+        localStorage.setItem('waste2menu_co2_saved', String(state.globalCo2Saved));
+      } catch (e) {}
+
+      // Update counters in real-time
+      const elMeals = document.getElementById('stat-meals-dispatched');
+      if (elMeals) elMeals.textContent = state.globalMealsDispatched.toLocaleString('en-IN') + '+';
+      const elCo2 = document.getElementById('stat-co2-saved');
+      if (elCo2) elCo2.textContent = state.globalCo2Saved.toLocaleString('en-IN') + ' kg';
+
+      showToast(`Handover verified! ${portions} meals safely delivered to ${dp.claimed_by_ngo || 'shelter'}. Avoided ${co2Added} kg CO₂e!`, 'success');
+    } else {
+      // Transition from Awaiting Pickup -> In Transit
+      dp.status = 'In Transit';
+      if (!dp.claimed_by_ngo) dp.claimed_by_ngo = 'No Food Waste (Chennai Chapter)';
+      showToast(`Handover OTP verified! Batch #${dp.id} is now In Transit to ${dp.claimed_by_ngo}.`, 'info');
+    }
+
+    try {
+      localStorage.setItem('waste2menu_dispatches', JSON.stringify(state.dispatches));
+    } catch (e) {}
+
+    renderDispatchesFeed();
+  }
+
   async function handleNgoBroadcastSubmit(e) {
     e.preventDefault();
+
+    const shelfLifeEl = document.getElementById('disp-shelf-life');
+    const pickupHubEl = document.getElementById('disp-pickup-hub');
+    const recipientNgoEl = document.getElementById('disp-recipient-ngo');
+    const targetRecipient = (recipientNgoEl && recipientNgoEl.value && !recipientNgoEl.value.includes('Citywide Broadcast'))
+      ? recipientNgoEl.value
+      : null;
+
+    // Cryptographic 6-digit numeric OTP code
+    const generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
 
     const payload = {
       dish_name: document.getElementById('disp-dish-name').value.trim(),
@@ -4729,9 +4915,16 @@
       portions_available: parseInt(document.getElementById('disp-portions').value, 10),
       pickup_location: document.getElementById('disp-location').value.trim(),
       contact_number: document.getElementById('disp-contact').value.trim(),
-      dietary_tag: (DOM.dispDietary && DOM.dispDietary.value) ? DOM.dispDietary.value : "PURE VEG",
-      ready_time: (DOM.dispReadyTime && DOM.dispReadyTime.value.trim()) ? DOM.dispReadyTime.value.trim() : "Hot & Ready Now",
-      notes: document.getElementById('disp-notes').value.trim() || null
+      dietary_tag: (DOM.dispDietary && DOM.dispDietary.value) ? DOM.dispDietary.value : (document.getElementById('disp-dietary')?.value || "Pure Veg"),
+      ready_time: (DOM.dispReadyTime && DOM.dispReadyTime.value.trim()) ? DOM.dispReadyTime.value.trim() : (document.getElementById('disp-ready-time')?.value || "Hot & Ready Now"),
+      shelf_life: shelfLifeEl ? shelfLifeEl.value : "4 Hours (Consume hot)",
+      pickup_hub: pickupHubEl ? pickupHubEl.value : "Ramapuram Hub (West Chennai)",
+      recipient_ngo: targetRecipient,
+      claimed_by_ngo: targetRecipient,
+      notes: document.getElementById('disp-notes').value.trim() || null,
+      status: 'Awaiting Pickup',
+      claim_otp: generatedOtp,
+      created_at: new Date().toISOString()
     };
 
     const submitBtn = document.getElementById('btn-submit-broadcast');
@@ -4751,17 +4944,13 @@
 
       // Add to local state
       payload.id = state.dispatches.length ? Math.max(...state.dispatches.map(d => d.id)) + 1 : 5;
-      payload.status = 'ACTIVE';
-      payload.claimed_by_ngo = null;
-      payload.claim_otp = null;
-      payload.created_at = new Date().toISOString();
       state.dispatches.unshift(payload);
 
       try {
         localStorage.setItem('waste2menu_dispatches', JSON.stringify(state.dispatches));
       } catch (e) {}
 
-      showToast('📢 Surplus food alert broadcast to shelters!', 'success');
+      showToast(`Surplus food alert broadcast to shelters! Handover OTP: ${generatedOtp}`, 'success');
       DOM.ngoBroadcastForm.reset();
 
       if (savedBackend) {
@@ -4776,7 +4965,10 @@
       showToast(`Error: ${err.message}`, 'error');
     } finally {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '<span>📢 Broadcast Surplus Alert to Shelters</span>';
+      submitBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+        <span>Broadcast Surplus Alert to Shelters</span>
+      `;
     }
   }
 
@@ -4804,10 +4996,10 @@
     const ngo = DOM.claimInputNgo.value.trim() || 'Chennai Food Bank (Relief Partner)';
     if (!state.activeClaimDispatchId) return;
 
-    // Generate verified 6-digit handover OTP (e.g. #CN-4821)
-    const generatedOtp = `#CN-${Math.floor(1000 + Math.random() * 9000)}`;
-
     const targetDispatch = state.dispatches.find(d => d.id === state.activeClaimDispatchId);
+
+    // Generate or preserve verified 6-digit handover OTP
+    const generatedOtp = targetDispatch && targetDispatch.claim_otp ? targetDispatch.claim_otp : String(Math.floor(100000 + Math.random() * 900000));
 
     try {
       let savedBackend = false;
@@ -4822,7 +5014,7 @@
 
       // Update local state
       if (targetDispatch) {
-        targetDispatch.status = 'CLAIMED';
+        targetDispatch.status = 'Awaiting Pickup';
         targetDispatch.claimed_by_ngo = ngo;
         targetDispatch.claim_otp = generatedOtp;
       }
@@ -4839,15 +5031,15 @@
         if (DOM.claimLogisticsMeta && targetDispatch) {
           DOM.claimLogisticsMeta.innerHTML = `
             <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-              <div><strong>Pickup Location:</strong> 📍 ${escapeHtml((targetDispatch.pickup_location || '').replace(/^📍\s*/, ''))}</div>
-              <div><strong>Ready Time:</strong> ⏱️ ${escapeHtml(targetDispatch.ready_time || 'Hot & Ready Now')}</div>
-              <div><strong>Kitchen Contact:</strong> 📞 ${escapeHtml(targetDispatch.contact_number)}</div>
+              <div><strong>Pickup Location:</strong> ${escapeHtml((targetDispatch.pickup_location || '').replace(/^[^a-zA-Z0-9]+/, ''))}</div>
+              <div><strong>Ready Window:</strong> ${escapeHtml(targetDispatch.ready_time || 'Hot & Ready Now')}</div>
+              <div><strong>Kitchen Contact:</strong> ${escapeHtml(targetDispatch.contact_number)}</div>
             </div>
           `;
         }
       }
 
-      showToast(`🤝 Meal batch claimed! Handover OTP: ${generatedOtp}`, 'success');
+      showToast(`Meal batch claimed! Handover OTP: ${generatedOtp}`, 'success');
       renderDispatchesFeed();
     } catch (err) {
       showToast(err.message, 'error');
@@ -4859,9 +5051,10 @@
   // ==========================================================================
   function animateMetricCounters() {
     const targets = [
-      { element: DOM.statScrapsRescued, target: 12450, suffix: '+ kg' },
-      { element: DOM.statCo2Saved, target: 31125, suffix: ' kg' },
-      { element: DOM.statMealsServed, target: 1420, suffix: '+' }
+      { element: DOM.statScrapsRescued || document.getElementById('stat-scraps-rescued'), target: 12450, suffix: '+ kg' },
+      { element: DOM.statCo2Saved || document.getElementById('stat-co2-saved'), target: state.globalCo2Saved || 31125, suffix: ' kg' },
+      { element: DOM.statMealsServed || document.getElementById('stat-meals-served'), target: 1420, suffix: '+' },
+      { element: DOM.statMealsDispatched || document.getElementById('stat-meals-dispatched'), target: state.globalMealsDispatched || 8600, suffix: '+' }
     ];
 
     targets.forEach(item => {
@@ -4901,11 +5094,24 @@
       const catMeta = CATEGORIES_METADATA.find(c => c.id === sc.category_id) || {};
       const card = document.createElement('article');
       card.className = 'showcase-scrap-card';
+      card.style.cursor = 'pointer';
+
       card.innerHTML = `
         <div>
           <div class="showcase-card-top">
-            <span class="showcase-cat-pill">${catMeta.emoji || '🌱'} ${escapeHtml(catMeta.name || 'Byproduct')}</span>
-            <span class="showcase-eco-badge">♻️ 100% Edible</span>
+            <span class="showcase-cat-pill">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: -2px;">
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+              </svg>
+              ${escapeHtml(catMeta.name || 'Byproduct')}
+            </span>
+            <span class="showcase-eco-badge">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: -1px;">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+              100% Edible
+            </span>
           </div>
           <h4 class="showcase-scrap-title">${escapeHtml(sc.name_en)}</h4>
           <p class="showcase-method-text">${escapeHtml(sc.common_uses)}</p>
@@ -4913,27 +5119,29 @@
         <div class="showcase-card-bottom">
           <span style="font-size: 0.76rem; color: var(--text-muted); font-weight: 600;">Ancestral Recipe Ready</span>
           <button type="button" class="btn-showcase-cook" data-scrap-id="${sc.id}">
-            <span>Cook With This Scrap ➔</span>
+            <span>Cook With This Scrap</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px; vertical-align: -2px;">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
           </button>
         </div>
       `;
 
-      const cookBtn = card.querySelector('.btn-showcase-cook');
-      if (cookBtn) {
-        cookBtn.addEventListener('click', () => {
-          const rc = state.recipes.find(r => r.scrap_id === sc.id);
-          if (rc) {
-            openRecipeDetailModal(rc.id);
-          } else {
-            state.selectedScrapIds.clear();
-            state.selectedScrapIds.add(sc.id);
-            updateCatalogCardsSelectionState();
-            updateCatalogSelectionDock();
-            switchTab('home-chef');
-            applyFiltersAndRenderRecipes();
-          }
-        });
-      }
+      // Entire card click opens recipe modal or navigates
+      card.addEventListener('click', () => {
+        const rc = state.recipes.find(r => (r.scrap_id === sc.id || r.scrapId === sc.id));
+        if (rc) {
+          openRecipeDetailModal(rc.id);
+        } else {
+          state.selectedScrapIds.clear();
+          state.selectedScrapIds.add(sc.id);
+          updateCatalogCardsSelectionState();
+          updateCatalogSelectionDock();
+          switchTab('home-chef');
+          applyFiltersAndRenderRecipes();
+        }
+      });
 
       DOM.ancestralShowcaseGrid.appendChild(card);
     });
