@@ -3,16 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Waste2Menu — A Zero-Waste Reverse Recipe & Byproduct Optimization Engine</title>
-  <meta name="description" content="A Zero-Waste Reverse Recipe & Byproduct Optimization Engine celebrating Indian kitchen wisdom to protect nature from food waste. Complete 35-byproduct reference matrix." />
+  <title>Waste2Menu — Commercial Zero-Waste Reverse Recipe & Byproduct Optimization SaaS</title>
+  <meta name="description" content="A nationwide commercial platform connecting household cooks, commercial kitchens, and verified relief shelters across India to valorize food byproducts and eliminate surplus meal waste." />
   
   <!-- Valid High-Quality Inline SVG Leaf Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314452F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z'/%3E%3Cpath d='M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'/%3E%3C/svg%3E" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230F3D26' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z'/%3E%3Cpath d='M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'/%3E%3C/svg%3E" />
   
-  <!-- Curated Editorial Typography: Playfair Display + Plus Jakarta Sans + JetBrains Mono -->
+  <!-- Curated Editorial Typography: Instrument Serif + Playfair Display + Plus Jakarta Sans + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- Supabase Cloud SDK v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -32,7 +35,7 @@
         </div>
         <div class="brand-text">
           <h1 class="brand-title">Waste2Menu</h1>
-          <span class="brand-subtitle">Community Zero-Waste Edition</span>
+          <span class="brand-subtitle">Commercial Food Recovery SaaS</span>
         </div>
       </div>
 
@@ -50,7 +53,7 @@
             <circle cx="12" cy="12" r="3"/>
             <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
           </svg>
-          <span>Home Chef Hub</span>
+          <span>Reverse Recipe Hub</span>
         </button>
         <button type="button" class="nav-tab-btn" data-tab="scraps-matrix" id="nav-tab-matrix">
           <svg class="nav-btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
@@ -59,33 +62,49 @@
             <rect width="7" height="7" x="14" y="14" rx="1"/>
             <rect width="7" height="7" x="3" y="14" rx="1"/>
           </svg>
-          <span>Ingredients Catalog</span>
+          <span>Ingredients Matrix</span>
         </button>
         <button type="button" class="nav-tab-btn" data-tab="master-chef" id="nav-tab-master">
           <svg class="nav-btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 13.8a4.5 4.5 0 1 1 5.4-6.4 4.5 4.5 0 0 1 7.2 2.6 4 4 0 0 1-1.6 7.6H7a4 4 0 0 1-1-.2Z"/>
             <path d="M6 17h12v4H6z"/>
           </svg>
-          <span>Master Chef Studio</span>
+          <span>Commercial Chef Studio</span>
         </button>
         <button type="button" class="nav-tab-btn" data-tab="ngo-dispatch" id="nav-tab-ngo">
           <svg class="nav-btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="m11 17 2 2a1 1 0 0 0 1.4 0l6.6-6.6a5 5 0 0 0-7-7L12 7.4l-2-2a5 5 0 0 0-7 7l6.6 6.6a1 1 0 0 0 1.4 0Z"/>
           </svg>
-          <span>Chennai NGO Dispatch</span>
+          <span>Surplus Food Dispatch</span>
           <span class="active-badge-pill" id="active-dispatch-badge" style="display:none;">0</span>
         </button>
       </nav>
 
-      <!-- Right Cluster: Role-Specific Action Buttons & User Profile Badge -->
-      <div class="navbar-right-cluster header-auth" id="header-auth">
-        <button type="button" class="btn-auth-signin" id="btn-open-auth">
-          <svg class="nav-btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      <!-- Right Cluster: Region/Language Selector & User Auth State -->
+      <div class="navbar-right-cluster">
+        <!-- Live Region & Language Selector Pill -->
+        <button type="button" class="btn-locale-pill" id="btn-open-locale" title="Change Region &amp; Spoken Language">
+          <svg class="locale-globe-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+            <path d="M2 12h20"/>
           </svg>
-          <span>Sign In / Demo</span>
+          <span id="nav-active-locale-label">Tamil Nadu &bull; தமிழ்</span>
+          <svg class="chevron-svg" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
         </button>
+
+        <!-- Auth State: Sign In Button OR Logged-in User Profile -->
+        <div class="header-auth" id="header-auth">
+          <button type="button" class="btn-auth-signin" id="btn-open-auth">
+            <svg class="nav-btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>Sign In / Join</span>
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -101,43 +120,19 @@
       <!-- ASYMMETRIC 2-COLUMN HERO BENTO SECTION -->
       <div class="hero-bento-layout">
         
-        <!-- Left Column: Editorial Headline, Mission & Role Switcher -->
+        <!-- Left Column: Editorial Headline, Mission & Actions -->
         <div class="hero-bento-narrative">
           <div class="hero-showcase-badge">
             <span class="pulse-indicator-emerald"></span>
-            <span class="badge-text">Chennai Zero-Waste Movement • Non-Commercial Gastronomy</span>
+            <span class="badge-text">Pan-India Zero-Waste Movement &bull; Commercial &amp; Household Food Recovery</span>
           </div>
 
           <h2 class="hero-heading">Transform Every Kitchen Scrap into Wholesome Nourishment</h2>
 
           <p class="hero-lead">
             Honoring ancient Indian kitchen science and Antoine Lavoisier’s timeless principle: 
-            <em>“In nature, nothing is lost, everything is transformed.”</em> We empower home cooks to convert peelings, stems, and leftover grains into nutritious heritage dishes, while connecting community kitchens with verified Chennai relief shelters.
+            <em>“In nature, nothing is lost, everything is transformed.”</em> We empower home cooks and commercial kitchens across India to valorize peelings, stems, and leftover grains into regional heritage delicacies, while directly dispatching fresh surplus meal batches to verified grassroots relief shelters.
           </p>
-
-          <!-- Interactive Persona Switcher -->
-          <div class="hero-role-switcher-bar">
-            <span class="role-switcher-label">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-              </svg>
-              Live Persona Preview:
-            </span>
-            <div class="role-switcher-buttons" role="group" aria-label="Switch User Persona">
-              <button type="button" class="btn-role-switch active" data-role="guest" title="Experience site as a visitor">
-                <span>Guest</span>
-              </button>
-              <button type="button" class="btn-role-switch" data-role="home_chef" title="Switch to Home Chef Priya">
-                <span>Home Chef (Priya)</span>
-              </button>
-              <button type="button" class="btn-role-switch" data-role="master_chef" title="Switch to Master Chef Sanjeev">
-                <span>Master Chef (Sanjeev)</span>
-              </button>
-              <button type="button" class="btn-role-switch" data-role="ngo_rep" title="Switch to NGO Rep No Food Waste">
-                <span>NGO Partner (No Food Waste)</span>
-              </button>
-            </div>
-          </div>
 
           <!-- Hero Action Buttons -->
           <div class="hero-actions-row">
@@ -166,7 +161,7 @@
           </div>
         </div>
 
-        <!-- Right Column: Interactive Live Chennai Impact Bento Grid -->
+        <!-- Right Column: Interactive Live Pan-India Impact Bento Grid -->
         <div class="hero-bento-metrics">
           <div class="bento-metric-card emerald-accent">
             <div class="bento-metric-top">
@@ -218,8 +213,8 @@
             </div>
             <div class="bento-number-wrap">
               <span class="achieve-number metric-mono" id="stat-meals-served">1,420+</span>
-              <h4 class="bento-label">South Indian Upcycling Recipes</h4>
-              <p class="bento-sub">Curated from temple kitchens, paatis, and master chefs across Chennai.</p>
+              <h4 class="bento-label">Pan-Indian Upcycling Recipes</h4>
+              <p class="bento-sub">Curated from temple kitchens, heritage rasois, and master chefs across India.</p>
             </div>
           </div>
 
@@ -235,7 +230,7 @@
             <div class="bento-number-wrap">
               <span class="achieve-number metric-mono" id="stat-meals-dispatched">8,600+</span>
               <h4 class="bento-label">Surplus Meals Dispatched</h4>
-              <p class="bento-sub">Hot, wholesome batches routed directly to verified local shelters.</p>
+              <p class="bento-sub">Hot, wholesome batches routed directly to verified local shelters nationwide.</p>
             </div>
           </div>
         </div>
@@ -285,15 +280,15 @@
         </div>
       </div>
 
-      <!-- CHENNAI COMMUNITY IMPACT PARTNERS SECTION -->
+      <!-- PAN-INDIA COMMUNITY IMPACT PARTNERS SECTION -->
       <div class="home-partners-section" id="chennai-community-partners-section">
         <div class="section-title-wrap">
           <div class="kicker-with-badge">
             <span class="pulse-indicator-emerald"></span>
-            <span class="section-kicker">VERIFIED GRASSROOTS RECIPIENTS</span>
+            <span class="section-kicker">VERIFIED GRASSROOTS RECIPIENTS &bull; PAN-INDIA NETWORK</span>
           </div>
-          <h3 class="section-heading">Verified Chennai Community Partners</h3>
-          <p class="section-subtitle">Routing excess prepared nutrition directly into verified shelters, destitute homes, and volunteer networks across Chennai.</p>
+          <h3 class="section-heading">Verified Community Partners &amp; Relief Networks</h3>
+          <p class="section-subtitle">Routing excess prepared nutrition directly into verified shelters, destitute homes, and grassroots volunteer fleets across major Indian metropolitan hubs.</p>
         </div>
 
         <div class="partners-cards-grid" id="partners-cards-grid">
@@ -765,10 +760,10 @@
         </div>
         <div class="notice-body">
           <h4>Master Chef Sign-In Required</h4>
-          <p id="chef-role-notice-text">Recipe authoring and upload is exclusive to Master Chefs. Sign in or use the instant Master Chef demo to author community dishes.</p>
+          <p id="chef-role-notice-text">Recipe authoring and surplus logging is exclusive to verified Commercial Kitchens and Master Chefs. Sign in to your account to author dishes.</p>
         </div>
         <button class="btn-small-auth" id="btn-chef-demo-signin">
-          <span>Sign In as Master Chef Demo</span>
+          <span>Sign In to Commercial Studio</span>
         </button>
       </div>
 
@@ -827,8 +822,8 @@
     <section class="tab-panel" id="panel-ngo-dispatch">
       <div class="portal-header-bar">
         <div>
-          <h2 class="portal-heading">Community Kitchen &amp; NGO Surplus Dispatch</h2>
-          <p class="portal-sub">A non-commercial, rapid bridge between kitchens with surplus cooked meals and verified shelters feeding those in need.</p>
+          <h2 class="portal-heading">Commercial Kitchen &amp; NGO Surplus Dispatch Console</h2>
+          <p class="portal-sub">A nationwide commercial and community bridge between food providers with surplus batches and verified shelters feeding those in need.</p>
         </div>
       </div>
 
@@ -839,7 +834,7 @@
             <div class="pulse-indicator-saffron"></div>
             <h3>Surplus Batch Broadcast Form</h3>
           </div>
-          <p class="broadcast-desc">Have wholesome surplus cooked food from a kitchen batch, community langar, or festive event? Alert nearby verified non-profit shelters instantly.</p>
+          <p class="broadcast-desc">Have wholesome surplus cooked food from a banquet, restaurant service, community langar, or catering batch? Alert verified local relief shelters instantly.</p>
 
           <form id="ngo-broadcast-form">
             <div class="form-group">
@@ -886,14 +881,40 @@
             </div>
 
             <div class="form-group">
-              <label for="disp-pickup-hub">Chennai Logistics Pickup Hub *</label>
+              <label for="disp-pickup-hub">Metropolitan Logistics Hub *</label>
               <select id="disp-pickup-hub">
-                <option value="Ramapuram Hub (West Chennai)">Ramapuram Hub (West Chennai)</option>
-                <option value="Mylapore Heritage Hub (Central Chennai)">Mylapore Heritage Hub (Central Chennai)</option>
-                <option value="T. Nagar Central Hub">T. Nagar Central Hub</option>
-                <option value="Guindy Industrial Hub">Guindy Industrial Hub</option>
-                <option value="Velachery South Hub">Velachery South Hub</option>
-                <option value="OMR IT Corridor Hub">OMR IT Corridor Hub</option>
+                <optgroup label="Tamil Nadu (Chennai)">
+                  <option value="Mylapore Heritage Hub (Central Chennai)">Mylapore Heritage Hub (Central Chennai)</option>
+                  <option value="T. Nagar Central Hub">T. Nagar Central Hub</option>
+                  <option value="Ramapuram Hub (West Chennai)">Ramapuram Hub (West Chennai)</option>
+                  <option value="Guindy Industrial Hub">Guindy Industrial Hub</option>
+                  <option value="Velachery South Hub">Velachery South Hub</option>
+                </optgroup>
+                <optgroup label="West Bengal (Kolkata)">
+                  <option value="Park Street & Central Kolkata Hub">Park Street & Central Kolkata Hub</option>
+                  <option value="Salt Lake & New Town Tech Hub">Salt Lake & New Town Tech Hub</option>
+                  <option value="Howrah Rail Logistics Hub">Howrah Rail Logistics Hub</option>
+                </optgroup>
+                <optgroup label="Delhi NCR">
+                  <option value="Connaught Place Central Hub">Connaught Place Central Hub</option>
+                  <option value="Noida Expressway Logistics Hub">Noida Expressway Logistics Hub</option>
+                  <option value="Gurugram Cyber City Hub">Gurugram Cyber City Hub</option>
+                </optgroup>
+                <optgroup label="Maharashtra (Mumbai)">
+                  <option value="Lower Parel Commercial Hub">Lower Parel Commercial Hub</option>
+                  <option value="Andheri West Food Hub">Andheri West Food Hub</option>
+                  <option value="BKC Logistics Hub">BKC Logistics Hub</option>
+                </optgroup>
+                <optgroup label="Karnataka (Bengaluru)">
+                  <option value="Indiranagar & Central Bengaluru Hub">Indiranagar & Central Bengaluru Hub</option>
+                  <option value="Whitefield IT Corridor Hub">Whitefield IT Corridor Hub</option>
+                  <option value="Koramangala Commercial Hub">Koramangala Commercial Hub</option>
+                </optgroup>
+                <optgroup label="Telangana (Hyderabad)">
+                  <option value="Hitec City IT Corridor Hub">Hitec City IT Corridor Hub</option>
+                  <option value="Banjara Hills Food Hub">Banjara Hills Food Hub</option>
+                  <option value="Secunderabad Logistics Hub">Secunderabad Logistics Hub</option>
+                </optgroup>
               </select>
             </div>
 
@@ -905,10 +926,14 @@
             <div class="form-group">
               <label for="disp-recipient-ngo">Target Recipient NGO / Shelter (Optional)</label>
               <select id="disp-recipient-ngo">
-                <option value="All Verified Chennai Shelters (Citywide Broadcast)">All Verified Chennai Shelters (Citywide Broadcast)</option>
-                <option value="No Food Waste (Chennai Chapter)">No Food Waste (Chennai Chapter)</option>
+                <option value="All Verified Shelters (Nationwide Broadcast)">All Verified Shelters (Nationwide Broadcast)</option>
+                <option value="No Food Waste (Chennai / Tamil Nadu)">No Food Waste (Chennai / Tamil Nadu)</option>
+                <option value="Robin Hood Army (Pan-India Volunteer Network)">Robin Hood Army (Pan-India Volunteer Network)</option>
+                <option value="Feeding India by Zomato (Delhi NCR / Pan-India)">Feeding India by Zomato (Delhi NCR / Pan-India)</option>
+                <option value="The Akshaya Patra Foundation (Bengaluru / Pan-India)">The Akshaya Patra Foundation (Bengaluru / Pan-India)</option>
+                <option value="Mumbai Roti Bank (Mumbai / Maharashtra)">Mumbai Roti Bank (Mumbai / Maharashtra)</option>
+                <option value="Goonj (Delhi NCR / Kolkata)">Goonj (Delhi NCR / Kolkata)</option>
                 <option value="Akshaya Trust Chennai">Akshaya Trust Chennai</option>
-                <option value="Robin Hood Army (Chennai Chapter)">Robin Hood Army (Chennai Chapter)</option>
                 <option value="Udavum Karangal">Udavum Karangal</option>
                 <option value="Little Drops">Little Drops</option>
                 <option value="Annai Fathima Child Welfare Centre">Annai Fathima Child Welfare Centre</option>
@@ -936,11 +961,22 @@
         <div class="dispatch-feed-wrap">
           <div class="feed-header-row">
             <div>
-              <h3>Live Community Surplus Feed</h3>
-              <p class="feed-sub">Active alerts awaiting NGO pickup</p>
+              <h3>Live Commercial Surplus Feed</h3>
+              <p class="feed-sub">Active alerts awaiting verified NGO pickup</p>
             </div>
-            <div class="feed-active-counter">
-              <span id="stat-feed-active-meals" class="metric-mono">0</span> Meals Open
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+              <select id="filter-dispatch-region" class="region-filter-select" aria-label="Filter batches by region" style="padding: 0.35rem 0.65rem; border-radius: 6px; border: 1px solid var(--border-color); background: #fff; font-size: 0.82rem; font-weight: 600; color: var(--text-primary);">
+                <option value="all">All India (Nationwide)</option>
+                <option value="Tamil Nadu">Tamil Nadu (Chennai)</option>
+                <option value="West Bengal">West Bengal (Kolkata)</option>
+                <option value="Delhi NCR">Delhi NCR (New Delhi)</option>
+                <option value="Maharashtra">Maharashtra (Mumbai)</option>
+                <option value="Karnataka">Karnataka (Bengaluru)</option>
+                <option value="Telangana">Telangana (Hyderabad)</option>
+              </select>
+              <div class="feed-active-counter">
+                <span id="stat-feed-active-meals" class="metric-mono">0</span> Meals Open
+              </div>
             </div>
           </div>
 
@@ -950,17 +986,17 @@
         </div>
       </div>
 
-      <!-- CHENNAI LOCAL NGO DIRECTORY -->
+      <!-- PAN-INDIA LOCAL NGO DIRECTORY -->
       <div class="chennai-ngo-section" id="chennai-ngo-directory">
         <div class="section-title-wrap">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; width: 100%;">
             <div>
-              <span class="section-kicker">LOCAL COMMUNITY PARTNERS &bull; CHENNAI REGION</span>
-              <h3 class="section-heading">Verified Community Shelters &amp; Food Banks</h3>
-              <p class="section-subtitle">Collaborate directly with grassroots relief centers, destitute homes, and volunteer networks across Chennai.</p>
+              <span class="section-kicker">COMMUNITY RELIEF PARTNERS &bull; PAN-INDIA NETWORK</span>
+              <h3 class="section-heading">Verified Community Shelters &amp; Food Rescue Hubs</h3>
+              <p class="section-subtitle">Collaborate directly with grassroots relief centers, destitute homes, and volunteer networks across Chennai, Kolkata, Delhi, Mumbai, Bengaluru, and Hyderabad.</p>
             </div>
             <div class="chennai-search-box">
-              <input type="text" id="search-chennai-ngos" placeholder="Filter by Zone (e.g. T. Nagar, Porur, Adyar)..." />
+              <input type="text" id="search-chennai-ngos" placeholder="Filter by City or Zone (e.g. Kolkata, Delhi, Mumbai, T. Nagar)..." />
             </div>
           </div>
         </div>
@@ -1066,7 +1102,7 @@
   </main>
 
   <!-- ===================================================================== -->
-  <!-- NATIVE HTML5 DIALOG: AUTH MODAL (SIGN IN / REGISTER / DEMO) -->
+  <!-- NATIVE HTML5 DIALOG: COMMERCIAL AUTH MODAL (SUPABASE CLOUD AUTH) -->
   <!-- ===================================================================== -->
   <dialog class="app-modal" id="auth-modal">
     <div class="modal-card small">
@@ -1079,40 +1115,21 @@
       </header>
 
       <div class="modal-card-body">
-        <!-- Quick 1-Click Demo Buttons -->
-        <div class="demo-login-shortcuts">
-          <span class="demo-shortcuts-label">1-Click Instant Demo Login:</span>
-          <div class="demo-btns-row">
-            <button class="btn-demo-pill chef" id="btn-quick-demo-chef">
-              <span>Master Chef Demo</span>
-            </button>
-            <button class="btn-demo-pill home" id="btn-quick-demo-home">
-              <span>Home Chef Demo</span>
-            </button>
-            <button class="btn-demo-pill ngo" id="btn-quick-demo-ngo">
-              <span>NGO Shelter Demo</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="auth-divider">
-          <span>or continue with email</span>
-        </div>
-
         <!-- SIGN IN FORM -->
         <form id="form-signin" class="auth-form-view">
           <div class="form-group">
-            <label for="signin-email">Email Address</label>
-            <input type="email" id="signin-email" required placeholder="e.g. chef@annapurna.org or ngo@relief.org" />
+            <label for="signin-email">Email Address *</label>
+            <input type="email" id="signin-email" required placeholder="e.g. chef@kitchen.in or rescue@ngo.org" autocomplete="email" />
           </div>
 
           <div class="form-group">
-            <label for="signin-password">Password</label>
-            <input type="password" id="signin-password" required placeholder="Enter your password" />
+            <label for="signin-password">Password *</label>
+            <input type="password" id="signin-password" required placeholder="Enter your account password" autocomplete="current-password" />
           </div>
 
           <button type="submit" class="btn-auth-submit" id="btn-submit-signin">
-            <span>Sign In</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            <span>Sign In to Waste2Menu</span>
           </button>
         </form>
 
@@ -1120,35 +1137,139 @@
         <form id="form-register" class="auth-form-view" style="display:none;">
           <div class="form-group">
             <label for="reg-name">Full Name *</label>
-            <input type="text" id="reg-name" required placeholder="e.g. Ananya Sen / Kavitha Raman" />
+            <input type="text" id="reg-name" required placeholder="e.g. Chef Sundaram / Ananya Sen" />
           </div>
 
           <div class="form-group">
             <label for="reg-email">Email Address *</label>
-            <input type="email" id="reg-email" required placeholder="e.g. ananya@rasoi.in or ngo@relief.org" />
+            <input type="email" id="reg-email" required placeholder="e.g. user@domain.com" autocomplete="email" />
           </div>
 
           <div class="form-group">
             <label for="reg-password">Password *</label>
-            <input type="password" id="reg-password" minlength="4" required placeholder="At least 4 characters" />
+            <input type="password" id="reg-password" minlength="6" required placeholder="At least 6 characters" autocomplete="new-password" />
+            <span style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem; display: block;">Protected via Supabase Cloud Encrypted Auth</span>
           </div>
 
           <div class="form-group">
-            <label for="reg-role">Account Role *</label>
+            <label for="reg-role">Account Type &amp; Access Tier *</label>
             <select id="reg-role" required>
-              <option value="home_chef">Home Chef &mdash; Explores recipes, selects scraps, and logs dishes</option>
-              <option value="master_chef">Master Chef &mdash; Author &amp; standardize recipes</option>
-              <option value="ngo_rep">NGO / Community Shelter &mdash; Claim surplus food with OTP verification</option>
+              <option value="home_chef">Household Cook / Home Chef (Reverse Recipes &amp; AI Scanner)</option>
+              <option value="master_chef">Commercial Kitchen / Master Chef (Recipe Studio &amp; Dispatches)</option>
+              <option value="ngo_partner">Verified NGO / Relief Partner (Surplus Food Claims &amp; OTP)</option>
+            </select>
+          </div>
+
+          <div class="form-two-cols-compact">
+            <div class="form-group">
+              <label for="reg-region">State / Region *</label>
+              <select id="reg-region" required>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="West Bengal">West Bengal</option>
+                <option value="Delhi NCR">Delhi NCR</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Telangana">Telangana</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-city">Active City *</label>
+              <select id="reg-city" required>
+                <option value="Chennai">Chennai</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="New Delhi">New Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Bengaluru">Bengaluru</option>
+                <option value="Hyderabad">Hyderabad</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-language">Preferred Spoken Language *</label>
+            <select id="reg-language" required>
+              <option value="ta">Tamil (தமிழ்)</option>
+              <option value="bn">Bengali (বাংলা)</option>
+              <option value="hi">Hindi (हिन्दी)</option>
+              <option value="en">English (Universal)</option>
+              <option value="mr">Marathi (मराठी)</option>
+              <option value="te">Telugu (తెలుగు)</option>
+              <option value="kn">Kannada (ಕನ್ನಡ)</option>
+            </select>
+          </div>
+
+          <!-- Dynamic Commercial / NGO Verification Section -->
+          <div id="reg-commercial-fields" style="display:none; background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem; margin-bottom: 1rem;">
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label for="reg-org-name" id="label-reg-org">Organization / Kitchen / Shelter Name *</label>
+              <input type="text" id="reg-org-name" placeholder="e.g. Annapoorna Central Kitchen or Relief Shelter" />
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="reg-license-id" id="label-reg-license">FSSAI License / NGO Darpan Registration ID *</label>
+              <input type="text" id="reg-license-id" placeholder="e.g. FSSAI 10020042000123 / TN/2021/0284912" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-auth-submit" id="btn-submit-register">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            <span>Create Verified Account</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ===================================================================== -->
+  <!-- NATIVE HTML5 DIALOG: REGION & SPOKEN LANGUAGE LOCALIZATION SELECTOR -->
+  <!-- ===================================================================== -->
+  <dialog class="app-modal" id="locale-modal">
+    <div class="modal-card small">
+      <header class="modal-card-header">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+            <path d="M2 12h20"/>
+          </svg>
+          <h3 style="margin: 0; font-size: 1.15rem; font-family: var(--font-display);">Select Region &amp; Spoken Language</h3>
+        </div>
+        <button class="btn-close-modal" id="locale-modal-close" aria-label="Close">&times;</button>
+      </header>
+      <div class="modal-card-body">
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+          Personalize your regional scrap terminology, local heritage recipe curation, and community relief shelters.
+        </p>
+        <form id="form-locale-select">
+          <div class="form-group">
+            <label for="locale-select-region">Active State / Region</label>
+            <select id="locale-select-region" required>
+              <option value="Tamil Nadu">Tamil Nadu (Chennai)</option>
+              <option value="West Bengal">West Bengal (Kolkata)</option>
+              <option value="Delhi NCR">Delhi NCR (New Delhi)</option>
+              <option value="Maharashtra">Maharashtra (Mumbai)</option>
+              <option value="Karnataka">Karnataka (Bengaluru)</option>
+              <option value="Telangana">Telangana (Hyderabad)</option>
+              <option value="All India">All India (Pan-Indian Hub)</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="reg-affiliation">Kitchen Affiliation / Shelter Organization</label>
-            <input type="text" id="reg-affiliation" placeholder="e.g. Chennai Food Bank / Community Rasoi" />
+            <label for="locale-select-language">Preferred Spoken Language</label>
+            <select id="locale-select-language" required>
+              <option value="ta">Tamil (தமிழ்)</option>
+              <option value="bn">Bengali (বাংলা)</option>
+              <option value="hi">Hindi (हिन्दी)</option>
+              <option value="en">English (Universal)</option>
+              <option value="mr">Marathi (मराठी)</option>
+              <option value="te">Telugu (తెలుగు)</option>
+              <option value="kn">Kannada (ಕನ್ನಡ)</option>
+            </select>
           </div>
 
-          <button type="submit" class="btn-auth-submit" id="btn-submit-register">
-            <span>Create Free Account</span>
+          <button type="submit" class="btn-auth-submit" id="btn-save-locale">
+            <span>Apply Region &amp; Language</span>
           </button>
         </form>
       </div>

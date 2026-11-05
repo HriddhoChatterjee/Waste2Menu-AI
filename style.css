@@ -42,7 +42,7 @@
   --border-light: #F0EAE1;
 
   /* Editorial Typography Stack */
-  --font-display: 'Playfair Display', Georgia, serif;
+  --font-display: 'Instrument Serif', 'Playfair Display', Georgia, serif;
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
@@ -5318,4 +5318,120 @@ p,
   .partners-cards-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ==========================================================================
+   COMMERCIAL SaaS AUTH & REGION LOCALIZATION STYLES
+   ========================================================================== */
+.navbar-right-cluster {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-locale-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.85rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.btn-locale-pill:hover {
+  border-color: var(--brand-emerald);
+  background: #FFFFFF;
+  color: var(--brand-emerald);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(20, 69, 47, 0.1);
+}
+
+.btn-locale-pill .locale-globe-svg {
+  color: var(--brand-emerald);
+  flex-shrink: 0;
+}
+
+.btn-locale-pill .chevron-svg {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.user-profile-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: #FFFFFF;
+  padding: 0.3rem 0.65rem 0.3rem 0.85rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.user-profile-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-role-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--emerald-light);
+  color: var(--brand-emerald);
+  border: 1px solid var(--emerald-border);
+}
+
+.user-role-tag.master_chef {
+  background: var(--terracotta-light);
+  color: var(--brand-terracotta);
+  border-color: var(--terracotta-border);
+}
+
+.user-role-tag.ngo_partner {
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+.btn-auth-signout {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.btn-auth-signout:hover {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.region-filter-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2357534E' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2rem !important;
 }

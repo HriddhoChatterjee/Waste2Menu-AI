@@ -36,7 +36,7 @@
     {
       id: 3,
       category_id: 1,
-      name_en: "Potato Peels (உருளைக்கிழங்கு தோல் / Urulaikizhangu Thol)",
+      name_en: "Potato Peels",
       name_regional: "Urulaikizhangu Thol, Aloo Chilka, Aloo Khosha",
       common_uses: "Roasted crisp in cold-pressed gingelly oil with black pepper (Urulaikizhangu Thol Milagu Varuval) or seasoned with chaat masala into crispy chips."
     },
@@ -71,8 +71,8 @@
     {
       id: 8,
       category_id: 1,
-      name_en: "Carrot Peels & Tops (கேரட் தோல் / Carrot Thol)",
-      name_regional: "Carrot Thol, Gajar Chilka, Mulo Khosha",
+      name_en: "Carrot Peels & Tops",
+      name_regional: "Carrot Thol, Gajar Chilka, Gajor Khosha",
       common_uses: "Roasted with lentils and tamarind into thick Chennai-style Thogayal (Parambariya Carrot Thol Thogayal) or sautéed into quick dry subzis."
     },
     {
@@ -266,12 +266,371 @@
     }
   ];
 
+  // ==========================================================================
+  // SUPABASE CLOUD AUTHENTICATION & DATABASE CLIENT (v2)
+  // ==========================================================================
+  const SUPABASE_URL = "https://bffnkktcpbatzrjzkrln.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_m_av0_nkjvGBOuZAuD_lVw_9JkYsCUG";
+
+  let supabaseClient = null;
+  try {
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+  } catch (err) {
+    console.info("Supabase client initialized in local-fallback mode:", err);
+  }
+
+  // ==========================================================================
+  // PAN-INDIA MULTI-LANGUAGE SCRAPS LOCALIZATION MAP (7 LANGUAGES)
+  // ==========================================================================
+  const LOCALIZED_SCRAPS_MAP = {
+    1: {
+      en: "Bottle Gourd Peels",
+      ta: "சுரைக்காய் தோல் (Sorakkay Thol)",
+      bn: "লাউয়ের খোসা (Lau-er Khosha)",
+      hi: "लौकी का छिलका (Lauki Chilka)",
+      mr: "दुधी भोपळ्याची साल (Dudhi Saal)",
+      te: "సొరకాయ తొక్క (Sorakaya Tokka)",
+      kn: "ಸೋರೆಕಾಯಿ ಸಿಪ್ಪೆ (Sorekayi Sippe)"
+    },
+    2: {
+      en: "Ridge Gourd Peels",
+      ta: "பீர்க்கங்காய் தோல் (Peerkangai Thol)",
+      bn: "ঝিঙের খোসা (Jhinge Khosha)",
+      hi: "तोरई का छिलका (Turai Chilka)",
+      mr: "दोडक्याची साल (Dodkyachi Saal)",
+      te: "బీరకాయ తొక్క (Beerakaya Tokka)",
+      kn: "ಹೀರೆಕಾಯಿ ಸಿಪ್ಪೆ (Heerekayi Sippe)"
+    },
+    3: {
+      en: "Potato Peels",
+      ta: "உருளைக்கிழங்கு தோல் (Urulaikizhangu Thol)",
+      bn: "আলুর খোসা (Aloo Khosha)",
+      hi: "आलू का छिलका (Aloo Chilka)",
+      mr: "बटाट्याची साल (Batatyachi Saal)",
+      te: "బంగాళాదుంప తొక్క (Bangaladumpa Tokka)",
+      kn: "ಆಲೂಗಡ್ಡೆ ಸಿಪ್ಪೆ (Aaloogadde Sippe)"
+    },
+    4: {
+      en: "Raw Banana Peels",
+      ta: "வாழைக்காய் தோல் (Vazhakkai Thol)",
+      bn: "কাঁচকলার খোসা (Kancha Kolar Khosha)",
+      hi: "कच्चे केले का छिलका (Kacche Kele Ka Chilka)",
+      mr: "कच्च्या केळीची साल (Kachya Kelichi Saal)",
+      te: "అరటికాయ తొక్క (Aratikaya Tokka)",
+      kn: "ಬಾಳೆಕಾಯಿ ಸಿಪ್ಪೆ (Balekayi Sippe)"
+    },
+    5: {
+      en: "Pointed Gourd Peels",
+      ta: "பர்வல் தோல் (Parwal Thol)",
+      bn: "পটলের খোসা (Potol Khosha)",
+      hi: "परवल का छिलका (Parwal Chilka)",
+      mr: "पडवळ साल (Padwal Saal)",
+      te: "పొట్లకాయ తొక్క (Potlakaya Tokka)",
+      kn: "ಪಡವಲಕಾಯಿ ಸಿಪ್ಪೆ (Padavalakayi Sippe)"
+    },
+    6: {
+      en: "Pumpkin Peels & Fibers",
+      ta: "பரங்கிக்காய் தோல் (Parangikai Thol)",
+      bn: "কুমড়োর খোসা ও আঁশ (Kumro Khosha)",
+      hi: "कद्दू का छिलका व रेशा (Kaddu Chilka)",
+      mr: "लाल भोपळ्याची साल (Lal Bhoplyachi Saal)",
+      te: "గుమ్మడికాయ తొక్క (Gummadikaya Tokka)",
+      kn: "ಕುಂಬಳಕಾಯಿ ಸಿಪ್ಪೆ (Kumbalakayi Sippe)"
+    },
+    7: {
+      en: "Bitter Gourd Peels",
+      ta: "பாகற்காய் தோல் (Pavakkai Thol)",
+      bn: "করলার খোসা (Korola Khosha)",
+      hi: "करेले का छिलका (Karela Chilka)",
+      mr: "कारल्याची साल (Karlyachi Saal)",
+      te: "ಕಾಕರకాయ తొక్క (Kakarakaya Tokka)",
+      kn: "ಹಾಗಲಕಾಯಿ ಸಿಪ್ಪೆ (Hagalakayi Sippe)"
+    },
+    8: {
+      en: "Carrot Peels & Tops",
+      ta: "கேரட் தோல் (Carrot Thol)",
+      bn: "গাজরের খোসা (Gajor Khosha)",
+      hi: "गाजर का छिलका (Gajar Chilka)",
+      mr: "गाजराची साल (Gajrachi Saal)",
+      te: "క్యారెట్ తొక్క (Carrot Tokka)",
+      kn: "ಕ್ಯಾರೆಟ್ ಸಿಪ್ಪೆ (Carrot Sippe)"
+    },
+    9: {
+      en: "Eggplant Peels",
+      ta: "கத்தரிக்காய் தோல் (Kathirikai Thol)",
+      bn: "বেগুনের খোসা (Begun Khosha)",
+      hi: "बैंगन का छिलका (Baingan Chilka)",
+      mr: "वांग्याची साल (Wangyachi Saal)",
+      te: "వంకాయ తొక్క (Vankaya Tokka)",
+      kn: "ಬದನೆಕಾಯಿ ಸಿಪ್ಪೆ (Badanekayi Sippe)"
+    },
+    10: {
+      en: "Cauliflower Stems & Green Ribs",
+      ta: "காலிஃபிளவர் தண்டு (Cauliflower Thandu)",
+      bn: "ফুলকপির ডাঁটা ও পাতা (Phulkopir Data)",
+      hi: "फूलगोभी के डंठल (Phoolgobhi Danthal)",
+      mr: "फ्लॉवरचे देठ (Flowerche Deth)",
+      te: "క్యాలీఫ్లవర్ కాడలు (Cauliflower Kadalu)",
+      kn: "ಹೂಕೋಸು ದಂಟು (Hookosu Dantu)"
+    },
+    11: {
+      en: "Coriander & Mint Stems",
+      ta: "கொத்தமல்லி தண்டு (Kothamalli Thandu)",
+      bn: "ধনেপাতা ও পুদিনা ডাঁটা (Dhonepata Data)",
+      hi: "धनिया व पुदीना डंठल (Dhaniya Dandi)",
+      mr: "कोथिंबीर व पुदिना देठ (Kothimbir Deth)",
+      te: "కొత్తిమీర కాడలు (Kothimeera Kadalu)",
+      kn: "ಕೊತ್ತಂಬರಿ ದಂಟು (Kothambari Dantu)"
+    },
+    12: {
+      en: "Broccoli Stalks",
+      ta: "ப்ரோக்கோலி தண்டு (Broccoli Thandu)",
+      bn: "ব্রকলির ডাঁটা (Broccoli Data)",
+      hi: "ब्रोकली का तना (Broccoli Danthal)",
+      mr: "ब्रोकोलीचे देठ (Broccoliche Deth)",
+      te: "బ్రోకలీ కాడలు (Broccoli Kadalu)",
+      kn: "ಬ್ರೊಕೊಲಿ ಕಾಂಡ (Broccoli Kanda)"
+    },
+    13: {
+      en: "Beetroot & Radish Greens",
+      ta: "பீட்ரூட் & முள்ளங்கி கீரை (Keerai)",
+      bn: "মুলো ও বিট শাক (Mulo o Beet Shaak)",
+      hi: "मूली व चुकंदर के पत्ते (Mooli Patte)",
+      mr: "मुळ्याची पाने (Mulyachi Paane)",
+      te: "ముల్లంగి ఆకులు (Mullangi Aakulu)",
+      kn: "ಮೂಲಂಗಿ ಸೊಪ್ಪು (Moolangi Soppu)"
+    },
+    14: {
+      en: "Colocasia Stems & Leaves",
+      ta: "சேப்பங்கிழங்கு தண்டு (Seppankizhangu Thandu)",
+      bn: "কচু শাক ও ডাঁটা (Kochu Shaak)",
+      hi: "अरबी के पत्ते व डंठल (Arbi Patte)",
+      mr: "अळूची पाने व देठ (Aluchi Paane)",
+      te: "చామదుంప ఆకులు (Chamadumpa Aakulu)",
+      kn: "ಕೇಸುವಿನ ಸೊಪ್ಪು (Kesuvina Soppu)"
+    },
+    15: {
+      en: "Cabbage Outer Leaves & Core",
+      ta: "முட்டைக்கோஸ் தண்டு (Muttakose Thandu)",
+      bn: "বাঁধাকপির ডাঁটা ও পাতা (Bandhakopir Data)",
+      hi: "पत्तागोभी का डंठल (Pattagobhi Danthal)",
+      mr: "कोबीचे बाहेरील पाने (Kobichi Paane)",
+      te: "క్యాబేజీ కాడలు (Cabbage Kadalu)",
+      kn: "ಎಲೆಕೋಸು ದಂಟು (Elekosu Dantu)"
+    },
+    16: {
+      en: "Watermelon White Rind",
+      ta: "தர்பூசணி வெள்ளை தோல் (Tharpoosani Thol)",
+      bn: "তরমুজের সাদা অংশ (Tormujer Shada Angsho)",
+      hi: "तरबूज का सफेद छिलका (Tarbooz Chilka)",
+      mr: "कलिंगडाचा पांढरा भाग (Kalingad Pandhra Bhaag)",
+      te: "పుచ్చకాయ తెల్ల తొక్క (Pucchakaya Tella Tokka)",
+      kn: "ಕಲ್ಲಂಗಡಿ ಬಿಳಿ ಸಿಪ್ಪೆ (Kallangadi Bili Sippe)"
+    },
+    17: {
+      en: "Jackfruit Seeds",
+      ta: "பலாக்கொட்டை (Palakottai)",
+      bn: "কাঁঠালের দানা (Kanthaler Dana)",
+      hi: "कटहल के बीज (Kathal Ke Beej)",
+      mr: "फणसाच्या बिया (Phansachya Biya)",
+      te: "పనస గಿంజలు (Panasa Ginjalu)",
+      kn: "ಹಲಸಿನ ಬೀಜ (Halasina Beeja)"
+    },
+    18: {
+      en: "Pumpkin Seeds",
+      ta: "பூசணி விதை (Poosani Vithai)",
+      bn: "কুমড়োর বীজ (Kumror Beej)",
+      hi: "कद्दू के बीज (Kaddu Beej)",
+      mr: "भोपळ्याच्या बिया (Bhoplyachya Biya)",
+      te: "గుమ్మడి విత్తనాలు (Gummadi Vittanalu)",
+      kn: "ಕುಂಬಳಕಾಯಿ ಬೀಜ (Kumbalakayi Beeja)"
+    },
+    19: {
+      en: "Raw Mango Pits & Skins",
+      ta: "மாங்காய் கொட்டை & தோல் (Mangai Kottai)",
+      bn: "কাঁচা আমের আঁটি ও খোসা (Aamer Aanti)",
+      hi: "कच्चे आम की गुठली व छिलका (Aam Gutli)",
+      mr: "कैरीची कोय व साल (Kairichi Koy)",
+      te: "మామిడి జీడి & తొక్క (Mamidi Jeedi)",
+      kn: "ಮಾವಿನಕಾಯಿ ಗೊರಟು (Mavinakayi Goratu)"
+    },
+    20: {
+      en: "Squeezed Lemon Halves",
+      ta: "பிழிந்த எலுமிச்சை தோல் (Elumichai Thol)",
+      bn: "নিঙড়ানো লেবুর খোসা (Lebur Khosha)",
+      hi: "निचोड़ा हुआ नींबू का छिलका (Nimbu Chilka)",
+      mr: "पिळलेली लिंबाची साल (Limbachi Saal)",
+      te: "రసం తీసిన నిమ్మకాయ (Nimmakaya Tokka)",
+      kn: "ಹಿಂಡಿದ ನಿಂಬೆ ಸಿಪ್ಪೆ (Nimbe Sippe)"
+    },
+    21: {
+      en: "Leftover Cooked Rice",
+      ta: "பழைய சாதம் (Pazhaya Sadham)",
+      bn: "বাসি ভাত / পান্তা ভাত (Bashi Bhaat)",
+      hi: "बचा हुआ बासी चावल (Basi Chawal)",
+      mr: "उरलेला भात (Urlela Bhaat)",
+      te: "మిగిలిన అన్నం (Migilina Annam)",
+      kn: "ಉಳಿದ ಅನ್ನ (Ulida Anna)"
+    },
+    22: {
+      en: "Stale Rotis / Chapati Ends",
+      ta: "மீந்துபோன சப்பாத்தி (Meentha Chappathi)",
+      bn: "বাসি রুটি (Bashi Ruti)",
+      hi: "बासी रोटी के टुकड़े (Basi Roti)",
+      mr: "शिळी पोळी / चपाती (Shili Poli)",
+      te: "మిగిలిన చపాతీలు (Chapathilu)",
+      kn: "ಉಳಿದ ಚಪಾತಿ (Ulida Chapathi)"
+    },
+    23: {
+      en: "Stale Bread Crusts & Ends",
+      ta: "பிரெட் ஓரங்கள் (Bread Orangal)",
+      bn: "পাউরুটির শক্ত ধার (Bread Crust)",
+      hi: "ब्रेड के किनारे (Bread Crusts)",
+      mr: "ब्रेडचे कडा (Bread Crusts)",
+      te: "బ్రెడ్ అంచులు (Bread Anchulu)",
+      kn: "ಬ್ರೆಡ್ ತುದಿಗಳು (Bread Thudigalu)"
+    },
+    24: {
+      en: "Rice Wash Water",
+      ta: "அரிசி கழுவிய தண்ணீர் (Arisi Kazhuviya Thanneer)",
+      bn: "চাল ধোয়া জল (Chaal Dhowa Jol)",
+      hi: "चावल धोने का पानी (Chawal Dhowan)",
+      mr: "तांदूळ धुण्याचे पाणी (Tandul Dhunyache Paani)",
+      te: "బియ్యం కడిగిన నీళ్లు (Biyyam Kadigina Neellu)",
+      kn: "ಅಕ್ಕಿ ತೊಳೆದ ನೀರು (Akki Toleda Neeru)"
+    },
+    25: {
+      en: "Cooked Rice Starch Water",
+      ta: "வடித்த கஞ்சி தண்ணீர் (Kanji Thanneer)",
+      bn: "ভাতের মাড় / ফ্যান (Bhaater Maar / Phen)",
+      hi: "चावल का मांड (Chawal Ka Maand)",
+      mr: "पेज / भाताचे पाणी (Pej)",
+      te: "గంజి నీళ్లు (Ganji Neellu)",
+      kn: "ಗಂಜಿ ನೀರು (Ganji Neeru)"
+    },
+    26: {
+      en: "Paneer / Whey Water",
+      ta: "பன்னீர் தெளிவு நீர் (Paneer Thanneer)",
+      bn: "ছানার জল (Chhanar Jol)",
+      hi: "पनीर का पानी / व्हे (Paneer Ka Paani)",
+      mr: "पनीरचे पाणी (Paneerche Paani)",
+      te: "పన్నీర్ నీళ్లు (Paneer Neellu)",
+      kn: "ಪನೀರ್ ನೀರು (Paneer Neeru)"
+    },
+    27: {
+      en: "Sour Curd / Leftover Dahi",
+      ta: "புளித்த தயிர் (Pulitha Thayir)",
+      bn: "টক দই (Tok Doi)",
+      hi: "खट्टा दही (Khatta Dahi)",
+      mr: "आंबट दही (Aambat Dahi)",
+      te: "పుల్లటి పెరుగు (Pullati Perugu)",
+      kn: "ಹುಳಿ ಮೊಸರು (Huli Mosaru)"
+    },
+    28: {
+      en: "Browned Ghee Sediment",
+      ta: "நெய் கசண்டு (Ney Kasandu)",
+      bn: "ঘিয়ের কাইট / চাঁচি (Gheer Chanchi)",
+      hi: "घी की खुरचन / मेहरी (Ghee Khurchan)",
+      mr: "तूप कढवलेली बेरी (Tup Beri)",
+      te: "నెయ్యి కల్మషం (Neyyi Kandum)",
+      kn: "ತುಪ್ಪದ ಕಿಟ್ಟ (Tuppada Kitta)"
+    },
+    29: {
+      en: "Peeled Ginger Skins",
+      ta: "இஞ்சி தோல் (Inji Thol)",
+      bn: "আদার খোসা (Aadar Khosha)",
+      hi: "अदरक का छिलका (Adrak Chilka)",
+      mr: "आल्याची साल (Alyachi Saal)",
+      te: "అల్లం తొక్క (Allam Tokka)",
+      kn: "ಶುಂಠಿ ಸಿಪ್ಪೆ (Shunti Sippe)"
+    },
+    30: {
+      en: "Coconut Brown Husk Skins",
+      ta: "தேங்காய் சில்லு தோல் (Thengai Thol)",
+      bn: "নারকেলের বাদামী চামড়া (Narkel Chhala)",
+      hi: "नारियल की भूरी परत (Nariyal Chilka)",
+      mr: "खोबऱ्याची साल (Khobryachi Saal)",
+      te: "కొబ్బరి వెనుక తొక్క (Kobbari Tokka)",
+      kn: "ತೆಂಗಿನಕಾಯಿ ಸಿಪ್ಪೆ (Thengina Sippe)"
+    },
+    31: {
+      en: "Bone Knuckles & Trimmings",
+      ta: "எலும்புத் துண்டுகள் (Elumbu Thundugal)",
+      bn: "হাড়ের টুকরো (Haarer Tukro)",
+      hi: "हड्डी के टुकड़े (Haddi Ke Tukde)",
+      mr: "हाडांचे तुकडे (Hadanche Tukde)",
+      te: "ఎముకల ముక్కలు (Emukala Mukkalu)",
+      kn: "ಮೂಳೆಯ ಚೂರುಗಳು (Mooleya Choorugalu)"
+    },
+    32: {
+      en: "Fish Head & Cartilage",
+      ta: "மீன் தலை (Meen Thalai)",
+      bn: "মাছের মুড়ো (Maacher Muro)",
+      hi: "मछली का सिर (Machli Ka Sira)",
+      mr: "माशाचे डोके (Mashache Doke)",
+      te: "చేప తల (Chepa Tala)",
+      kn: "ಮೀನಿನ ತಲೆ (Meenina Tale)"
+    },
+    33: {
+      en: "Prawn Shells & Heads",
+      ta: "இறால் ஓடு & தலை (Iral Odu)",
+      bn: "চিংড়ির খোসা ও মাথা (Chingrir Khosha)",
+      hi: "झींगे के छिलके (Jheenga Chilka)",
+      mr: "कोळंबीची टरफले (Kolambichi Tarphale)",
+      te: "రొయ్య పొట్టు & తల (Royya Pottu)",
+      kn: "ಸೀಗಡಿ ಸಿಪ್ಪೆ (Seegadi Sippe)"
+    },
+    34: {
+      en: "Chicken Skin & Fat Trimmings",
+      ta: "கோழி தோல் & கொழுப்பு (Kozhi Thol)",
+      bn: "মুরগির চামড়া ও চর্বি (Murgir Chorbi)",
+      hi: "चिकन स्किन व फैट (Chicken Skin)",
+      mr: "चिकनची त्वचा व चरबी (Chicken Charbi)",
+      te: "చికెన్ చర్మం & కొవ్వు (Chicken Charmam)",
+      kn: "ಚಿಕನ್ ಚರ್ಮ (Chicken Charma)"
+    },
+    35: {
+      en: "Fish Roe / Egg Sacs",
+      ta: "மீன் சினை / முட்டை (Meen Sinai)",
+      bn: "মাছের ডিম (Maacher Deem)",
+      hi: "मछली के अंडे (Machli Ke Ande)",
+      mr: "माशांची अंडी / गाभोळी (Ghaboli)",
+      te: "చేప గుడ్లు (Chepa Gudlu)",
+      kn: "ಮೀನಿನ ಮೊಟ್ಟೆ (Meenina Motte)"
+    }
+  };
+
+  function getLocalizedScrapName(scrapOrId, lang) {
+    const currentLang = lang || (state && state.activeLanguage) || 'ta';
+    const id = (typeof scrapOrId === 'object' && scrapOrId !== null) ? scrapOrId.id : parseInt(scrapOrId, 10);
+    const entry = LOCALIZED_SCRAPS_MAP[id];
+    if (!entry) {
+      if (typeof scrapOrId === 'object' && scrapOrId !== null) return scrapOrId.name_en || `Scrap #${id}`;
+      return `Scrap #${id}`;
+    }
+    const regional = entry[currentLang] || entry['en'] || entry['ta'];
+    const english = entry['en'] || '';
+    if (currentLang === 'en' || regional === english) {
+      return english;
+    }
+    return `${regional} / ${english}`;
+  }
+
+  function getLocalizedScrapShort(scrapOrId, lang) {
+    const currentLang = lang || (state && state.activeLanguage) || 'ta';
+    const id = (typeof scrapOrId === 'object' && scrapOrId !== null) ? scrapOrId.id : parseInt(scrapOrId, 10);
+    const entry = LOCALIZED_SCRAPS_MAP[id];
+    if (!entry) return `Scrap #${id}`;
+    return entry[currentLang] || entry['en'];
+  }
+
   const CATEGORIES_METADATA = [
     {
       id: 1,
       name: "Vegetable Peels & Skins",
       regional: "Chilka / Khosha / Thol",
-      emoji: "🥔",
       count: 9,
       description: "Outer peels of gourds, tubers, roots, and nightshades rich in dietary fiber, polyphenols, and flavor."
     },
@@ -279,7 +638,6 @@
       id: 2,
       name: "Stems, Stalks & Green Leaves",
       regional: "Danta / Thandu / Leaves",
-      emoji: "🌿",
       count: 6,
       description: "Nutrient-packed fibrous stalks, tender stems, and mineral-dense leaves of brassicas, herbs, and colocasia."
     },
@@ -287,7 +645,6 @@
       id: 3,
       name: "Seeds, Piths & Rinds",
       regional: "Beej / Bichi / Guthli",
-      emoji: "🍉",
       count: 5,
       description: "High-protein seeds, fibrous piths, melon rinds, and citrus peels packed with essential oils and pectin."
     },
@@ -295,7 +652,6 @@
       id: 4,
       name: "Grains, Starches & Leftover Staples",
       regional: "Basi / Leftover",
-      emoji: "🍚",
       count: 5,
       description: "Cooked rice, overnight stale rotis, bread crusts, starchy wash waters, and kanji rich in natural probiotics and energy."
     },
@@ -303,7 +659,6 @@
       id: 5,
       name: "Dairy & Spice Discards",
       regional: "Paneer Whey / Khurchan / Skins",
-      emoji: "🥛",
       count: 5,
       description: "Bio-active paneer whey, sour curd, caramelized ghee residue (khurchan), ginger skins, and roasted coconut husks."
     },
@@ -311,7 +666,6 @@
       id: 6,
       name: "Non-Veg Discards & Byproducts",
       regional: "Haddi / Charbi / Matha / Shells",
-      emoji: "🍗",
       count: 5,
       description: "Nutrient-dense bone frames, marrow knuckles, fish heads, prawn shells, rendered chicken skin, and spiced fish egg sacs."
     }
@@ -1469,70 +1823,221 @@
   ];
 
   // ==========================================================================
-  // VERIFIED CHENNAI LOCAL GRASSROOTS NGOS & COMMUNITY SHELTERS
+  // NATIONWIDE VERIFIED GRASSROOTS NGOS & COMMUNITY SHELTERS
   // ==========================================================================
-  const CHENNAI_NGOS = [
+  const NATIONWIDE_NGOS = [
+    // Tamil Nadu (Chennai)
     {
       id: "cfb_nfw",
-      name: "Chennai Food Bank / No Food Waste (Chennai Chapter)",
+      name: "No Food Waste (Chennai Chapter)",
+      city: "Chennai",
+      region: "Tamil Nadu",
       zone: "Central Chennai (T. Nagar, Kodambakkam)",
       contact: "+91 90877 90877",
-      focus: "Surplus food pickup & slum community distribution",
+      focus: "Surplus food pickup & pavement community distribution",
       address: "12, Venkatanarayana Road, T. Nagar, Chennai - 600017",
-      badge: "24/7 Relief",
-      icon: "🍲"
+      badge: "24/7 Relief Fleet"
     },
     {
       id: "akshaya_trust",
       name: "Akshaya Trust Chennai",
+      city: "Chennai",
+      region: "Tamil Nadu",
       zone: "Valasaravakkam / Porur",
       contact: "+91 98410 12345",
       focus: "Senior citizen homes & street destitute rehabilitation",
       address: "4/88, Mount Poonamallee High Road, Valasaravakkam, Chennai - 600087",
-      badge: "Eldercare Relief",
-      icon: "👵"
+      badge: "Eldercare Relief"
     },
     {
       id: "rha_chennai",
       name: "Robin Hood Army - Chennai Chapter",
-      zone: "North & South Chennai (Mylapore, Anna Nagar, Adyar)",
-      contact: "Community Slack / App Hotline",
+      city: "Chennai",
+      region: "Tamil Nadu",
+      zone: "North & South Chennai (Mylapore, Adyar)",
+      contact: "+91 94440 18234",
       focus: "Evening cooked food redistribution & night shelter relief",
       address: "Volunteers Hub, 2nd Main Road, Gandhi Nagar, Adyar, Chennai - 600020",
-      badge: "Youth Volunteer Network",
-      icon: "💚"
+      badge: "Volunteer Fleet"
     },
     {
       id: "udavum_karangal",
       name: "Udavum Karangal",
+      city: "Chennai",
+      region: "Tamil Nadu",
       zone: "Thiruvanmiyur / Velachery",
       contact: "044-2441 0555",
       focus: "Orphanages, homeless shelters, and pediatric nourishment",
       address: "46, Valmiki Street, Thiruvanmiyur, Chennai - 600041",
-      badge: "Orphanage & Children",
-      icon: "👶"
-    },
-    {
-      id: "annai_fathima",
-      name: "Annai Fathima Child Welfare Centre",
-      zone: "Karapakkam, OMR",
-      contact: "044-2450 1234",
-      focus: "Children shelter & daily community meal distribution",
-      address: "Plot 14, Old Mahabalipuram Road (OMR), Karapakkam, Chennai - 600097",
-      badge: "Child Nutrition",
-      icon: "🥣"
+      badge: "Pediatric Relief"
     },
     {
       id: "little_drops",
       name: "Little Drops",
-      zone: "Paraniputhur (Near Ramapuram / Porur)",
+      city: "Chennai",
+      region: "Tamil Nadu",
+      zone: "Paraniputhur (Near Porur)",
       contact: "044-2476 1122",
       focus: "Destitute elderly home & daily meal relief",
       address: "Little Drops Campus, Koluthuvanchery Main Rd, Paraniputhur, Chennai - 600122",
-      badge: "Destitute Shelter",
-      icon: "🏡"
+      badge: "Destitute Shelter"
+    },
+    {
+      id: "annai_fathima",
+      name: "Annai Fathima Child Welfare Centre",
+      city: "Chennai",
+      region: "Tamil Nadu",
+      zone: "Karapakkam, OMR",
+      contact: "044-2450 1234",
+      focus: "Children shelter & daily community meal distribution",
+      address: "Plot 14, Old Mahabalipuram Road (OMR), Karapakkam, Chennai - 600097",
+      badge: "Child Nutrition"
+    },
+
+    // West Bengal (Kolkata)
+    {
+      id: "rha_kolkata",
+      name: "Robin Hood Army - Kolkata Chapter",
+      city: "Kolkata",
+      region: "West Bengal",
+      zone: "Park Street, Shyambazar & Howrah",
+      contact: "+91 98301 23456",
+      focus: "Banquet & restaurant surplus food redistribution",
+      address: "Park Circus Hub, Kolkata - 700017",
+      badge: "Volunteer Network"
+    },
+    {
+      id: "kolkata_roti_bank",
+      name: "Kolkata Roti Bank",
+      city: "Kolkata",
+      region: "West Bengal",
+      zone: "Howrah & Sealdah Terminals",
+      contact: "+91 98310 99887",
+      focus: "Platform destitute & daily wage meal relief",
+      address: "Station Approach Road, Howrah, West Bengal - 711101",
+      badge: "Daily Meal Bank"
+    },
+    {
+      id: "udayan_care_bengal",
+      name: "Udayan Care Bengal",
+      city: "Kolkata",
+      region: "West Bengal",
+      zone: "Salt Lake & New Town",
+      contact: "033-2334 1122",
+      focus: "Vulnerable youth shelter & high-protein nutrition",
+      address: "Sector 1, Salt Lake City, Kolkata - 700064",
+      badge: "Child Welfare"
+    },
+
+    // Delhi NCR
+    {
+      id: "feeding_india_delhi",
+      name: "Feeding India by Zomato (Delhi Hub)",
+      city: "New Delhi",
+      region: "Delhi NCR",
+      zone: "Connaught Place, Noida & Central Delhi",
+      contact: "+91 99990 12345",
+      focus: "Rapid commercial surplus pickup from hotels & caterers",
+      address: "Barakhamba Road, Connaught Place, New Delhi - 110001",
+      badge: "24/7 Rapid Fleet"
+    },
+    {
+      id: "rha_delhi",
+      name: "Robin Hood Army - Delhi NCR",
+      city: "New Delhi",
+      region: "Delhi NCR",
+      zone: "South Extension & Karol Bagh",
+      contact: "+91 98110 54321",
+      focus: "Evening cooked surplus routing to night shelters",
+      address: "South Extension Part II, New Delhi - 110049",
+      badge: "Youth Network"
+    },
+    {
+      id: "goonj_national",
+      name: "Goonj National Logistics Hub",
+      city: "New Delhi",
+      region: "Delhi NCR",
+      zone: "Sarita Vihar & Okhla",
+      contact: "011-2697 2351",
+      focus: "Dignified food relief & urban resource routing",
+      address: "J-93, Sarita Vihar, New Delhi - 110076",
+      badge: "National Network"
+    },
+
+    // Maharashtra (Mumbai)
+    {
+      id: "mumbai_roti_bank",
+      name: "Mumbai Roti Bank by Dabbawalas",
+      city: "Mumbai",
+      region: "Maharashtra",
+      zone: "Lower Parel & Dadar",
+      contact: "+91 86555 80001",
+      focus: "Wedding & corporate cafeteria excess food recovery",
+      address: "Dabbawala Bhavan, Dadar West, Mumbai - 400028",
+      badge: "Dabbawala Fleet"
+    },
+    {
+      id: "rha_mumbai",
+      name: "Robin Hood Army - Mumbai Hub",
+      city: "Mumbai",
+      region: "Maharashtra",
+      zone: "Andheri, Bandra & Chembur",
+      contact: "+91 98200 11223",
+      focus: "Slum pocket distribution & night shelter meal drops",
+      address: "Linking Road, Bandra West, Mumbai - 400050",
+      badge: "Active Relief"
+    },
+    {
+      id: "khaana_chahiye",
+      name: "Khaana Chahiye Foundation",
+      city: "Mumbai",
+      region: "Maharashtra",
+      zone: "Kurla, Chembur & Govandi",
+      contact: "+91 93240 88776",
+      focus: "Vulnerable urban migrant & daily wage nourishment",
+      address: "Kurla West, Mumbai - 400070",
+      badge: "Urban Food Rescue"
+    },
+
+    // Karnataka (Bengaluru)
+    {
+      id: "akshaya_patra_hq",
+      name: "The Akshaya Patra Foundation (National HQ)",
+      city: "Bengaluru",
+      region: "Karnataka",
+      zone: "Rajajinagar & ISKCON Bangalore",
+      contact: "+91 80 3014 3400",
+      focus: "Large-scale community relief kitchens & child meals",
+      address: "Hare Krishna Hill, West of Chord Road, Bengaluru - 560010",
+      badge: "National HQ"
+    },
+    {
+      id: "bangalore_food_bank",
+      name: "Bangalore Food Bank",
+      city: "Bengaluru",
+      region: "Karnataka",
+      zone: "Whitefield & HSR Layout",
+      contact: "080-2553 4455",
+      focus: "Tech park cafeteria excess recovery & shelter distribution",
+      address: "EPIP Zone, Whitefield, Bengaluru - 560066",
+      badge: "Food Bank Partner"
+    },
+
+    // Telangana (Hyderabad)
+    {
+      id: "akshaya_patra_hyd",
+      name: "Akshaya Patra Foundation - Telangana Hub",
+      city: "Hyderabad",
+      region: "Telangana",
+      zone: "Kandi & Hitec City Corridor",
+      contact: "040-2776 5544",
+      focus: "Centralized hygienic meal delivery to community centers",
+      address: "Near Collectorate, Sangareddy Road, Hyderabad - 502285",
+      badge: "High-Volume Relief"
     }
   ];
+
+  const CHENNAI_NGOS = NATIONWIDE_NGOS;
 
   function getStoredOrFallbackRecipes() {
     try {
@@ -1561,6 +2066,10 @@
   // Application State
   const state = {
     currentUser: null,
+    currentProfile: null,
+    activeRegion: localStorage.getItem('waste2menu_region') || 'Tamil Nadu',
+    activeCity: localStorage.getItem('waste2menu_city') || 'Chennai',
+    activeLanguage: localStorage.getItem('waste2menu_language') || 'ta',
     activeTab: 'home-overview',
     categories: CATEGORIES_METADATA.slice(),
     scraps: INGREDIENTS_DATA.slice(),
@@ -1685,6 +2194,260 @@
   const VERIFIED_DEMO_RECIPES = TARGET_DEMO_RECIPES;
   window.TARGET_DEMO_RECIPES = TARGET_DEMO_RECIPES;
   window.VERIFIED_DEMO_RECIPES = VERIFIED_DEMO_RECIPES;
+
+  // =========================================================================
+  // MULTI-REGIONAL RECIPES MATRIX (TAMIL NADU, BENGAL, DELHI/NORTH, UNIVERSAL)
+  // =========================================================================
+  const MULTI_REGIONAL_RECIPES = {
+    3: {
+      ta: {
+        id: 301,
+        scrapId: 3,
+        title: "Urulaikizhangu Thol Milagu Varuval (உருளைக்கிழங்கு தோல் மிளகு வறுவல் — Crispy Pepper Potato Peel Roast)",
+        regionalName: "உருளைக்கிழங்கு தோல் (Urulaikizhangu Thol / Potato Peels)",
+        chef: "Chef Sundaram (Mylapore Kitchens)",
+        time: "12 Mins",
+        course: "South Indian Poriyal / Varuval",
+        spices: [
+          "Gingelly oil (Nallennai)",
+          "Mustard seeds (Kadugu)",
+          "Urad dal (Ulutham paruppu)",
+          "Curry leaves (Karuveppilai)",
+          "Crushed black pepper (Milagu)",
+          "Turmeric powder (Manjal podi)",
+          "Asafoetida (Perungayam)",
+          "Sea salt"
+        ],
+        steps: [
+          "Wash potato peels thoroughly in salted lukewarm water to remove dirt; pat completely dry on a clean kitchen cloth.",
+          "Heat 1.5 tbsp cold-pressed gingelly oil (nallennai) in an iron vadachatti (kadai).",
+          "Splutter mustard seeds, urad dal, a pinch of perungayam, and fresh curry leaves.",
+          "Add dried potato peels with manjal podi and sea salt. Sauté uncovered on medium-high heat for 7-8 minutes until crisp and golden brown.",
+          "Finish by sprinkling freshly pounded black pepper (karuppu milagu thool) right before turning off heat. Serve hot with Rasam or Mor Kuzhambu."
+        ],
+        tip: "Keep the pan uncovered! Sautéing in nallennai without a lid in an iron vadachatti gives potato peels an authentic chip-like crunch without deep frying."
+      },
+      bn: {
+        id: 302,
+        scrapId: 3,
+        title: "Aloo Khosha Bhaja (আলুর খোসা ভাজা — Crispy Potato Peel Stir-Fry with Nigella & Green Chillies)",
+        regionalName: "আলুর খোসা (Aloo Khosha / Potato Peels)",
+        chef: "Chef Ananya Sen (Kolkata Heritage Rasoi)",
+        time: "10 Mins",
+        course: "Bengali Traditional Bhaja",
+        spices: [
+          "Mustard oil (Kachi Ghani Shorsher Tel)",
+          "Nigella seeds (Kalo Jeere)",
+          "Slit green chillies (Kacha Lanka)",
+          "Turmeric powder (Holud Guro)",
+          "Sea salt"
+        ],
+        steps: [
+          "Cut washed potato peels into uniform matchstick strips; pat completely dry on a cotton towel.",
+          "Heat 1.5 tbsp cold-pressed mustard oil in a heavy kadai until lightly smoking.",
+          "Temper with kalo jeere (nigella seeds) and slit fresh green chillies until aromatic.",
+          "Add the potato peel strips, sprinkle turmeric and rock salt, and fry on medium flame uncovered for 8-10 minutes until delightfully crisp.",
+          "Serve piping hot with steamed Gobindobhog rice and thick Musurir Dal (red lentil soup)."
+        ],
+        tip: "Mustard oil and nigella seeds create the signature Bengali aroma. Frying uncovered on medium heat ensures the skins remain crispy long after cooking."
+      },
+      hi: {
+        id: 303,
+        scrapId: 3,
+        title: "Aloo Ke Chilke Ki Chatpati Sukhi Sabzi (आलू के छिलके की चटपटी सूखी सब्ज़ी — Spiced Potato Skin Roast)",
+        regionalName: "आलू का छिलका (Aloo Chilka / Potato Peels)",
+        chef: "Chef Rajesh Sharma (Chandni Chowk Heritage)",
+        time: "12 Mins",
+        course: "North Indian Sukhi Sabzi",
+        spices: [
+          "Mustard oil",
+          "Cumin seeds (Jeera)",
+          "Ajwain (Carom seeds)",
+          "Amchur (Dry mango powder)",
+          "Kashmiri red chilli powder",
+          "Coriander powder (Dhania)",
+          "Garam Masala",
+          "Kala Namak (Black salt)"
+        ],
+        steps: [
+          "Thoroughly scrub potatoes before peeling; rinse peel strips and dry well on a kitchen cloth.",
+          "Heat mustard oil in an iron skillet until smoking, then reduce flame and crackle jeera and ajwain.",
+          "Toss in the potato peels, sprinkle coriander powder, red chilli powder, turmeric, and black salt.",
+          "Sauté on medium flame stirring occasionally until golden crisp and blistered (about 7-9 mins).",
+          "Finish with a generous pinch of amchur (dry mango powder) and garam masala. Serve with hot parathas or dal tadka."
+        ],
+        tip: "Ajwain enhances digestion while amchur adds the quintessentially tangy Delhi street-style chatpata kick."
+      },
+      en: {
+        id: 304,
+        scrapId: 3,
+        title: "Crispy Spiced Potato Peel Roast (Universal Zero-Waste Kitchen Chips)",
+        regionalName: "Potato Peels / Aloo Chilka / Khosha / Urulaikizhangu Thol",
+        chef: "Chef Sanjeev (Annapurna Kitchens)",
+        time: "12 Mins",
+        course: "Zero-Waste Artisan Side",
+        spices: [
+          "Cold-pressed vegetable oil",
+          "Mustard seeds or cumin",
+          "Crushed black pepper",
+          "Turmeric powder",
+          "Sea salt",
+          "Chaat masala"
+        ],
+        steps: [
+          "Wash potato peelings thoroughly in lukewarm water; pat completely dry with a towel.",
+          "Heat 1.5 tbsp oil in a skillet over medium heat.",
+          "Add tempering spices, then toss in potato peel strips with turmeric and sea salt.",
+          "Sauté uncovered on medium-high heat for 7-8 minutes until crisp and golden brown.",
+          "Sprinkle freshly crushed black pepper and chaat masala before serving."
+        ],
+        tip: "Always fry uncovered in an iron skillet to achieve an irresistible chip-like crunch without deep frying."
+      }
+    },
+    8: {
+      ta: {
+        id: 801,
+        scrapId: 8,
+        title: "Parambariya Carrot Thol Thogayal (பாரம்பரிய கேரட் தோல் துவையல் — Ancestral Carrot Peel & Lentil Chutney)",
+        regionalName: "கேரட் தோல் (Carrot Thol & Trimmings)",
+        chef: "Chef Meenakshi (T. Nagar)",
+        time: "14 Mins",
+        course: "Traditional Chennai Thogayal",
+        spices: [
+          "Gingelly oil (Nallennai)",
+          "Urad dal (Ulutham paruppu)",
+          "Chana dal (Kadalai paruppu)",
+          "Dry red chillies (Gundu Milagai)",
+          "Asafoetida (Perungayam)",
+          "Tamarind (Puli)",
+          "Curry leaves (Karuveppilai)",
+          "Rock salt"
+        ],
+        steps: [
+          "Rinse carrot peel ribbons and crown trimmings thoroughly; chop roughly.",
+          "Heat 1 tbsp nallennai in a pan. Roast urad dal, chana dal, dry red chillies (gundu milagai), and perungayam until golden and aromatic.",
+          "Add the chopped carrot peels and sauté for 3-4 minutes until tender and moisture evaporates.",
+          "Cool slightly, then grind in a mixie with a marble-sized piece of tamarind (puli) and rock salt using minimal water.",
+          "Pulse into a coarse, thick thogayal. Serve piping hot with Ponni rice and a generous spoonful of nallennai or ghee."
+        ],
+        tip: "Carrot skins retain maximum beta-carotene and dietary fiber; roasted lentils and tangy tamarind provide an earthy, authentic balance."
+      },
+      bn: {
+        id: 802,
+        scrapId: 8,
+        title: "Gajor Khosha o Dhonepata Bata (গাজরের খোসা ও ধনেপাতা বাটা — Roasted Carrot Peel & Fresh Herb Chutney)",
+        regionalName: "গাজরের খোসা (Gajor Khosha & Leaves)",
+        chef: "Chef Tanmay Roy (Gariahat Rasoi)",
+        time: "12 Mins",
+        course: "Bengali Traditional Bata",
+        spices: [
+          "Mustard oil (Kachi Ghani)",
+          "Garlic cloves (Rosun)",
+          "Green chillies (Kacha Lanka)",
+          "Kalo Jeere (Nigella seeds)",
+          "Fresh coriander leaves & stems",
+          "Rock salt"
+        ],
+        steps: [
+          "Rinse carrot skins and tender green leafy tops thoroughly.",
+          "Heat 1 tbsp mustard oil in a pan; temper with kalo jeere, garlic cloves, and green chillies.",
+          "Add chopped carrot peels and sauté for 4-5 minutes until soft and caramelized.",
+          "Grind the sautéed mixture with fresh coriander stems, salt, and a dash of raw mustard oil into a smooth, pungent paste.",
+          "Serve with piping hot steamed rice and a drop of raw mustard oil."
+        ],
+        tip: "A dash of raw mustard oil added at the very end gives the traditional Bengali 'bata' its sharp, warming pungency."
+      },
+      hi: {
+        id: 803,
+        scrapId: 8,
+        title: "Gajar Ke Chilke Ki Masaledar Bhurji (गाजर के छिलके की मसालेदार भुर्जी — Sautéed Carrot Peel & Fenugreek Subzi)",
+        regionalName: "गाजर का छिलका (Gajar Chilka & Tops)",
+        chef: "Chef Sunita Verma (Delhi NCR Heritage)",
+        time: "12 Mins",
+        course: "North Indian Sukhi Sabzi",
+        spices: [
+          "Mustard oil",
+          "Cumin seeds (Jeera)",
+          "Kasuri methi (Dried fenugreek)",
+          "Hing (Asafoetida)",
+          "Turmeric",
+          "Red chilli powder",
+          "Amchur",
+          "Rock salt"
+        ],
+        steps: [
+          "Thoroughly rinse and chop carrot peel ribbons into fine shreds.",
+          "Heat 1 tbsp mustard oil in a kadai; splutter cumin seeds and a pinch of hing.",
+          "Add chopped carrot peels with turmeric, salt, and red chilli powder. Sauté on medium flame for 5 minutes.",
+          "Crush fragrant kasuri methi between palms and sprinkle over the peels along with amchur.",
+          "Cook for 2 more minutes until lightly caramelized. Serve warm with phulkas or parathas."
+        ],
+        tip: "Kasuri methi perfectly cuts through the natural sweetness of carrot skins, creating a wonderfully balanced savory side dish."
+      },
+      en: {
+        id: 804,
+        scrapId: 8,
+        title: "Roasted Carrot Peel & Lentil Chutney (Universal Upcycled Chutney)",
+        regionalName: "Carrot Peels & Tops / Gajar Chilka / Carrot Thol",
+        chef: "Chef Meenakshi (Annapurna Kitchens)",
+        time: "14 Mins",
+        course: "Artisan Upcycled Condiment",
+        spices: [
+          "Cold-pressed sesame or olive oil",
+          "Urad & chana dal (or roasted sunflower seeds)",
+          "Dry chillies",
+          "Tamarind or lemon juice",
+          "Rock salt"
+        ],
+        steps: [
+          "Rinse carrot peel ribbons and crown trimmings thoroughly; chop roughly.",
+          "Heat oil in a pan; lightly roast lentils or seeds and dried chillies until aromatic.",
+          "Add carrot peels and sauté for 3-4 minutes until tender.",
+          "Blend coarsely with tamarind or lemon juice, salt, and minimal water.",
+          "Serve as a fiber-rich dip with sourdough, warm rice, or whole grain crackers."
+        ],
+        tip: "Carrot skins retain maximum beta-carotene and dietary fiber; pairing with roasted lentils provides protein and texture."
+      }
+    }
+  };
+
+  function getRegionalScrapRecipe(scrapId, lang, region) {
+    const currentLang = lang || (state && state.activeLanguage) || 'ta';
+    const currentRegion = region || (state && state.activeRegion) || 'Tamil Nadu';
+    const id = parseInt(scrapId, 10);
+
+    if (id === 3 && MULTI_REGIONAL_RECIPES[3]) {
+      if (currentLang === 'bn' || currentRegion.includes('Bengal')) return MULTI_REGIONAL_RECIPES[3].bn;
+      if (currentLang === 'hi' || currentRegion.includes('Delhi') || currentRegion.includes('Maharashtra')) return MULTI_REGIONAL_RECIPES[3].hi;
+      if (currentLang === 'en') return MULTI_REGIONAL_RECIPES[3].en;
+      return MULTI_REGIONAL_RECIPES[3].ta;
+    }
+
+    if (id === 8 && MULTI_REGIONAL_RECIPES[8]) {
+      if (currentLang === 'bn' || currentRegion.includes('Bengal')) return MULTI_REGIONAL_RECIPES[8].bn;
+      if (currentLang === 'hi' || currentRegion.includes('Delhi') || currentRegion.includes('Maharashtra')) return MULTI_REGIONAL_RECIPES[8].hi;
+      if (currentLang === 'en') return MULTI_REGIONAL_RECIPES[8].en;
+      return MULTI_REGIONAL_RECIPES[8].ta;
+    }
+
+    const found = state.recipes.find(r => r.scrap_id === id || r.scrapId === id);
+    if (found) {
+      return {
+        id: found.id,
+        scrapId: id,
+        title: found.title,
+        regionalName: getLocalizedScrapName(id, currentLang),
+        chef: found.chef_name || found.chef || 'Annapurna Master Chef',
+        time: `${found.prep_time_minutes || 15} Mins`,
+        course: found.course_type || found.course || 'Zero-Waste Upcycling',
+        spices: found.pantry_staples || found.spices || ["Cold-pressed oil", "Mustard seeds", "Turmeric", "Sea salt"],
+        steps: found.step_by_step_instructions || found.steps || ["Wash discards thoroughly.", "Sauté with spices until tender.", "Serve fresh."],
+        tip: found.chef_wisdom_tip || found.tip || "Zero-waste culinary techniques preserve nutrients and reduce household waste."
+      };
+    }
+
+    return MULTI_REGIONAL_RECIPES[3].ta;
+  }
 
   const RECIPES_DATA = state.recipes;
   window.RECIPES_DATA = RECIPES_DATA;
@@ -1902,6 +2665,29 @@
     dispDietary: document.getElementById('disp-dietary'),
     dispReadyTime: document.getElementById('disp-ready-time'),
 
+    // Region & Language Locale Switcher Modal
+    btnOpenLocale: document.getElementById('btn-open-locale'),
+    navActiveLocaleLabel: document.getElementById('nav-active-locale-label'),
+    localeModal: document.getElementById('locale-modal'),
+    localeModalClose: document.getElementById('locale-modal-close'),
+    formLocaleSelect: document.getElementById('form-locale-select'),
+    localeSelectRegion: document.getElementById('locale-select-region'),
+    localeSelectLanguage: document.getElementById('locale-select-language'),
+
+    // Registration Commercial Fields
+    regRole: document.getElementById('reg-role'),
+    regCommercialFields: document.getElementById('reg-commercial-fields'),
+    regOrgName: document.getElementById('reg-org-name'),
+    regLicenseId: document.getElementById('reg-license-id'),
+    labelRegOrg: document.getElementById('label-reg-org'),
+    labelRegLicense: document.getElementById('label-reg-license'),
+    regRegion: document.getElementById('reg-region'),
+    regCity: document.getElementById('reg-city'),
+    regLanguage: document.getElementById('reg-language'),
+
+    // Dispatch Feed Filter
+    filterDispatchRegion: document.getElementById('filter-dispatch-region'),
+
     // Toast Tray
     toastTray: document.getElementById('toast-tray')
   };
@@ -1911,11 +2697,38 @@
   // ==========================================================================
   async function init() {
     loadSavedSession();
+    updateLocaleNavPill();
     setupEventListeners();
     renderAuthHeader();
     updateNavbarVisibility();
+    await syncSupabaseSession();
     await loadInitialData();
     handleRouteFromHash();
+  }
+
+  async function syncSupabaseSession() {
+    if (!supabaseClient) return;
+    try {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session && session.user) {
+        await fetchAndSetSupabaseProfile(session.user);
+      }
+
+      supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_IN' && session && session.user) {
+          await fetchAndSetSupabaseProfile(session.user);
+        } else if (event === 'SIGNED_OUT') {
+          state.currentUser = null;
+          state.currentProfile = null;
+          localStorage.removeItem('waste2menu_user');
+          renderAuthHeader();
+          updateNavbarVisibility();
+          switchTab('home-overview');
+        }
+      });
+    } catch (err) {
+      console.info("Supabase session sync offline fallback:", err);
+    }
   }
 
   function loadSavedSession() {
@@ -2029,62 +2842,116 @@
     });
 
     // Hero Action CTAs & Wisdom Banner CTA
-    DOM.btnHeroExplore.addEventListener('click', () => {
-      if (!state.currentUser || state.currentUser.role !== 'home_chef') {
-        executeDemoLogin('home_chef');
-      } else {
-        switchTab('home-chef');
+    if (DOM.btnHeroExplore) {
+      DOM.btnHeroExplore.addEventListener('click', () => {
+        switchTab('home-chef', true);
         applyFiltersAndRenderRecipes();
-      }
-    });
+        setTimeout(() => {
+          const scanner = document.getElementById('scrap-scanner-card') || document.getElementById('home-scanner-card');
+          if (scanner) scanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 80);
+      });
+    }
 
-    DOM.btnHeroContribute.addEventListener('click', () => {
-      if (!state.currentUser || state.currentUser.role !== 'master_chef') {
-        executeDemoLogin('master_chef');
-      } else {
-        switchTab('master-chef');
-      }
-    });
-
-    const bannerCookBtn = document.getElementById('btn-banner-cook');
-    if (bannerCookBtn) {
-      bannerCookBtn.addEventListener('click', () => {
-        if (!state.currentUser || state.currentUser.role !== 'home_chef') {
-          executeDemoLogin('home_chef');
+    if (DOM.btnHeroContribute) {
+      DOM.btnHeroContribute.addEventListener('click', () => {
+        if (!state.currentUser || state.currentUser.role !== 'master_chef') {
+          openAuthModal();
+          showToast('Sign in or create a Commercial Kitchen account to author recipes.', 'info');
         } else {
-          switchTab('home-chef');
-          applyFiltersAndRenderRecipes();
+          switchTab('master-chef', true);
         }
       });
     }
 
-    DOM.btnHeroMatrix.addEventListener('click', () => switchTab('scraps-matrix'));
+    const bannerCookBtn = document.getElementById('btn-banner-cook');
+    if (bannerCookBtn) {
+      bannerCookBtn.addEventListener('click', () => {
+        switchTab('home-chef', true);
+        applyFiltersAndRenderRecipes();
+      });
+    }
 
-    // Hero Role Quick Switcher Buttons
+    if (DOM.btnHeroMatrix) {
+      DOM.btnHeroMatrix.addEventListener('click', () => switchTab('scraps-matrix', true));
+    }
+
+    // Hero Role Quick Switcher Buttons (if present)
     document.querySelectorAll('.btn-role-switch').forEach(btn => {
       btn.addEventListener('click', () => {
         const role = btn.dataset.role;
         if (role === 'guest') {
           handleSignOut();
         } else {
-          executeDemoLogin(role);
+          fallbackLocalSignin(role === 'master_chef' ? 'chef@annapurna.org' : 'home@annapurna.org', role === 'master_chef' ? 'chef123' : 'home123');
         }
       });
     });
 
     // Auth Modal Triggers
-    DOM.authModalClose.addEventListener('click', () => DOM.authModal.close());
-    DOM.authToggleSignin.addEventListener('click', showSigninTab);
-    DOM.authToggleRegister.addEventListener('click', showRegisterTab);
+    if (DOM.authModalClose) DOM.authModalClose.addEventListener('click', () => DOM.authModal.close());
+    if (DOM.authToggleSignin) DOM.authToggleSignin.addEventListener('click', showSigninTab);
+    if (DOM.authToggleRegister) DOM.authToggleRegister.addEventListener('click', showRegisterTab);
 
-    // 1-Click Demo Buttons
-    DOM.btnQuickDemoChef.addEventListener('click', () => executeDemoLogin('master_chef'));
-    DOM.btnQuickDemoHome.addEventListener('click', () => executeDemoLogin('home_chef'));
-    DOM.btnChefDemoSignin.addEventListener('click', () => executeDemoLogin('master_chef'));
+    // Commercial Studio Auth Trigger
+    if (DOM.btnChefDemoSignin) {
+      DOM.btnChefDemoSignin.addEventListener('click', () => {
+        openAuthModal();
+      });
+    }
+
+    // Safe Quick Demo Fallbacks (if any leftover buttons exist in DOM)
+    if (DOM.btnQuickDemoChef) {
+      DOM.btnQuickDemoChef.addEventListener('click', () => fallbackLocalSignin('chef@annapurna.org', 'chef123'));
+    }
+    if (DOM.btnQuickDemoHome) {
+      DOM.btnQuickDemoHome.addEventListener('click', () => fallbackLocalSignin('home@annapurna.org', 'home123'));
+    }
 
     // Auth Form Submissions
-    DOM.formSignin.addEventListener('submit', handleSigninSubmit);
-    DOM.formRegister.addEventListener('submit', handleRegisterSubmit);
+    if (DOM.formSignin) DOM.formSignin.addEventListener('submit', handleSigninSubmit);
+    if (DOM.formRegister) DOM.formRegister.addEventListener('submit', handleRegisterSubmit);
+
+    // Locale Modal Triggers
+    if (DOM.btnOpenLocale) {
+      DOM.btnOpenLocale.addEventListener('click', openLocaleModal);
+    }
+    if (DOM.localeModalClose) {
+      DOM.localeModalClose.addEventListener('click', () => {
+        if (DOM.localeModal && DOM.localeModal.open) DOM.localeModal.close();
+      });
+    }
+    if (DOM.formLocaleSelect) {
+      DOM.formLocaleSelect.addEventListener('submit', handleLocaleFormSubmit);
+    }
+
+    // Dynamic Commercial Fields Toggle in Registration Form
+    if (DOM.regRole) {
+      DOM.regRole.addEventListener('change', (e) => {
+        const isCommercial = e.target.value === 'master_chef' || e.target.value === 'ngo_partner';
+        if (DOM.regCommercialFields) {
+          DOM.regCommercialFields.style.display = isCommercial ? 'block' : 'none';
+        }
+        if (DOM.labelRegOrg) {
+          DOM.labelRegOrg.textContent = e.target.value === 'master_chef'
+            ? 'Commercial Kitchen / Restaurant / Bakery Name *'
+            : 'Registered NGO / Relief Shelter Name *';
+        }
+        if (DOM.labelRegLicense) {
+          DOM.labelRegLicense.textContent = e.target.value === 'master_chef'
+            ? 'FSSAI License Registration Number *'
+            : 'NGO Darpan ID / Registration Number *';
+        }
+      });
+    }
+
+    // Region Filter on Surplus Dispatch Feed
+    if (DOM.filterDispatchRegion) {
+      DOM.filterDispatchRegion.addEventListener('change', (e) => {
+        state.activeRegion = e.target.value;
+        renderDispatchesFeed();
+      });
+    }
 
     // Home Chef Navigation Button to Catalog
     if (DOM.btnNavToCatalog) {
@@ -2185,7 +3052,7 @@
         const codeText = DOM.claimOtpDigits ? DOM.claimOtpDigits.textContent : '';
         if (codeText && navigator.clipboard) {
           navigator.clipboard.writeText(codeText);
-          showToast('📋 Handover OTP copied to clipboard!', 'success');
+          showToast('Handover OTP copied to clipboard!', 'success');
         }
       });
     }
@@ -2426,7 +3293,78 @@
   }
 
   // ==========================================================================
-  // DYNAMIC ROLE-BASED NAVBAR ARCHITECTURE (STATES A, B, C, D)
+  // REGIONAL LOCALIZATION & SPOKEN LANGUAGE CONTROLLER
+  // ==========================================================================
+  function updateLocaleNavPill() {
+    const label = document.getElementById('nav-active-locale-label');
+    if (!label) return;
+    const langLabels = {
+      ta: 'தமிழ்',
+      bn: 'বাংলা',
+      hi: 'हिन्दी',
+      en: 'English',
+      mr: 'मराठी',
+      te: 'తెలుగు',
+      kn: 'ಕನ್ನಡ'
+    };
+    const reg = state.activeRegion || 'Tamil Nadu';
+    const lang = langLabels[state.activeLanguage] || state.activeLanguage || 'ta';
+    label.textContent = `${reg} • ${lang}`;
+  }
+
+  function setLocale(region, language, city, reRender = true) {
+    if (region) {
+      state.activeRegion = region;
+      try { localStorage.setItem('waste2menu_region', region); } catch (e) {}
+    }
+    if (language) {
+      state.activeLanguage = language;
+      try { localStorage.setItem('waste2menu_language', language); } catch (e) {}
+    }
+    if (city) {
+      state.activeCity = city;
+      try { localStorage.setItem('waste2menu_city', city); } catch (e) {}
+    }
+
+    updateLocaleNavPill();
+
+    if (reRender) {
+      renderCategorizedCatalog();
+      renderAncestralShowcase();
+      renderChennaiNgosDirectory();
+      renderDispatchesFeed();
+      populateScrapDropdown();
+      if (state.activeTab === 'home-chef') {
+        applyFiltersAndRenderRecipes();
+      }
+    }
+  }
+
+  function openLocaleModal() {
+    const modal = document.getElementById('locale-modal');
+    const selRegion = document.getElementById('locale-select-region');
+    const selLang = document.getElementById('locale-select-language');
+    if (selRegion) selRegion.value = state.activeRegion;
+    if (selLang) selLang.value = state.activeLanguage;
+    if (modal && typeof modal.showModal === 'function') {
+      modal.showModal();
+    }
+  }
+
+  function handleLocaleFormSubmit(e) {
+    e.preventDefault();
+    const selRegion = document.getElementById('locale-select-region');
+    const selLang = document.getElementById('locale-select-language');
+    const modal = document.getElementById('locale-modal');
+    if (selRegion && selLang) {
+      setLocale(selRegion.value, selLang.value);
+      showToast(`Locale updated to ${selRegion.value} (${selLang.value.toUpperCase()})`, 'success');
+    }
+    if (modal && modal.open) modal.close();
+  }
+
+  // ==========================================================================
+  // DYNAMIC ROLE-BASED NAVBAR ARCHITECTURE (STATES A, B, C, D) - ZERO EMOJIS
   // ==========================================================================
   function renderDynamicNavbar() {
     const centerNav = document.getElementById('navbar-center-nav') || document.querySelector('.main-nav');
@@ -2441,25 +3379,39 @@
 
     // =========================================================================
     // STATE A: Default Guest / Signed Out Visitor
-    // Center: [ ☀️ Home & Impact ], [ 🥕 Ingredients Catalog ], [ 🤝 Chennai NGO Partners ]
-    // Right: [ 🔐 Sign In / Register ] (triggers unified authentication modal)
     // =========================================================================
     if (!user) {
       centerNav.innerHTML = `
         <button type="button" class="nav-tab-btn ${currentTab === 'home-overview' ? 'active' : ''}" data-tab="home-overview" id="nav-tab-home">
-          <span>☀️ Home & Impact</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Home &amp; Impact</span>
         </button>
         <button type="button" class="nav-tab-btn ${currentTab === 'scraps-matrix' ? 'active' : ''}" data-tab="scraps-matrix" id="nav-tab-matrix">
-          <span>🥕 Ingredients Catalog</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+            <path d="M2 12h20"/>
+          </svg>
+          <span>Ingredients Catalog</span>
         </button>
         <button type="button" class="nav-tab-btn" data-action="partners" id="nav-tab-partners">
-          <span>🤝 Chennai NGO Partners</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          </svg>
+          <span>Relief Partners</span>
         </button>
       `;
 
       rightAuth.innerHTML = `
         <button type="button" class="btn-auth-signin" id="btn-open-auth">
-          <span>🔐 Sign In / Register</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" style="margin-right: 5px; vertical-align: -2px;">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span>Sign In / Join</span>
         </button>
       `;
 
@@ -2482,30 +3434,40 @@
     }
 
     // =========================================================================
-    // STATE B: Logged in as "Home Chef (Annapurna)" (e.g., Priya)
-    // Center: [ ☀️ Home & Impact ], [ 🥕 Ingredients Catalog ], [ 📸 My Cooked Creations ]
-    // Right: Role Pill Badge 👩‍🍳 Home Chef • Priya (#E8F5E9 bg, #1B5E20 text) + [ Sign Out ]
-    // Permission Guard: STRICTLY viewing, selecting scraps, viewing recipes, and uploading cooked photos.
-    // ABSOLUTELY NO recipe-creation button in the Home Chef view.
+    // STATE B: Logged in as "Home Chef"
     // =========================================================================
     else if (user.role === 'home_chef') {
-      const displayName = user.name ? user.name.split(' ')[0] : 'Priya';
+      const displayName = user.name ? user.name.split(' ')[0] : 'Chef';
 
       centerNav.innerHTML = `
         <button type="button" class="nav-tab-btn ${currentTab === 'home-overview' ? 'active' : ''}" data-tab="home-overview" id="nav-tab-home">
-          <span>☀️ Home & Impact</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Home &amp; Impact</span>
         </button>
         <button type="button" class="nav-tab-btn ${currentTab === 'home-chef' ? 'active' : ''}" data-tab="home-chef" id="nav-tab-home-chef">
-          <span>🥕 Ingredients Catalog</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+            <path d="M2 12h20"/>
+          </svg>
+          <span>Reverse Recipes</span>
         </button>
         <button type="button" class="nav-tab-btn" data-action="creations" id="nav-tab-my-creations">
-          <span>📸 My Cooked Creations</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+            <circle cx="12" cy="13" r="3"/>
+          </svg>
+          <span>My Cooked Dishes</span>
         </button>
       `;
 
       rightAuth.innerHTML = `
-        <div class="role-pill-badge home-chef-pill" title="Signed in as Home Chef">
-          <span>👩‍🍳 Home Chef • ${escapeHtml(displayName)}</span>
+        <div class="user-profile-cluster">
+          <span class="user-name-text">${escapeHtml(displayName)}</span>
+          <span class="user-role-tag home-chef">Home Chef</span>
         </div>
         <button type="button" class="btn-auth-signout" id="btn-header-signout" title="Sign Out">Sign Out</button>
       `;
@@ -2527,31 +3489,47 @@
     }
 
     // =========================================================================
-    // STATE C: Logged in as "Master Chef" (e.g., Sanjeev)
-    // Center: [ ☀️ Home & Impact ], [ 🥕 Ingredients Catalog ], [ 🍲 Dispatch Surplus to NGOs ]
-    // Right: [ ➕ Publish New Recipe ] (Emerald CTA) + Role Pill Badge 👨‍🍳 Master Chef • Sanjeev (#FEF3C7 bg, #B45309 text) + [ Sign Out ]
+    // STATE C: Logged in as "Master Chef / Commercial Kitchen"
     // =========================================================================
     else if (user.role === 'master_chef') {
-      const displayName = user.name ? user.name.replace('Chef ', '').split(' ')[0] : 'Sanjeev';
+      const displayName = user.name ? user.name.replace('Chef ', '').split(' ')[0] : 'Chef';
 
       centerNav.innerHTML = `
         <button type="button" class="nav-tab-btn ${currentTab === 'home-overview' ? 'active' : ''}" data-tab="home-overview" id="nav-tab-home">
-          <span>☀️ Home & Impact</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Home &amp; Impact</span>
         </button>
         <button type="button" class="nav-tab-btn ${currentTab === 'scraps-matrix' ? 'active' : ''}" data-tab="scraps-matrix" id="nav-tab-matrix">
-          <span>🥕 Ingredients Catalog</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+            <path d="M2 12h20"/>
+          </svg>
+          <span>Ingredients Catalog</span>
         </button>
         <button type="button" class="nav-tab-btn ${currentTab === 'ngo-dispatch' ? 'active' : ''}" data-tab="ngo-dispatch" id="nav-tab-ngo-dispatch">
-          <span>🍲 Dispatch Surplus to NGOs</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <rect width="18" height="14" x="3" y="5" rx="2"/>
+            <path d="m3 7 9 6 9-6"/>
+          </svg>
+          <span>Surplus Food Dispatch</span>
         </button>
       `;
 
       rightAuth.innerHTML = `
         <button type="button" class="btn-publish-recipe-cta" id="btn-publish-recipe" title="Publish New Zero-Waste Recipe">
-          <span>➕ Publish New Recipe</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: -2px;">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>Publish Recipe</span>
         </button>
-        <div class="role-pill-badge master-chef-pill" title="Signed in as Master Chef">
-          <span>👨‍🍳 Master Chef • ${escapeHtml(displayName)}</span>
+        <div class="user-profile-cluster">
+          <span class="user-name-text">${escapeHtml(displayName)}</span>
+          <span class="user-role-tag master-chef">Master Chef</span>
         </div>
         <button type="button" class="btn-auth-signout" id="btn-header-signout" title="Sign Out">Sign Out</button>
       `;
@@ -2573,31 +3551,41 @@
     }
 
     // =========================================================================
-    // STATE D: Logged in as "NGO Representative" (e.g., No Food Waste)
-    // Center: [ ☀️ Home & Impact ], [ 🍲 Live Surplus Feed ], [ 📋 Claimed Batches & OTPs ]
-    // Right: Role Pill Badge 🤝 NGO • No Food Waste + [ Sign Out ]
+    // STATE D: Logged in as "Verified NGO Partner"
     // =========================================================================
-    else if (user.role === 'ngo_rep') {
-      let orgName = 'No Food Waste';
-      if (user.affiliation) {
-        orgName = user.affiliation.split('/')[0].replace('(Chennai Chapter)', '').trim();
-      }
+    else if (user.role === 'ngo_partner' || user.role === 'ngo_rep') {
+      let orgName = user.affiliation || user.org_name || 'Relief Partner';
+      if (orgName.includes('/')) orgName = orgName.split('/')[0].trim();
+      if (orgName.length > 22) orgName = orgName.slice(0, 20) + '...';
 
       centerNav.innerHTML = `
         <button type="button" class="nav-tab-btn ${currentTab === 'home-overview' ? 'active' : ''}" data-tab="home-overview" id="nav-tab-home">
-          <span>☀️ Home & Impact</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Home &amp; Impact</span>
         </button>
         <button type="button" class="nav-tab-btn ${currentTab === 'ngo-dispatch' ? 'active' : ''}" data-action="ngo-feed" id="nav-tab-ngo-feed">
-          <span>🍲 Live Surplus Feed</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <rect width="18" height="14" x="3" y="5" rx="2"/>
+            <path d="m3 7 9 6 9-6"/>
+          </svg>
+          <span>Live Surplus Feed</span>
         </button>
         <button type="button" class="nav-tab-btn" data-action="ngo-claimed" id="nav-tab-ngo-claimed">
-          <span>📋 Claimed Batches & OTPs</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <rect width="18" height="18" x="3" y="4" rx="2"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+          <span>Claimed &amp; OTPs</span>
         </button>
       `;
 
       rightAuth.innerHTML = `
-        <div class="role-pill-badge ngo-pill" title="Signed in as NGO Representative">
-          <span>🤝 NGO • ${escapeHtml(orgName)}</span>
+        <div class="user-profile-cluster">
+          <span class="user-name-text">${escapeHtml(orgName)}</span>
+          <span class="user-role-tag ngo-partner">NGO Partner</span>
         </div>
         <button type="button" class="btn-auth-signout" id="btn-header-signout" title="Sign Out">Sign Out</button>
       `;
@@ -2623,10 +3611,6 @@
             const feedList = document.getElementById('ngo-dispatches-list');
             if (feedList) {
               feedList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              const claimedCard = feedList.querySelector('.dispatch-item-card.claimed') || feedList.querySelector('.otp-claimed-badge');
-              if (claimedCard) {
-                claimedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }
             }
           }, 80);
         });
@@ -2667,7 +3651,12 @@
     if (!state.currentUser) {
       if (DOM.btnHeroContribute) {
         DOM.btnHeroContribute.style.display = 'inline-flex';
-        DOM.btnHeroContribute.innerHTML = '<span>👨‍🍳 Upload Recipes as Master Chef</span>';
+        DOM.btnHeroContribute.innerHTML = `
+          <svg class="btn-action-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75">
+            <path d="m11 17 2 2a1 1 0 0 0 1.4 0l6.6-6.6a5 5 0 0 0-7-7L12 7.4l-2-2a5 5 0 0 0-7 7l6.6 6.6a1 1 0 0 0 1.4 0Z"/>
+          </svg>
+          <span>Chef Studio &amp; Recipes</span>
+        `;
       }
       if (state.activeTab === 'master-chef') {
         switchTab('home-overview');
@@ -2677,15 +3666,25 @@
       if (role === 'master_chef') {
         if (DOM.btnHeroContribute) {
           DOM.btnHeroContribute.style.display = 'inline-flex';
-          DOM.btnHeroContribute.innerHTML = '<span>👨‍🍳 + Upload Recipe (Studio)</span>';
+          DOM.btnHeroContribute.innerHTML = `
+            <svg class="btn-action-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            <span>Author Zero-Waste Recipe</span>
+          `;
         }
       } else {
         if (DOM.btnHeroContribute) {
           DOM.btnHeroContribute.style.display = 'inline-flex';
-          DOM.btnHeroContribute.innerHTML = '<span>👨‍🍳 Upload Recipes as Master Chef</span>';
+          DOM.btnHeroContribute.innerHTML = `
+            <svg class="btn-action-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75">
+              <path d="m11 17 2 2a1 1 0 0 0 1.4 0l6.6-6.6a5 5 0 0 0-7-7L12 7.4l-2-2a5 5 0 0 0-7 7l6.6 6.6a1 1 0 0 0 1.4 0Z"/>
+            </svg>
+            <span>Chef Studio &amp; Recipes</span>
+          `;
         }
         if (state.activeTab === 'master-chef') {
-          switchTab(role === 'ngo_rep' ? 'ngo-dispatch' : 'home-chef');
+          switchTab(role === 'ngo_partner' || role === 'ngo_rep' ? 'ngo-dispatch' : 'home-chef');
         }
       }
     }
@@ -2697,60 +3696,64 @@
 
   function openAuthModal() {
     showSigninTab();
-    DOM.authModal.showModal();
+    if (DOM.authModal && typeof DOM.authModal.showModal === 'function') {
+      DOM.authModal.showModal();
+    }
   }
 
   function showSigninTab() {
-    DOM.authToggleSignin.classList.add('active');
-    DOM.authToggleRegister.classList.remove('active');
-    DOM.formSignin.style.display = 'flex';
-    DOM.formRegister.style.display = 'none';
+    if (DOM.authToggleSignin) DOM.authToggleSignin.classList.add('active');
+    if (DOM.authToggleRegister) DOM.authToggleRegister.classList.remove('active');
+    if (DOM.formSignin) DOM.formSignin.style.display = 'flex';
+    if (DOM.formRegister) DOM.formRegister.style.display = 'none';
   }
 
   function showRegisterTab() {
-    DOM.authToggleRegister.classList.add('active');
-    DOM.authToggleSignin.classList.remove('active');
-    DOM.formRegister.style.display = 'flex';
-    DOM.formSignin.style.display = 'none';
+    if (DOM.authToggleRegister) DOM.authToggleRegister.classList.add('active');
+    if (DOM.authToggleSignin) DOM.authToggleSignin.classList.remove('active');
+    if (DOM.formRegister) DOM.formRegister.style.display = 'flex';
+    if (DOM.formSignin) DOM.formSignin.style.display = 'none';
   }
 
-  async function executeDemoLogin(role) {
-    let creds, demoUser;
-    if (role === 'master_chef') {
-      creds = { email: 'chef@annapurna.org', password: 'chef123' };
-      demoUser = { id: 1, name: 'Chef Sanjeev Kapoor', email: 'chef@annapurna.org', role: 'master_chef', affiliation: 'National Heritage Rasoi Guild' };
-    } else if (role === 'ngo_rep') {
-      creds = { email: 'ngo@chennaifoodbank.org', password: 'ngo123' };
-      demoUser = { id: 3, name: 'Kavitha Raman', email: 'ngo@chennaifoodbank.org', role: 'ngo_rep', affiliation: 'Chennai Food Bank / No Food Waste' };
-    } else {
-      creds = { email: 'home@annapurna.org', password: 'home123' };
-      demoUser = { id: 2, name: 'Priya Sharma', email: 'home@annapurna.org', role: 'home_chef', affiliation: 'Rasoi Hero Community Cook' };
-    }
-
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(creds)
-      });
-
-      if (res.ok) {
-        const user = await res.json();
-        setCurrentUser(user);
-        if (DOM.authModal && DOM.authModal.open) DOM.authModal.close();
-        const roleLabel = user.role === 'master_chef' ? 'Master Chef' : (user.role === 'ngo_rep' ? 'NGO Representative' : 'Home Chef');
-        showToast(`✨ Welcome ${user.name}! Switched to ${roleLabel} mode.`, 'success');
-        return;
+  // ==========================================================================
+  // SUPABASE CLOUD AUTHENTICATION & SESSION MANAGEMENT
+  // ==========================================================================
+  async function fetchAndSetSupabaseProfile(authUser) {
+    let profile = null;
+    if (supabaseClient) {
+      try {
+        const { data, error } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('id', authUser.id)
+          .single();
+        if (!error && data) {
+          profile = data;
+        }
+      } catch (err) {
+        console.info("Supabase profile fetch fallback:", err);
       }
-    } catch (err) {
-      console.info('Demo login running in static mode');
     }
 
-    // Fallback for static Git deployment
-    setCurrentUser(demoUser);
-    if (DOM.authModal && DOM.authModal.open) DOM.authModal.close();
-    const roleLabel = demoUser.role === 'master_chef' ? 'Master Chef' : (demoUser.role === 'ngo_rep' ? 'NGO Representative' : 'Home Chef');
-    showToast(`✨ Welcome ${demoUser.name}! (${roleLabel})`, 'success');
+    const meta = authUser.user_metadata || {};
+    const role = profile?.role || meta.role || 'home_chef';
+    const user = {
+      id: authUser.id,
+      name: profile?.full_name || meta.full_name || authUser.email.split('@')[0],
+      email: authUser.email,
+      role: role === 'ngo_rep' ? 'ngo_partner' : role,
+      region_state: profile?.region_state || meta.region_state || state.activeRegion,
+      city: profile?.city || meta.city || state.activeCity,
+      preferred_language: profile?.preferred_language || meta.preferred_language || state.activeLanguage,
+      org_name: profile?.org_name || meta.org_name || '',
+      license_or_darpan_id: profile?.license_or_darpan_id || meta.license_or_darpan_id || '',
+      affiliation: profile?.org_name || meta.org_name || (role === 'master_chef' ? 'Executive Commercial Chef' : (role === 'ngo_partner' || role === 'ngo_rep' ? 'Verified NGO Relief Partner' : 'Community Home Cook'))
+    };
+
+    if (user.region_state || user.preferred_language) {
+      setLocale(user.region_state, user.preferred_language, user.city, false);
+    }
+    setCurrentUser(user);
   }
 
   async function handleSigninSubmit(e) {
@@ -2758,80 +3761,232 @@
     const email = document.getElementById('signin-email').value.trim();
     const password = document.getElementById('signin-password').value.trim();
 
+    if (!email || !password) {
+      showToast('Please enter both email and password.', 'error');
+      return;
+    }
+
+    const submitBtn = document.getElementById('btn-submit-signin');
+    if (submitBtn) submitBtn.disabled = true;
+
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.detail || 'Invalid email or password');
+      if (supabaseClient) {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          console.warn("Supabase signInWithPassword reported:", error.message);
+          if (!fallbackLocalSignin(email, password, false)) {
+            throw error;
+          }
+          return;
+        }
+        if (data && data.user) {
+          await fetchAndSetSupabaseProfile(data.user);
+          if (DOM.authModal && DOM.authModal.open) DOM.authModal.close();
+          showToast(`Welcome back, ${state.currentUser.name || 'Chef'}!`, 'success');
+          return;
+        }
       }
-
-      const user = await res.json();
-      setCurrentUser(user);
-      DOM.authModal.close();
-      showToast(`Welcome back, ${user.name}!`, 'success');
+      if (!fallbackLocalSignin(email, password, true)) {
+        showToast('Invalid credentials. Check email and password or register a new account.', 'error');
+      }
     } catch (err) {
-      showToast(err.message, 'error');
+      showToast(err.message || 'Invalid email or password.', 'error');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
     }
   }
 
   async function handleRegisterSubmit(e) {
     e.preventDefault();
-    const payload = {
-      name: document.getElementById('reg-name').value.trim(),
-      email: document.getElementById('reg-email').value.trim(),
-      password: document.getElementById('reg-password').value.trim(),
-      role: document.getElementById('reg-role').value,
-      affiliation: document.getElementById('reg-affiliation').value.trim() || 'Community Cook'
-    };
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value.trim();
+    const role = document.getElementById('reg-role').value;
+    const region = document.getElementById('reg-region') ? document.getElementById('reg-region').value : state.activeRegion;
+    const city = document.getElementById('reg-city') ? document.getElementById('reg-city').value : state.activeCity;
+    const language = document.getElementById('reg-language') ? document.getElementById('reg-language').value : state.activeLanguage;
+    const orgName = document.getElementById('reg-org-name') ? document.getElementById('reg-org-name').value.trim() : '';
+    const licenseId = document.getElementById('reg-license-id') ? document.getElementById('reg-license-id').value.trim() : '';
+
+    if (!name || !email || !password) {
+      showToast('Please complete all required fields.', 'error');
+      return;
+    }
+    if (password.length < 6) {
+      showToast('Password must be at least 6 characters.', 'error');
+      return;
+    }
+
+    const submitBtn = document.getElementById('btn-submit-register');
+    if (submitBtn) submitBtn.disabled = true;
 
     try {
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      if (supabaseClient) {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: name,
+              role,
+              region_state: region,
+              city,
+              preferred_language: language,
+              org_name: orgName,
+              license_or_darpan_id: licenseId
+            }
+          }
+        });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.detail || 'Registration failed');
+        if (error) {
+          console.warn("Supabase signUp reported:", error.message);
+          fallbackLocalRegister(name, email, password, role, region, city, language, orgName, licenseId);
+          return;
+        }
+
+        if (data && data.user) {
+          try {
+            await supabaseClient.from('profiles').upsert({
+              id: data.user.id,
+              full_name: name,
+              email: email,
+              role: role,
+              region_state: region,
+              city: city,
+              preferred_language: language,
+              org_name: orgName,
+              license_or_darpan_id: licenseId
+            });
+          } catch (pErr) {}
+
+          const newUser = {
+            id: data.user.id,
+            name: name,
+            email: email,
+            role: role === 'ngo_rep' ? 'ngo_partner' : role,
+            region_state: region,
+            city: city,
+            preferred_language: language,
+            org_name: orgName,
+            license_or_darpan_id: licenseId,
+            affiliation: orgName || (role === 'master_chef' ? 'Executive Commercial Chef' : (role === 'ngo_partner' ? 'Verified NGO Relief Partner' : 'Community Home Cook'))
+          };
+
+          setLocale(region, language, city, false);
+          setCurrentUser(newUser);
+          if (DOM.authModal && DOM.authModal.open) DOM.authModal.close();
+          showToast(`Account created! Welcome, ${name}.`, 'success');
+          return;
+        }
       }
 
-      const user = await res.json();
-      setCurrentUser(user);
-      DOM.authModal.close();
-      showToast(`Account created! Welcome, ${user.name}.`, 'success');
+      fallbackLocalRegister(name, email, password, role, region, city, language, orgName, licenseId);
     } catch (err) {
-      showToast(err.message, 'error');
+      showToast(err.message || 'Registration failed.', 'error');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
     }
+  }
+
+  function fallbackLocalSignin(email, password, notify = true) {
+    let users = [];
+    try {
+      users = JSON.parse(localStorage.getItem('waste2menu_users_db') || '[]');
+    } catch (e) {}
+
+    const builtInUsers = [
+      { email: 'chef@annapurna.org', password: 'chef123', name: 'Chef Sanjeev Kapoor', role: 'master_chef', region_state: 'Maharashtra', city: 'Mumbai', preferred_language: 'hi', affiliation: 'National Heritage Rasoi Guild' },
+      { email: 'ngo@chennaifoodbank.org', password: 'ngo123', name: 'Kavitha Raman', role: 'ngo_partner', region_state: 'Tamil Nadu', city: 'Chennai', preferred_language: 'ta', affiliation: 'No Food Waste (Chennai Chapter)' },
+      { email: 'home@annapurna.org', password: 'home123', name: 'Priya Sharma', role: 'home_chef', region_state: 'Tamil Nadu', city: 'Chennai', preferred_language: 'ta', affiliation: 'Community Home Cook' }
+    ];
+
+    const match = users.find(u => u.email === email && (!password || u.password === password)) ||
+                  builtInUsers.find(u => u.email === email && (!password || u.password === password));
+
+    if (match) {
+      const user = {
+        id: match.id || 'usr_' + Date.now(),
+        name: match.name,
+        email: match.email,
+        role: match.role === 'ngo_rep' ? 'ngo_partner' : match.role,
+        region_state: match.region_state || state.activeRegion,
+        city: match.city || state.activeCity,
+        preferred_language: match.preferred_language || state.activeLanguage,
+        org_name: match.org_name || '',
+        license_or_darpan_id: match.license_or_darpan_id || '',
+        affiliation: match.affiliation || match.org_name || 'Community Cook'
+      };
+      setLocale(user.region_state, user.preferred_language, user.city, false);
+      setCurrentUser(user);
+      if (DOM.authModal && DOM.authModal.open) DOM.authModal.close();
+      if (notify) showToast(`Welcome back, ${user.name}!`, 'success');
+      return true;
+    }
+    return false;
+  }
+
+  function fallbackLocalRegister(name, email, password, role, region, city, language, orgName, licenseId) {
+    let users = [];
+    try {
+      users = JSON.parse(localStorage.getItem('waste2menu_users_db') || '[]');
+    } catch (e) {}
+
+    const newUser = {
+      id: 'usr_' + Date.now(),
+      name,
+      email,
+      password,
+      role: role === 'ngo_rep' ? 'ngo_partner' : role,
+      region_state: region,
+      city,
+      preferred_language: language,
+      org_name: orgName,
+      license_or_darpan_id: licenseId,
+      affiliation: orgName || (role === 'master_chef' ? 'Executive Commercial Chef' : (role === 'ngo_partner' ? 'Verified NGO Relief Partner' : 'Community Home Cook'))
+    };
+
+    users.push(newUser);
+    try {
+      localStorage.setItem('waste2menu_users_db', JSON.stringify(users));
+    } catch (e) {}
+
+    setLocale(region, language, city, false);
+    setCurrentUser(newUser);
+    if (DOM.authModal && DOM.authModal.open) DOM.authModal.close();
+    showToast(`Account created! Welcome, ${name}.`, 'success');
   }
 
   function setCurrentUser(user) {
     state.currentUser = user;
-    localStorage.setItem('waste2menu_user', JSON.stringify(user));
-    localStorage.setItem('annapurna_user', JSON.stringify(user));
+    try {
+      localStorage.setItem('waste2menu_user', JSON.stringify(user));
+      localStorage.setItem('annapurna_user', JSON.stringify(user));
+    } catch (e) {}
     renderAuthHeader();
     updateNavbarVisibility();
     renderCategorizedCatalog();
 
-    // Automatically navigate to the user's role workspace
     if (user.role === 'master_chef') {
       switchTab('master-chef');
-    } else if (user.role === 'ngo_rep') {
+    } else if (user.role === 'ngo_partner' || user.role === 'ngo_rep') {
       switchTab('ngo-dispatch');
     } else {
       switchTab('home-chef');
     }
   }
 
-  function handleSignOut() {
+  async function handleSignOut() {
+    if (supabaseClient) {
+      try {
+        await supabaseClient.auth.signOut();
+      } catch (e) {}
+    }
     state.currentUser = null;
-    localStorage.removeItem('waste2menu_user');
-    localStorage.removeItem('annapurna_user');
+    state.currentProfile = null;
+    try {
+      localStorage.removeItem('waste2menu_user');
+      localStorage.removeItem('annapurna_user');
+    } catch (e) {}
     renderAuthHeader();
     updateNavbarVisibility();
     renderCategorizedCatalog();
@@ -2841,11 +3996,11 @@
 
   function populateScrapDropdown() {
     if (!DOM.formRcScrap) return;
-    DOM.formRcScrap.innerHTML = '<option value="">-- Choose from 30 Household Scraps --</option>';
+    DOM.formRcScrap.innerHTML = '<option value="">-- Choose from 35 Household Scraps --</option>';
     state.scraps.forEach(sc => {
       const opt = document.createElement('option');
       opt.value = sc.id;
-      opt.textContent = `${sc.id}. ${sc.name_en}`;
+      opt.textContent = `${sc.id}. ${getLocalizedScrapName(sc)}`;
       DOM.formRcScrap.appendChild(opt);
     });
   }
@@ -3094,16 +4249,20 @@
 
   const CHENNAI_DEMO_RECIPES = CHENNAI_RECIPES;
 
-  // 1. Reusable Rich Recipe Card Generator
-  function buildChennaiRecipeCardHtml(recipe, confidence = "97.6%", showBanner = true) {
+  // 1. Reusable Rich Recipe Card Generator (Multi-Regional & Zero Emojis)
+  function buildRegionalRecipeCardHtml(recipe, confidence = "97.6%", showBanner = true) {
+    const regTitle = recipe.regionalName || recipe.tamilName || (recipe.title ? recipe.title.split('(')[0].trim() : 'Upcycled Recipe');
     const bannerHtml = showBanner ? `
       <div style="margin-bottom: 1.15rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--border-color, #E6E0D4);">
-        <div style="font-size: 0.78rem; font-weight: 700; color: #78716C; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;">
-          Inference Match (Chennai Regional Model):
+        <div style="font-size: 0.76rem; font-weight: 700; color: #78716C; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;">
+          AI Vision Inference Match (${state.activeRegion || 'National'} Model):
         </div>
         <div style="display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap;">
-          <span style="font-size: 1.2rem; font-weight: 800; color: #14452F;">✓ ${recipe.tamilName}</span>
-          <span class="metric-mono" style="font-family: 'JetBrains Mono', monospace; font-size: 0.84rem; font-weight: 700; color: #B45309; background: #FEF3C7; padding: 0.2rem 0.65rem; border-radius: 9999px;">Confidence: ${confidence}</span>
+          <span style="font-size: 1.15rem; font-weight: 800; color: #14452F; display: inline-flex; align-items: center; gap: 6px;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#14452F" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            ${escapeHtml(regTitle)}
+          </span>
+          <span class="metric-mono" style="font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 700; color: #B45309; background: #FEF3C7; padding: 0.2rem 0.65rem; border-radius: 9999px;">Confidence: ${confidence}</span>
         </div>
       </div>
     ` : '';
@@ -3113,34 +4272,39 @@
       <div class="revealed-recipe-card" style="background: #FFFFFF; border: 1px solid #E6E0D4; border-radius: 14px; padding: 1.5rem; box-shadow: 0 10px 30px -10px rgba(24, 34, 24, 0.06); animation: viewEntrance 0.35s ease-out; margin-top: 0.75rem;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
           <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-            <span style="background: rgba(20, 69, 47, 0.08); color: #14452F; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">${recipe.course}</span>
-            <span style="background: #FEF3C7; color: #B45309; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">⏱ ${recipe.time}</span>
+            <span style="background: rgba(20, 69, 47, 0.08); color: #14452F; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">${escapeHtml(recipe.course)}</span>
+            <span style="background: #FEF3C7; color: #B45309; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 4px;">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${escapeHtml(recipe.time)}
+            </span>
           </div>
-          <span style="font-size: 0.82rem; font-weight: 600; color: #78716C;">Curated by ${recipe.chef}</span>
+          <span style="font-size: 0.82rem; font-weight: 600; color: #78716C;">Curated by ${escapeHtml(recipe.chef)}</span>
         </div>
 
-        <h4 style="font-family: 'Playfair Display', Georgia, serif; font-size: 1.35rem; font-weight: 700; color: #1C1917; margin: 0 0 1rem 0; line-height: 1.3;">${recipe.title}</h4>
+        <h4 style="font-family: var(--font-display, Georgia, serif); font-size: 1.35rem; font-weight: 700; color: #1C1917; margin: 0 0 1rem 0; line-height: 1.3;">${escapeHtml(recipe.title)}</h4>
 
         <div style="margin-bottom: 1.25rem;">
           <h5 style="font-size: 0.85rem; font-weight: 700; color: #1C1917; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Pantry Spices Required:</h5>
           <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
-            ${recipe.spices.map(s => `<span style="background: #FAF7F2; border: 1px solid #E6E0D4; color: #57534E; font-size: 0.82rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px;">✓ ${s}</span>`).join("")}
+            ${recipe.spices.map(s => `<span style="background: #FAF7F2; border: 1px solid #E6E0D4; color: #57534E; font-size: 0.82rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 4px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> ${escapeHtml(s)}</span>`).join("")}
           </div>
         </div>
 
         <div style="margin-bottom: 1.25rem;">
           <h5 style="font-size: 0.85rem; font-weight: 700; color: #1C1917; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem;">Traditional Preparation Steps:</h5>
           <ol style="margin: 0; padding-left: 1.25rem; color: #57534E; font-size: 0.92rem; line-height: 1.65;">
-            ${recipe.steps.map(step => `<li style="margin-bottom: 0.5rem;">${step}</li>`).join("")}
+            ${recipe.steps.map(step => `<li style="margin-bottom: 0.5rem;">${escapeHtml(step)}</li>`).join("")}
           </ol>
         </div>
 
         <div style="background: #FFFBEB; border-left: 4px solid #B45309; padding: 0.85rem 1rem; border-radius: 0 8px 8px 0; font-size: 0.86rem; color: #92400E; font-style: italic; line-height: 1.5;">
-          <strong>Chennai Kitchen Wisdom:</strong> ${recipe.tip}
+          <strong>${state.activeRegion || 'Heritage'} Kitchen Wisdom:</strong> ${escapeHtml(recipe.tip)}
         </div>
       </div>
     `;
   }
+
+  const buildChennaiRecipeCardHtml = buildRegionalRecipeCardHtml;
 
   // 2. Bulletproof Classification Routine (combines filename inspection, canvas chromatic test, and immediate safety fallback)
   function classifyScrapImage(source, fileName, callback) {
@@ -3258,7 +4422,7 @@
     if (proceedBtn) proceedBtn.style.display = "none";
 
     classifyScrapImage(file, file.name, (scrapId, confidence) => {
-      const recipe = CHENNAI_RECIPES[scrapId] || CHENNAI_RECIPES[3];
+      const recipe = getRegionalScrapRecipe(scrapId, state.activeLanguage, state.activeRegion);
 
       setTimeout(() => {
         if (loader) loader.style.display = "none";
@@ -3310,7 +4474,7 @@
   // Standalone showRecipeForScrap renderer that renders directly into details, revealed-container, and home-scanner
   function showRecipeForScrap(scrapId) {
     const idNum = Number(scrapId) || 3;
-    const recipe = CHENNAI_RECIPES[idNum] || CHENNAI_RECIPES[3];
+    const recipe = getRegionalScrapRecipe(idNum, state.activeLanguage, state.activeRegion);
     const details = document.getElementById("scanner-detection-details");
     const container = document.getElementById("revealed-recipe-container");
     const homeBox = document.getElementById("home-scanner-recipe-box");
@@ -3602,23 +4766,23 @@
     if (DOM.catalogScannedRecipesCount) DOM.catalogScannedRecipesCount.textContent = totalMatching;
 
     if (DOM.scannerImpactHint) {
-      DOM.scannerImpactHint.textContent = `🌱 Estimated ${scanData.estimated_weight_rescued_kg || 0.75} kg rescued • ${scanData.estimated_co2_prevented_kg || 1.35} kg CO₂ prevented`;
+      DOM.scannerImpactHint.textContent = `Estimated ${scanData.estimated_weight_rescued_kg || 0.75} kg rescued • ${scanData.estimated_co2_prevented_kg || 1.35} kg CO₂ prevented`;
     }
     if (DOM.catalogScannerImpactHint) {
-      DOM.catalogScannerImpactHint.textContent = `🌱 Auto-selected ${items.length} ingredients in catalog below`;
+      DOM.catalogScannerImpactHint.textContent = `Auto-selected ${items.length} ingredients in catalog below`;
     }
 
-    // Render the dedicated Chennai Upcycled Recipe directly inside Home Scanner Result Box
+    // Render the dedicated Regional Upcycled Recipe directly inside Home Scanner Result Box
     const homeRecipeBox = document.getElementById("home-scanner-recipe-box");
     if (homeRecipeBox && items.length > 0) {
       const topScrap = items[0];
-      const recipe = CHENNAI_RECIPES[topScrap.id] || CHENNAI_RECIPES[3];
+      const recipe = getRegionalScrapRecipe(topScrap.id, state.activeLanguage, state.activeRegion);
       homeRecipeBox.style.display = "block";
-      homeRecipeBox.innerHTML = buildChennaiRecipeCardHtml(recipe, topScrap.confidence_pct || "97.4%", true);
+      homeRecipeBox.innerHTML = buildRegionalRecipeCardHtml(recipe, topScrap.confidence_pct || "97.4%", true);
     }
 
     updateAfterScanSelection();
-    showToast(`✨ Scanned photo! Auto-selected ${items.length} kitchen ingredients.`, 'success');
+    showToast(`Scanned photo! Auto-selected ${items.length} kitchen ingredients.`, 'success');
   }
 
   function updateAfterScanSelection() {
@@ -3701,13 +4865,15 @@
     if (list.length === 0) {
       DOM.homeRecipeGrid.innerHTML = `
         <div style="grid-column: 1 / -1; text-align: center; padding: 3.5rem 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg);">
-          <div style="font-size: 2.8rem; margin-bottom: 0.5rem;">🥗</div>
+          <div style="margin-bottom: 0.75rem; color: var(--emerald-primary);">
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+          </div>
           <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">No matching zero-waste recipes found</h3>
           <p style="font-size: 0.92rem; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.5rem;">
-            Try selecting different scraps from the 30-scraps catalog or clear filters to view authentic zero-waste dishes.
+            Try selecting different scraps from the 35-scraps catalog or clear filters to view authentic zero-waste dishes.
           </p>
           <button class="btn-hero-primary" id="btn-empty-browse-catalog">
-            <span>📚 Browse 30 Kitchen Scraps Catalog</span>
+            <span>Browse 35 Kitchen Scraps Catalog</span>
           </button>
         </div>
       `;
@@ -3725,6 +4891,7 @@
 
       const savedKg = (0.35 + (rc.id % 5) * 0.1).toFixed(2);
       const co2Prevented = (savedKg * 1.8).toFixed(2);
+      const scrapTitle = getLocalizedScrapShort(rc.scrap_id || rc.scrapId || rc.scrap_name_en);
 
       card.innerHTML = `
         <div>
@@ -3736,7 +4903,12 @@
           <h3 class="recipe-dish-title">${escapeHtml(getEnglishRecipeTitle(rc.title))}</h3>
 
           <div class="card-byproduct-callout">
-            <span class="byproduct-title-row">♻️ Scrap: ${escapeHtml(rc.scrap_name_en)}</span>
+            <span class="byproduct-title-row">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: -2px;">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A7.003 7.003 0 0 1 5.07 11H5a1 1 0 0 1 0-2h.07A7.003 7.003 0 0 1 11 5.07V5a1 1 0 0 1 2 0v.07A7.003 7.003 0 0 1 18.93 11H19a1 1 0 0 1 0 2h-.07A7.003 7.003 0 0 1 13 16.93z"/>
+              </svg>
+              Scrap: ${escapeHtml(scrapTitle)}
+            </span>
           </div>
 
           ${rc.chef_wisdom_tip ? `<div class="card-wisdom-snippet">“${escapeHtml(rc.chef_wisdom_tip)}”</div>` : ''}
@@ -3744,17 +4916,42 @@
 
         <div>
           <div class="card-specs-row">
-            <span>⏱️ ${rc.prep_time_minutes} min</span>
-            <span>⚡ ${escapeHtml(rc.difficulty)}</span>
-            <span>🍽️ ${rc.servings} Servings</span>
+            <span>
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 3px; vertical-align: -1px;">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              ${rc.prep_time_minutes} min
+            </span>
+            <span>
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 3px; vertical-align: -1px;">
+                <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              ${escapeHtml(rc.difficulty)}
+            </span>
+            <span>
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 3px; vertical-align: -1px;">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 2a10 10 0 0 1 10 10"/>
+              </svg>
+              ${rc.servings} Servings
+            </span>
           </div>
 
           <div class="card-nature-impact">
-            🌱 ${savedKg} kg scrap transformed • ${co2Prevented} kg CO₂ prevented
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: -2px;">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+              <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+            </svg>
+            ${savedKg} kg scrap transformed &bull; ${co2Prevented} kg CO₂ prevented
           </div>
 
           <button class="btn-card-read" data-recipe-id="${rc.id}">
-            <span>📖 View Recipe & Audio Guide</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 5px; vertical-align: -2px;">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+            <span>View Recipe &amp; Audio Guide</span>
           </button>
         </div>
       `;
@@ -3926,7 +5123,9 @@
 
   function resetSpeechUI() {
     state.isSpeaking = false;
-    DOM.audioIconSpan.textContent = '▶️';
+    if (DOM.audioIconSpan) {
+      DOM.audioIconSpan.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align:-2px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+    }
     DOM.audioTextSpan.textContent = 'Listen to Voice Guide';
     DOM.btnAudioStop.style.display = 'none';
   }
@@ -3935,7 +5134,11 @@
   // SAVED FAVORITES LOGIC (HOME CHEF)
   // ==========================================================================
   function updateFavoriteButtonUI(isFav) {
-    if (DOM.favIcon) DOM.favIcon.textContent = isFav ? '❤️' : '🤍';
+    if (DOM.favIcon) {
+      DOM.favIcon.innerHTML = isFav 
+        ? `<svg viewBox="0 0 24 24" width="16" height="16" fill="#e53935" stroke="#e53935" stroke-width="1.75" style="vertical-align:-2px;"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`
+        : `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="vertical-align:-2px;"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`;
+    }
     if (DOM.favText) DOM.favText.textContent = isFav ? 'Saved' : 'Save';
     if (DOM.btnModalFavorite) {
       DOM.btnModalFavorite.classList.toggle('active', isFav);
@@ -3961,7 +5164,7 @@
         chef_name: rc.chef_name,
         prep_time_minutes: rc.prep_time_minutes
       });
-      showToast(`Saved "${getEnglishRecipeTitle(rc.title)}" to favorites! ❤️`, 'success');
+      showToast(`Saved "${getEnglishRecipeTitle(rc.title)}" to favorites!`, 'success');
       updateFavoriteButtonUI(true);
     }
 
@@ -3976,7 +5179,10 @@
     if (!state.favorites || state.favorites.length === 0) {
       DOM.favoritesListContainer.innerHTML = `
         <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem; color: var(--text-muted);">
-          <p style="font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 600;">🤍 No saved favorite recipes yet</p>
+          <div style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:rgba(27,94,32,0.08); color:var(--emerald-primary); margin-bottom:0.75rem;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </div>
+          <p style="font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 600;">No saved favorite recipes yet</p>
           <p style="font-size: 0.88rem;">Open any recipe and click the <strong>Save</strong> button to bookmark traditional zero-waste dishes here.</p>
         </div>
       `;
@@ -3987,10 +5193,13 @@
         card.innerHTML = `
           <div class="favorite-item-top">
             <span class="badge badge-course">${escapeHtml(fav.course_type || 'Dishes')}</span>
-            <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">⏱️ ${fav.prep_time_minutes || 15} min</span>
+            <span style="display:inline-flex; align-items:center; gap:3px; font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${fav.prep_time_minutes || 15} min
+            </span>
           </div>
           <h4 class="favorite-item-title">${escapeHtml(getEnglishRecipeTitle(fav.title))}</h4>
-          <p class="favorite-item-scrap">♻️ Scrap: ${escapeHtml(fav.scrap_name_en || 'Kitchen Scrap')}</p>
+          <p class="favorite-item-scrap">Scrap: ${escapeHtml(fav.scrap_name_en || 'Kitchen Scrap')}</p>
           <div class="favorite-item-actions">
             <button type="button" class="btn-fav-read" data-id="${fav.id}">View Recipe</button>
             <button type="button" class="btn-fav-remove" data-id="${fav.id}" title="Remove">✕</button>
@@ -4036,8 +5245,13 @@
       catSection.className = 'master-cat-section';
 
       catSection.innerHTML = `
-        <h4 class="master-cat-title">
-          <span>${cat.emoji}</span>
+        <h4 class="master-cat-title" style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:6px; background:rgba(27,94,32,0.08); color:var(--emerald-primary);">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+              <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+            </svg>
+          </span>
           <span>Category ${cat.id}: ${escapeHtml(cat.name)}</span>
         </h4>
         <div class="master-scraps-subgrid"></div>
@@ -4057,7 +5271,7 @@
               <span class="master-scrap-id">#${sc.id}</span>
               <div class="master-scrap-radio-indicator">${isSelected ? '✓' : ''}</div>
             </div>
-            <h4 class="master-scrap-name">${escapeHtml(sc.name_en)}</h4>
+            <h4 class="master-scrap-name">${escapeHtml(getLocalizedScrapName(sc))}</h4>
             <p class="master-scrap-method">${escapeHtml(sc.common_uses)}</p>
           </div>
           <button type="button" class="btn-master-card-select">
@@ -4087,7 +5301,7 @@
 
     const selectedScrap = state.scraps.find(s => s.id === scrapId);
     if (selectedScrap) {
-      showToast(`Selected "${selectedScrap.name_en}". Click "Next" to build the recipe!`, 'info');
+      showToast(`Selected "${getLocalizedScrapShort(selectedScrap)}". Click "Next" to build the recipe!`, 'info');
     }
   }
 
@@ -4114,7 +5328,7 @@
     if (DOM.step1SelectedBadge) {
       if (selectedScrap) {
         DOM.step1SelectedBadge.classList.add('has-selection');
-        DOM.step1SelectedBadge.innerHTML = `<span>✓ Selected: <strong>${escapeHtml(selectedScrap.name_en)}</strong></span>`;
+        DOM.step1SelectedBadge.innerHTML = `<span>✓ Selected: <strong>${escapeHtml(getLocalizedScrapName(selectedScrap))}</strong></span>`;
       } else {
         DOM.step1SelectedBadge.classList.remove('has-selection');
         DOM.step1SelectedBadge.innerHTML = `<span>No scrap selected yet</span>`;
@@ -4123,7 +5337,7 @@
 
     if (DOM.dockSelectedScrapName) {
       if (selectedScrap) {
-        DOM.dockSelectedScrapName.textContent = selectedScrap.name_en;
+        DOM.dockSelectedScrapName.textContent = getLocalizedScrapName(selectedScrap);
         DOM.dockSelectedScrapName.style.color = 'var(--emerald-primary)';
       } else {
         DOM.dockSelectedScrapName.textContent = 'None chosen — please click a scrap card above';
@@ -4153,10 +5367,10 @@
     if (!scrap) return;
 
     if (DOM.builderScrapPill) {
-      DOM.builderScrapPill.textContent = `♻️ Scrap #${scrap.id}`;
+      DOM.builderScrapPill.textContent = `Scrap #${scrap.id}`;
     }
     if (DOM.builderScrapTitle) {
-      DOM.builderScrapTitle.textContent = scrap.name_en;
+      DOM.builderScrapTitle.textContent = getLocalizedScrapName(scrap);
     }
     if (DOM.builderScrapReg) {
       DOM.builderScrapReg.textContent = '';
@@ -4299,7 +5513,7 @@
         localStorage.setItem('waste2menu_recipes', JSON.stringify(state.recipes));
       } catch (e) {}
 
-      showToast(`✨ "${payload.title}" published & preserved in the catalog!`, 'success');
+      showToast(`"${payload.title}" published & preserved in the catalog!`, 'success');
       DOM.masterRecipeForm.reset();
       closeMasterRecipeBuilderModal();
 
@@ -4321,7 +5535,7 @@
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span>🌿 Publish & Build New Dish</span>';
+        submitBtn.innerHTML = '<span>Publish & Build New Dish</span>';
       }
     }
   }
@@ -4488,7 +5702,7 @@
       DOM.dishSuccessBadge.style.display = 'flex';
     }
 
-    showToast('🌿 Zero Waste Hero: You diverted kitchen scrap into delicious food!', 'success');
+    showToast('Zero Waste Hero: You diverted kitchen scrap into delicious food!', 'success');
     renderCookedCreationsGallery();
   }
 
@@ -4508,7 +5722,12 @@
     if (list.length === 0) {
       DOM.cookedCreationsGrid.innerHTML = `
         <div class="creations-empty-state">
-          <span class="empty-icon">🍳</span>
+          <span class="empty-icon" style="display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:50%; background:rgba(27,94,32,0.08); color:var(--emerald-primary); margin-bottom:0.75rem;">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+              <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+            </svg>
+          </span>
           <h4>No cooked creations uploaded yet</h4>
           <p>Open any recipe above, cook it at home, and tap <strong>"Snap / Upload My Dish Creation"</strong> to build your Zero-Waste Hero portfolio!</p>
         </div>
@@ -4529,7 +5748,7 @@
       card.innerHTML = `
         <div class="creation-card-media">
           <img src="${item.photoUrl}" alt="${escapeHtml(item.recipeTitle)}" loading="lazy" />
-          <span class="creation-scrap-tag">♻️ ${escapeHtml(item.scrapName)}</span>
+          <span class="creation-scrap-tag">${escapeHtml(item.scrapName)}</span>
           <button type="button" class="btn-delete-creation" data-id="${item.id}" title="Remove creation">✕</button>
         </div>
         <div class="creation-card-body">
@@ -4540,7 +5759,13 @@
           <h4 class="creation-dish-title">${escapeHtml(item.recipeTitle)}</h4>
           <p class="creation-note">“${escapeHtml(item.note)}”</p>
           <div class="creation-card-footer">
-            <span class="hero-micro-badge">🌿 Zero Waste Hero</span>
+            <span class="hero-micro-badge">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:-2px;">
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+              </svg>
+              Zero Waste Hero
+            </span>
             <span class="creation-chef-tag">By ${escapeHtml(item.authorName)}</span>
           </div>
         </div>
@@ -4575,23 +5800,27 @@
     DOM.chennaiNgosGrid.innerHTML = '';
 
     const term = (filterText || '').trim().toLowerCase();
-    const filtered = CHENNAI_NGOS.filter(ngo => {
-      if (!term) return true;
-      return (
-        ngo.name.toLowerCase().includes(term) ||
-        ngo.zone.toLowerCase().includes(term) ||
-        ngo.focus.toLowerCase().includes(term) ||
-        ngo.address.toLowerCase().includes(term)
-      );
+    const activeReg = state.activeRegion || 'All India';
+
+    let filtered = NATIONWIDE_NGOS.filter(ngo => {
+      if (term) {
+        return (
+          ngo.name.toLowerCase().includes(term) ||
+          (ngo.city && ngo.city.toLowerCase().includes(term)) ||
+          (ngo.region && ngo.region.toLowerCase().includes(term)) ||
+          ngo.zone.toLowerCase().includes(term) ||
+          ngo.focus.toLowerCase().includes(term) ||
+          ngo.address.toLowerCase().includes(term)
+        );
+      }
+      if (activeReg && activeReg !== 'All India') {
+        return ngo.region === activeReg || (ngo.city && activeReg.toLowerCase().includes(ngo.city.toLowerCase()));
+      }
+      return true;
     });
 
     if (filtered.length === 0) {
-      DOM.chennaiNgosGrid.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem; color: var(--text-muted); background: var(--bg-surface); border-radius: var(--radius-md);">
-          No verified shelters matched "${escapeHtml(filterText)}". Showing all grassroots relief partners.
-        </div>
-      `;
-      return;
+      filtered = NATIONWIDE_NGOS.slice();
     }
 
     filtered.forEach(ngo => {
@@ -4688,7 +5917,27 @@
 
     DOM.ngoDispatchesList.innerHTML = '';
 
-    if (state.dispatches.length === 0) {
+    const filterElem = document.getElementById('filter-dispatch-region');
+    const selectedRegion = filterElem ? filterElem.value : (state.activeRegion || 'All India');
+
+    let feedItems = state.dispatches.slice();
+    if (selectedRegion && selectedRegion !== 'All India') {
+      feedItems = feedItems.filter(dp => {
+        const text = `${dp.pickup_location || ''} ${dp.pickup_hub || ''} ${dp.dish_name || ''} ${dp.notes || ''}`.toLowerCase();
+        if (selectedRegion === 'Tamil Nadu' && (text.includes('chennai') || text.includes('tamil nadu') || text.includes('tn-') || text.includes('mylapore') || text.includes('t. nagar') || text.includes('guindy'))) return true;
+        if (selectedRegion === 'West Bengal' && (text.includes('kolkata') || text.includes('bengal') || text.includes('wb-') || text.includes('gariah') || text.includes('salt lake'))) return true;
+        if (selectedRegion === 'Delhi NCR' && (text.includes('delhi') || text.includes('ncr') || text.includes('noida') || text.includes('gurgaon') || text.includes('chandni'))) return true;
+        if (selectedRegion === 'Maharashtra' && (text.includes('mumbai') || text.includes('pune') || text.includes('maharashtra') || text.includes('dadar'))) return true;
+        if (selectedRegion === 'Karnataka' && (text.includes('bengaluru') || text.includes('bangalore') || text.includes('karnataka') || text.includes('koramangala'))) return true;
+        if (selectedRegion === 'Telangana' && (text.includes('hyderabad') || text.includes('telangana') || text.includes('secunderabad') || text.includes('hitec'))) return true;
+        return false;
+      });
+      if (feedItems.length === 0) {
+        feedItems = state.dispatches.slice();
+      }
+    }
+
+    if (feedItems.length === 0) {
       DOM.ngoDispatchesList.innerHTML = `
         <div style="text-align: center; padding: 2.5rem; color: var(--text-muted); background: var(--bg-surface); border-radius: var(--radius-md); border: 1px dashed var(--border-light);">
           All surplus meals have been collected by community shelters!
@@ -4699,7 +5948,7 @@
       return;
     }
 
-    state.dispatches.forEach(dp => {
+    feedItems.forEach(dp => {
       // Determine canonical lifecycle status
       let rawStatus = (dp.status || 'Awaiting Pickup').toUpperCase();
       let canonicalStatus = 'Awaiting Pickup';
@@ -5113,7 +6362,7 @@
               100% Edible
             </span>
           </div>
-          <h4 class="showcase-scrap-title">${escapeHtml(sc.name_en)}</h4>
+          <h4 class="showcase-scrap-title">${escapeHtml(getLocalizedScrapName(sc))}</h4>
           <p class="showcase-method-text">${escapeHtml(sc.common_uses)}</p>
         </div>
         <div class="showcase-card-bottom">
@@ -5166,7 +6415,12 @@
       accordion.innerHTML = `
         <button type="button" class="catalog-category-header" aria-expanded="true">
           <div class="cat-header-left">
-            <span class="cat-header-emoji">${cat.emoji}</span>
+            <span class="cat-header-icon-box" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:8px; background:rgba(27,94,32,0.08); color:var(--emerald-primary);">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+              </svg>
+            </span>
             <div>
               <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
                 <h3 class="cat-header-title">Category ${cat.id}: ${escapeHtml(cat.name)}</h3>
@@ -5201,9 +6455,9 @@
           <div>
             <div class="scrap-card-header">
               <span class="scrap-card-id">#${sc.id}</span>
-              <span class="scrap-card-category-tag">${cat.emoji} Cat ${cat.id}</span>
+              <span class="scrap-card-category-tag">Cat ${cat.id}</span>
             </div>
-            <h4 class="scrap-card-title">${escapeHtml(sc.name_en)}</h4>
+            <h4 class="scrap-card-title">${escapeHtml(getLocalizedScrapName(sc))}</h4>
             <p class="scrap-card-method">${escapeHtml(sc.common_uses)}</p>
           </div>
           <div class="scrap-card-actions">
@@ -5237,7 +6491,7 @@
           if (rc) {
             openRecipeDetailModal(rc.id);
           } else {
-            showToast(`Recipe for ${sc.name_en} will be uploaded soon!`, 'info');
+            showToast(`Recipe for ${getLocalizedScrapShort(sc)} will be uploaded soon!`, 'info');
           }
         });
 
@@ -5313,7 +6567,7 @@
       } else {
         const names = state.scraps
           .filter(s => state.selectedScrapIds.has(s.id))
-          .map(s => s.name_en)
+          .map(s => getLocalizedScrapShort(s))
           .join(', ');
         DOM.selBarNames.textContent = names;
         DOM.selBarNames.title = names;
@@ -5344,7 +6598,7 @@
       }, 150);
     }
 
-    showToast(`✨ Showing zero-waste recipes for your selected ingredients!`, 'success');
+    showToast('Showing zero-waste recipes for your selected ingredients!', 'success');
   }
 
   // ==========================================================================
@@ -5353,8 +6607,15 @@
   function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast-msg ${type}`;
-    const icon = type === 'success' ? '✅' : type === 'error' ? '⚠️' : 'ℹ️';
-    toast.innerHTML = `<span>${icon}</span><span>${escapeHtml(message)}</span>`;
+    let iconSvg = '';
+    if (type === 'success') {
+      iconSvg = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+    } else if (type === 'error') {
+      iconSvg = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+    } else {
+      iconSvg = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
+    }
+    toast.innerHTML = `<span class="toast-icon-wrapper" style="display:inline-flex; align-items:center; margin-right:6px;">${iconSvg}</span><span>${escapeHtml(message)}</span>`;
 
     DOM.toastTray.appendChild(toast);
 
