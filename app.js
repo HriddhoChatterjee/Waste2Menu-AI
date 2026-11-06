@@ -603,26 +603,34 @@
   };
 
   function getLocalizedScrapName(scrapOrId, lang) {
-    const currentLang = lang || (state && state.activeLanguage) || 'ta';
+    const isUserLoggedIn = Boolean(state && state.currentUser);
+    const currentLang = lang || (isUserLoggedIn ? state.activeLanguage : 'en');
     const id = (typeof scrapOrId === 'object' && scrapOrId !== null) ? scrapOrId.id : parseInt(scrapOrId, 10);
     const entry = LOCALIZED_SCRAPS_MAP[id];
     if (!entry) {
       if (typeof scrapOrId === 'object' && scrapOrId !== null) return scrapOrId.name_en || `Scrap #${id}`;
       return `Scrap #${id}`;
     }
-    const regional = entry[currentLang] || entry['en'] || entry['ta'];
-    const english = entry['en'] || '';
-    if (currentLang === 'en' || regional === english) {
+    const english = entry['en'] || (typeof scrapOrId === 'object' ? scrapOrId.name_en : `Scrap #${id}`);
+    if (!isUserLoggedIn || currentLang === 'en') {
       return english;
     }
-    return `${regional} / ${english}`;
+    const regional = entry[currentLang];
+    if (!regional || regional === english) {
+      return english;
+    }
+    return `${english} (${regional})`;
   }
 
   function getLocalizedScrapShort(scrapOrId, lang) {
-    const currentLang = lang || (state && state.activeLanguage) || 'ta';
+    const isUserLoggedIn = Boolean(state && state.currentUser);
+    const currentLang = lang || (isUserLoggedIn ? state.activeLanguage : 'en');
     const id = (typeof scrapOrId === 'object' && scrapOrId !== null) ? scrapOrId.id : parseInt(scrapOrId, 10);
     const entry = LOCALIZED_SCRAPS_MAP[id];
     if (!entry) return `Scrap #${id}`;
+    if (!isUserLoggedIn || currentLang === 'en') {
+      return entry['en'] || `Scrap #${id}`;
+    }
     return entry[currentLang] || entry['en'];
   }
 
@@ -2064,12 +2072,21 @@
   }
 
   // Application State
+  const initialUser = (() => {
+    try {
+      const stored = localStorage.getItem('waste2menu_user');
+      return stored ? JSON.parse(stored) : null;
+    } catch (e) {
+      return null;
+    }
+  })();
+
   const state = {
-    currentUser: null,
-    currentProfile: null,
-    activeRegion: localStorage.getItem('waste2menu_region') || 'Tamil Nadu',
-    activeCity: localStorage.getItem('waste2menu_city') || 'Chennai',
-    activeLanguage: localStorage.getItem('waste2menu_language') || 'ta',
+    currentUser: initialUser,
+    currentProfile: initialUser,
+    activeRegion: initialUser?.region_state || 'All India',
+    activeCity: initialUser?.city || 'All Hubs',
+    activeLanguage: initialUser?.preferred_language || 'en',
     activeTab: 'home-overview',
     categories: CATEGORIES_METADATA.slice(),
     scraps: INGREDIENTS_DATA.slice(),
@@ -2412,22 +2429,25 @@
   };
 
   function getRegionalScrapRecipe(scrapId, lang, region) {
-    const currentLang = lang || (state && state.activeLanguage) || 'ta';
-    const currentRegion = region || (state && state.activeRegion) || 'Tamil Nadu';
+    const isUserLoggedIn = Boolean(state && state.currentUser);
+    const currentLang = lang || (isUserLoggedIn ? state.activeLanguage : 'en');
+    const currentRegion = region || (isUserLoggedIn ? state.activeRegion : 'All India');
     const id = parseInt(scrapId, 10);
 
     if (id === 3 && MULTI_REGIONAL_RECIPES[3]) {
+      if (!isUserLoggedIn || currentLang === 'en') return MULTI_REGIONAL_RECIPES[3].en;
       if (currentLang === 'bn' || currentRegion.includes('Bengal')) return MULTI_REGIONAL_RECIPES[3].bn;
       if (currentLang === 'hi' || currentRegion.includes('Delhi') || currentRegion.includes('Maharashtra')) return MULTI_REGIONAL_RECIPES[3].hi;
-      if (currentLang === 'en') return MULTI_REGIONAL_RECIPES[3].en;
-      return MULTI_REGIONAL_RECIPES[3].ta;
+      if (currentLang === 'ta' || currentRegion.includes('Tamil')) return MULTI_REGIONAL_RECIPES[3].ta;
+      return MULTI_REGIONAL_RECIPES[3].en;
     }
 
     if (id === 8 && MULTI_REGIONAL_RECIPES[8]) {
+      if (!isUserLoggedIn || currentLang === 'en') return MULTI_REGIONAL_RECIPES[8].en;
       if (currentLang === 'bn' || currentRegion.includes('Bengal')) return MULTI_REGIONAL_RECIPES[8].bn;
       if (currentLang === 'hi' || currentRegion.includes('Delhi') || currentRegion.includes('Maharashtra')) return MULTI_REGIONAL_RECIPES[8].hi;
-      if (currentLang === 'en') return MULTI_REGIONAL_RECIPES[8].en;
-      return MULTI_REGIONAL_RECIPES[8].ta;
+      if (currentLang === 'ta' || currentRegion.includes('Tamil')) return MULTI_REGIONAL_RECIPES[8].ta;
+      return MULTI_REGIONAL_RECIPES[8].en;
     }
 
     const found = state.recipes.find(r => r.scrap_id === id || r.scrapId === id);
@@ -2446,7 +2466,7 @@
       };
     }
 
-    return MULTI_REGIONAL_RECIPES[3].ta;
+    return MULTI_REGIONAL_RECIPES[3].en;
   }
 
   const RECIPES_DATA = state.recipes;
@@ -2697,7 +2717,7 @@
   // ==========================================================================
   async function init() {
     loadSavedSession();
-    updateLocaleNavPill();
+    updateHomePartnersHighlight();
     setupEventListeners();
     renderAuthHeader();
     updateNavbarVisibility();
@@ -2720,9 +2740,22 @@
         } else if (event === 'SIGNED_OUT') {
           state.currentUser = null;
           state.currentProfile = null;
-          localStorage.removeItem('waste2menu_user');
+          state.activeRegion = 'All India';
+          state.activeCity = 'All Hubs';
+          state.activeLanguage = 'en';
+          try {
+            localStorage.removeItem('waste2menu_user');
+            localStorage.removeItem('annapurna_user');
+            localStorage.removeItem('waste2menu_region');
+            localStorage.removeItem('waste2menu_city');
+            localStorage.removeItem('waste2menu_language');
+          } catch (e) {}
           renderAuthHeader();
           updateNavbarVisibility();
+          renderCategorizedCatalog();
+          renderAncestralShowcase();
+          renderChennaiNgosDirectory();
+          updateHomePartnersHighlight();
           switchTab('home-overview');
         }
       });
@@ -2767,6 +2800,7 @@
     populateScrapDropdown();
     renderRecipesGrid();
     renderDispatchesFeed();
+    updateHomePartnersHighlight();
     animateMetricCounters();
 
     // 2. Attempt fetching from backend if live server is reachable
@@ -2911,19 +2945,6 @@
     // Auth Form Submissions
     if (DOM.formSignin) DOM.formSignin.addEventListener('submit', handleSigninSubmit);
     if (DOM.formRegister) DOM.formRegister.addEventListener('submit', handleRegisterSubmit);
-
-    // Locale Modal Triggers
-    if (DOM.btnOpenLocale) {
-      DOM.btnOpenLocale.addEventListener('click', openLocaleModal);
-    }
-    if (DOM.localeModalClose) {
-      DOM.localeModalClose.addEventListener('click', () => {
-        if (DOM.localeModal && DOM.localeModal.open) DOM.localeModal.close();
-      });
-    }
-    if (DOM.formLocaleSelect) {
-      DOM.formLocaleSelect.addEventListener('submit', handleLocaleFormSubmit);
-    }
 
     // Dynamic Commercial Fields Toggle in Registration Form
     if (DOM.regRole) {
@@ -3295,38 +3316,60 @@
   // ==========================================================================
   // REGIONAL LOCALIZATION & SPOKEN LANGUAGE CONTROLLER
   // ==========================================================================
-  function updateLocaleNavPill() {
-    const label = document.getElementById('nav-active-locale-label');
-    if (!label) return;
-    const langLabels = {
-      ta: 'தமிழ்',
-      bn: 'বাংলা',
-      hi: 'हिन्दी',
-      en: 'English',
-      mr: 'मराठी',
-      te: 'తెలుగు',
-      kn: 'ಕನ್ನಡ'
-    };
-    const reg = state.activeRegion || 'Tamil Nadu';
-    const lang = langLabels[state.activeLanguage] || state.activeLanguage || 'ta';
-    label.textContent = `${reg} • ${lang}`;
+  // ==========================================================================
+  // PAN-INDIA NGO PARTNERS HIGHLIGHT & REGIONAL ROUTING
+  // ==========================================================================
+  function updateHomePartnersHighlight() {
+    const grid = document.getElementById('partners-cards-grid');
+    if (!grid) return;
+    const cards = Array.from(grid.querySelectorAll('.partner-card'));
+    const isUserLoggedIn = Boolean(state && state.currentUser);
+    const userRegion = isUserLoggedIn ? (state.currentUser.region_state || state.activeRegion) : null;
+
+    cards.forEach(card => {
+      const cardRegion = card.dataset.region || '';
+      const isMatch = Boolean(userRegion && userRegion !== 'All India' && (cardRegion.includes(userRegion) || userRegion.includes(cardRegion)));
+      
+      let badge = card.querySelector('.regional-match-tag');
+      if (isMatch) {
+        card.classList.add('highlighted-partner');
+        card.style.borderColor = 'var(--emerald-primary)';
+        card.style.boxShadow = '0 6px 20px rgba(27, 94, 32, 0.12)';
+        if (!badge) {
+          const badgeRow = card.querySelector('.partner-badge-row');
+          if (badgeRow) {
+            const span = document.createElement('span');
+            span.className = 'partner-verification-tag regional-match-tag';
+            span.style.background = '#E8F5E9';
+            span.style.color = '#1B5E20';
+            span.style.fontWeight = '700';
+            span.innerHTML = '★ Your Registered Region';
+            badgeRow.appendChild(span);
+          }
+        }
+      } else {
+        card.classList.remove('highlighted-partner');
+        card.style.borderColor = '';
+        card.style.boxShadow = '';
+        if (badge) badge.remove();
+      }
+    });
+
+    // If user has a registered regional match, prioritize the matching card to the front
+    if (userRegion && userRegion !== 'All India') {
+      cards.sort((a, b) => {
+        const aMatch = (a.dataset.region || '').includes(userRegion) ? -1 : 1;
+        const bMatch = (b.dataset.region || '').includes(userRegion) ? -1 : 1;
+        return aMatch - bMatch;
+      });
+      cards.forEach(card => grid.appendChild(card));
+    }
   }
 
   function setLocale(region, language, city, reRender = true) {
-    if (region) {
-      state.activeRegion = region;
-      try { localStorage.setItem('waste2menu_region', region); } catch (e) {}
-    }
-    if (language) {
-      state.activeLanguage = language;
-      try { localStorage.setItem('waste2menu_language', language); } catch (e) {}
-    }
-    if (city) {
-      state.activeCity = city;
-      try { localStorage.setItem('waste2menu_city', city); } catch (e) {}
-    }
-
-    updateLocaleNavPill();
+    if (region) state.activeRegion = region;
+    if (language) state.activeLanguage = language;
+    if (city) state.activeCity = city;
 
     if (reRender) {
       renderCategorizedCatalog();
@@ -3334,33 +3377,11 @@
       renderChennaiNgosDirectory();
       renderDispatchesFeed();
       populateScrapDropdown();
+      updateHomePartnersHighlight();
       if (state.activeTab === 'home-chef') {
         applyFiltersAndRenderRecipes();
       }
     }
-  }
-
-  function openLocaleModal() {
-    const modal = document.getElementById('locale-modal');
-    const selRegion = document.getElementById('locale-select-region');
-    const selLang = document.getElementById('locale-select-language');
-    if (selRegion) selRegion.value = state.activeRegion;
-    if (selLang) selLang.value = state.activeLanguage;
-    if (modal && typeof modal.showModal === 'function') {
-      modal.showModal();
-    }
-  }
-
-  function handleLocaleFormSubmit(e) {
-    e.preventDefault();
-    const selRegion = document.getElementById('locale-select-region');
-    const selLang = document.getElementById('locale-select-language');
-    const modal = document.getElementById('locale-modal');
-    if (selRegion && selLang) {
-      setLocale(selRegion.value, selLang.value);
-      showToast(`Locale updated to ${selRegion.value} (${selLang.value.toUpperCase()})`, 'success');
-    }
-    if (modal && modal.open) modal.close();
   }
 
   // ==========================================================================
@@ -3958,6 +3979,9 @@
 
   function setCurrentUser(user) {
     state.currentUser = user;
+    if (user.region_state) state.activeRegion = user.region_state;
+    if (user.preferred_language) state.activeLanguage = user.preferred_language;
+    if (user.city) state.activeCity = user.city;
     try {
       localStorage.setItem('waste2menu_user', JSON.stringify(user));
       localStorage.setItem('annapurna_user', JSON.stringify(user));
@@ -3965,6 +3989,9 @@
     renderAuthHeader();
     updateNavbarVisibility();
     renderCategorizedCatalog();
+    renderAncestralShowcase();
+    renderChennaiNgosDirectory();
+    updateHomePartnersHighlight();
 
     if (user.role === 'master_chef') {
       switchTab('master-chef');
@@ -3983,13 +4010,22 @@
     }
     state.currentUser = null;
     state.currentProfile = null;
+    state.activeRegion = 'All India';
+    state.activeCity = 'All Hubs';
+    state.activeLanguage = 'en';
     try {
       localStorage.removeItem('waste2menu_user');
       localStorage.removeItem('annapurna_user');
+      localStorage.removeItem('waste2menu_region');
+      localStorage.removeItem('waste2menu_city');
+      localStorage.removeItem('waste2menu_language');
     } catch (e) {}
     renderAuthHeader();
     updateNavbarVisibility();
     renderCategorizedCatalog();
+    renderAncestralShowcase();
+    renderChennaiNgosDirectory();
+    updateHomePartnersHighlight();
     switchTab('home-overview');
     showToast('Signed out successfully.', 'info');
   }
@@ -4251,11 +4287,19 @@
 
   // 1. Reusable Rich Recipe Card Generator (Multi-Regional & Zero Emojis)
   function buildRegionalRecipeCardHtml(recipe, confidence = "97.6%", showBanner = true) {
-    const regTitle = recipe.regionalName || recipe.tamilName || (recipe.title ? recipe.title.split('(')[0].trim() : 'Upcycled Recipe');
+    const isUserLoggedIn = Boolean(state && state.currentUser);
+    const regTitle = recipe.regionalName || (recipe.title ? recipe.title.split('(')[0].trim() : 'Upcycled Recipe');
+    const modelLabel = isUserLoggedIn && state.activeRegion && state.activeRegion !== 'All India' 
+      ? `${state.activeRegion} Regional Model` 
+      : 'Pan-India Vision Model';
+    const wisdomLabel = isUserLoggedIn && state.activeRegion && state.activeRegion !== 'All India' 
+      ? `${state.activeRegion} Kitchen Wisdom` 
+      : 'Heritage Kitchen Wisdom';
+
     const bannerHtml = showBanner ? `
       <div style="margin-bottom: 1.15rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--border-color, #E6E0D4);">
         <div style="font-size: 0.76rem; font-weight: 700; color: #78716C; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;">
-          AI Vision Inference Match (${state.activeRegion || 'National'} Model):
+          AI Vision Inference Match (${modelLabel}):
         </div>
         <div style="display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap;">
           <span style="font-size: 1.15rem; font-weight: 800; color: #14452F; display: inline-flex; align-items: center; gap: 6px;">
@@ -4298,7 +4342,7 @@
         </div>
 
         <div style="background: #FFFBEB; border-left: 4px solid #B45309; padding: 0.85rem 1rem; border-radius: 0 8px 8px 0; font-size: 0.86rem; color: #92400E; font-style: italic; line-height: 1.5;">
-          <strong>${state.activeRegion || 'Heritage'} Kitchen Wisdom:</strong> ${escapeHtml(recipe.tip)}
+          <strong>${wisdomLabel}:</strong> ${escapeHtml(recipe.tip)}
         </div>
       </div>
     `;
@@ -4734,7 +4778,7 @@
           <div class="detected-chip-left">
             <span class="detected-chip-check">✓</span>
             <div>
-              <span class="detected-chip-name">${escapeHtml(it.name_en)}</span>
+              <span class="detected-chip-name">${escapeHtml(getLocalizedScrapName(it))}</span>
               <span class="detected-chip-uses">${escapeHtml(it.common_uses || 'Zero-waste ingredient')}</span>
             </div>
           </div>

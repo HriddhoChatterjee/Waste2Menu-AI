@@ -80,21 +80,8 @@
         </button>
       </nav>
 
-      <!-- Right Cluster: Region/Language Selector & User Auth State -->
+      <!-- Right Cluster: User Auth State -->
       <div class="navbar-right-cluster">
-        <!-- Live Region & Language Selector Pill -->
-        <button type="button" class="btn-locale-pill" id="btn-open-locale" title="Change Region &amp; Spoken Language">
-          <svg class="locale-globe-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-            <path d="M2 12h20"/>
-          </svg>
-          <span id="nav-active-locale-label">Tamil Nadu &bull; தமிழ்</span>
-          <svg class="chevron-svg" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 12 15 18 9"/>
-          </svg>
-        </button>
-
         <!-- Auth State: Sign In Button OR Logged-in User Profile -->
         <div class="header-auth" id="header-auth">
           <button type="button" class="btn-auth-signin" id="btn-open-auth">
@@ -285,89 +272,19 @@
         <div class="section-title-wrap">
           <div class="kicker-with-badge">
             <span class="pulse-indicator-emerald"></span>
-            <span class="section-kicker">VERIFIED GRASSROOTS RECIPIENTS &bull; PAN-INDIA NETWORK</span>
+            <span class="section-kicker">VERIFIED GRASSROOTS RECIPIENTS &bull; PAN-INDIA RELIEF NETWORK</span>
           </div>
-          <h3 class="section-heading">Verified Community Partners &amp; Relief Networks</h3>
+          <h3 class="section-heading">Verified Pan-India Community Partners &amp; Relief Networks</h3>
           <p class="section-subtitle">Routing excess prepared nutrition directly into verified shelters, destitute homes, and grassroots volunteer fleets across major Indian metropolitan hubs.</p>
         </div>
 
         <div class="partners-cards-grid" id="partners-cards-grid">
           
-          <!-- Partner Card 1: No Food Waste -->
-          <div class="partner-card" data-partner-id="cfb_nfw">
+          <!-- Partner Card 1: Robin Hood Army -->
+          <div class="partner-card" data-partner-id="rha_national" data-region="All India">
             <div class="partner-card-header">
               <div class="partner-title-row">
-                <h4 class="partner-name">No Food Waste (Chennai Chapter)</h4>
-                <div class="active-partner-badge" title="Verified Active Partner">
-                  <span class="pulse-indicator-emerald"></span>
-                  <span class="partner-status-text">Active Partner</span>
-                </div>
-              </div>
-              <div class="partner-badge-row">
-                <span class="partner-type-badge">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/></svg>
-                  Surplus Redistribution
-                </span>
-                <span class="partner-verification-tag">Daily Active Fleet</span>
-              </div>
-              <div class="partner-zone-tag">
-                <svg class="zone-pin-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-                T. Nagar, Kodambakkam &amp; Central Chennai
-              </div>
-            </div>
-            <p class="partner-mission-text">
-              Rapid-response volunteer fleet collecting hot surplus meals from kitchens and delivering them directly to pavement communities.
-            </p>
-            <div class="partner-card-footer">
-              <div class="partner-metric-chip">
-                <span class="metric-text"><strong>1,200+</strong> portions delivered</span>
-              </div>
-              <button type="button" class="btn-partner-action" data-partner-id="cfb_nfw" data-partner-name="No Food Waste (Chennai Chapter)" data-nav-target="ngo-dispatch">
-                <span>Donate / Dispatch Here &rarr;</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Partner Card 2: Akshaya Trust -->
-          <div class="partner-card" data-partner-id="akshaya_trust">
-            <div class="partner-card-header">
-              <div class="partner-title-row">
-                <h4 class="partner-name">Akshaya Trust Chennai</h4>
-                <div class="active-partner-badge" title="Verified Active Partner">
-                  <span class="pulse-indicator-emerald"></span>
-                  <span class="partner-status-text">Active Partner</span>
-                </div>
-              </div>
-              <div class="partner-badge-row">
-                <span class="partner-type-badge">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                  Destitute Senior Care
-                </span>
-                <span class="partner-verification-tag">120+ Daily Residents</span>
-              </div>
-              <div class="partner-zone-tag">
-                <svg class="zone-pin-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-                Valasaravakkam, Porur &amp; West Chennai
-              </div>
-            </div>
-            <p class="partner-mission-text">
-              Provides medical care, shelter, and wholesome hot meals to abandoned senior citizens rescued from streets across West Chennai.
-            </p>
-            <div class="partner-card-footer">
-              <div class="partner-metric-chip">
-                <span class="metric-text"><strong>850+</strong> portions delivered</span>
-              </div>
-              <button type="button" class="btn-partner-action" data-partner-id="akshaya_trust" data-partner-name="Akshaya Trust Chennai" data-nav-target="ngo-dispatch">
-                <span>Donate / Dispatch Here &rarr;</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Partner Card 3: Robin Hood Army -->
-          <div class="partner-card" data-partner-id="rha_chennai">
-            <div class="partner-card-header">
-              <div class="partner-title-row">
-                <h4 class="partner-name">Robin Hood Army (Chennai Chapter)</h4>
+                <h4 class="partner-name">Robin Hood Army (Pan-India Network)</h4>
                 <div class="active-partner-badge" title="Verified Active Partner">
                   <span class="pulse-indicator-emerald"></span>
                   <span class="partner-status-text">Active Partner</span>
@@ -382,27 +299,97 @@
               </div>
               <div class="partner-zone-tag">
                 <svg class="zone-pin-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-                Mylapore, Adyar, Velachery &amp; Anna Nagar
+                Kolkata, Delhi NCR, Mumbai &amp; Chennai
               </div>
             </div>
             <p class="partner-mission-text">
-              Decentralized student and professional network redirecting evening meal batches directly to night shelters and children's homes.
+              Decentralized volunteer citizen network redirecting freshly cooked surplus meals from commercial kitchens to night shelters, destitute families, and orphanages.
             </p>
             <div class="partner-card-footer">
               <div class="partner-metric-chip">
-                <span class="metric-text"><strong>1,450+</strong> portions delivered</span>
+                <span class="metric-text"><strong>1,850+</strong> portions delivered</span>
               </div>
-              <button type="button" class="btn-partner-action" data-partner-id="rha_chennai" data-partner-name="Robin Hood Army (Chennai Chapter)" data-nav-target="ngo-dispatch">
+              <button type="button" class="btn-partner-action" data-partner-id="rha_national" data-partner-name="Robin Hood Army (Pan-India Network)" data-nav-target="ngo-dispatch">
                 <span>Donate / Dispatch Here &rarr;</span>
               </button>
             </div>
           </div>
 
-          <!-- Partner Card 4: Udavum Karangal -->
-          <div class="partner-card" data-partner-id="udavum_karangal">
+          <!-- Partner Card 2: Feeding India -->
+          <div class="partner-card" data-partner-id="feeding_india" data-region="Delhi NCR">
             <div class="partner-card-header">
               <div class="partner-title-row">
-                <h4 class="partner-name">Udavum Karangal</h4>
+                <h4 class="partner-name">Feeding India (Zomato Foundation)</h4>
+                <div class="active-partner-badge" title="Verified Active Partner">
+                  <span class="pulse-indicator-emerald"></span>
+                  <span class="partner-status-text">Active Partner</span>
+                </div>
+              </div>
+              <div class="partner-badge-row">
+                <span class="partner-type-badge">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/></svg>
+                  Large-Scale Hunger Relief
+                </span>
+                <span class="partner-verification-tag">Verified Fleet Logistics</span>
+              </div>
+              <div class="partner-zone-tag">
+                <svg class="zone-pin-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+                New Delhi, Gurugram, Mumbai &amp; Bengaluru
+              </div>
+            </div>
+            <p class="partner-mission-text">
+              Institutional hunger relief operating temperature-controlled transport to rescue corporate cafeterias and banquet surpluses, serving thousands of hot balanced meals daily.
+            </p>
+            <div class="partner-card-footer">
+              <div class="partner-metric-chip">
+                <span class="metric-text"><strong>2,400+</strong> portions delivered</span>
+              </div>
+              <button type="button" class="btn-partner-action" data-partner-id="feeding_india" data-partner-name="Feeding India (Zomato Foundation)" data-nav-target="ngo-dispatch">
+                <span>Donate / Dispatch Here &rarr;</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Partner Card 3: No Food Waste -->
+          <div class="partner-card" data-partner-id="cfb_nfw" data-region="Tamil Nadu">
+            <div class="partner-card-header">
+              <div class="partner-title-row">
+                <h4 class="partner-name">No Food Waste (South &amp; Central Hub)</h4>
+                <div class="active-partner-badge" title="Verified Active Partner">
+                  <span class="pulse-indicator-emerald"></span>
+                  <span class="partner-status-text">Active Partner</span>
+                </div>
+              </div>
+              <div class="partner-badge-row">
+                <span class="partner-type-badge">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/></svg>
+                  Surplus Redistribution
+                </span>
+                <span class="partner-verification-tag">Dedicated Rescue Helplines</span>
+              </div>
+              <div class="partner-zone-tag">
+                <svg class="zone-pin-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+                Chennai, Coimbatore, Hyderabad &amp; Bengaluru
+              </div>
+            </div>
+            <p class="partner-mission-text">
+              Rapid-response food recovery fleets operating across major southern and central urban hubs, picking up excess edible food and supplying verified community shelters within 60 minutes.
+            </p>
+            <div class="partner-card-footer">
+              <div class="partner-metric-chip">
+                <span class="metric-text"><strong>1,650+</strong> portions delivered</span>
+              </div>
+              <button type="button" class="btn-partner-action" data-partner-id="cfb_nfw" data-partner-name="No Food Waste (South &amp; Central Hub)" data-nav-target="ngo-dispatch">
+                <span>Donate / Dispatch Here &rarr;</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Partner Card 4: Roti Bank Foundation -->
+          <div class="partner-card" data-partner-id="roti_bank" data-region="Maharashtra">
+            <div class="partner-card-header">
+              <div class="partner-title-row">
+                <h4 class="partner-name">Roti Bank Foundation</h4>
                 <div class="active-partner-badge" title="Verified Active Partner">
                   <span class="pulse-indicator-emerald"></span>
                   <span class="partner-status-text">Active Partner</span>
@@ -411,33 +398,33 @@
               <div class="partner-badge-row">
                 <span class="partner-type-badge">
                   <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z"/></svg>
-                  Pediatric &amp; Destitute Relief
+                  Urban Meal Rescue
                 </span>
-                <span class="partner-verification-tag">Comprehensive Care</span>
+                <span class="partner-verification-tag">FSSAI-Certified Handling</span>
               </div>
               <div class="partner-zone-tag">
                 <svg class="zone-pin-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-                Thiruvanmiyur, Velachery &amp; South Chennai
+                Mumbai, Pune, Nagpur &amp; Maharashtra Corridor
               </div>
             </div>
             <p class="partner-mission-text">
-              Nourishing homeless infants, vulnerable children, and mentally challenged individuals across organized community centers.
+              Founded by senior civil servants and police veterans to bridge food excess and poverty, collecting untouched fresh meals from weddings and hospitality chains across western India.
             </p>
             <div class="partner-card-footer">
               <div class="partner-metric-chip">
-                <span class="metric-text"><strong>920+</strong> portions delivered</span>
+                <span class="metric-text"><strong>1,350+</strong> portions delivered</span>
               </div>
-              <button type="button" class="btn-partner-action" data-partner-id="udavum_karangal" data-partner-name="Udavum Karangal" data-nav-target="ngo-dispatch">
+              <button type="button" class="btn-partner-action" data-partner-id="roti_bank" data-partner-name="Roti Bank Foundation" data-nav-target="ngo-dispatch">
                 <span>Donate / Dispatch Here &rarr;</span>
               </button>
             </div>
           </div>
 
-          <!-- Partner Card 5: Little Drops -->
-          <div class="partner-card" data-partner-id="little_drops">
+          <!-- Partner Card 5: Calcutta Rescue & Annapurna Network -->
+          <div class="partner-card" data-partner-id="calcutta_rescue" data-region="West Bengal">
             <div class="partner-card-header">
               <div class="partner-title-row">
-                <h4 class="partner-name">Little Drops</h4>
+                <h4 class="partner-name">Calcutta Rescue &amp; Annapurna Network</h4>
                 <div class="active-partner-badge" title="Verified Active Partner">
                   <span class="pulse-indicator-emerald"></span>
                   <span class="partner-status-text">Active Partner</span>
@@ -446,33 +433,33 @@
               <div class="partner-badge-row">
                 <span class="partner-type-badge">
                   <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-                  Elderly &amp; Palliative Care
+                  Grassroots Destitute Relief
                 </span>
-                <span class="partner-verification-tag">800+ Bed Capacity</span>
+                <span class="partner-verification-tag">40+ Years Slum Nutrition</span>
               </div>
               <div class="partner-zone-tag">
                 <svg class="zone-pin-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-                Paraniputhur (Near Ramapuram / Porur)
+                Salt Lake, Ballygunge &amp; Greater Kolkata
               </div>
             </div>
             <p class="partner-mission-text">
-              Providing 3 nutritious meals daily to over 800 elderly and bedridden residents across their expansive suburban care facility.
+              Operating street clinics and community nutrition programs across greater Kolkata, delivering freshly prepared balanced meals and therapeutic nutrition to marginalized families.
             </p>
             <div class="partner-card-footer">
               <div class="partner-metric-chip">
-                <span class="metric-text"><strong>2,100+</strong> portions delivered</span>
+                <span class="metric-text"><strong>980+</strong> portions delivered</span>
               </div>
-              <button type="button" class="btn-partner-action" data-partner-id="little_drops" data-partner-name="Little Drops" data-nav-target="ngo-dispatch">
+              <button type="button" class="btn-partner-action" data-partner-id="calcutta_rescue" data-partner-name="Calcutta Rescue &amp; Annapurna Network" data-nav-target="ngo-dispatch">
                 <span>Donate / Dispatch Here &rarr;</span>
               </button>
             </div>
           </div>
 
-          <!-- Partner Card 6: Annai Fathima Child Welfare Centre -->
-          <div class="partner-card" data-partner-id="annai_fathima">
+          <!-- Partner Card 6: Akshaya Trust & Little Drops Relief -->
+          <div class="partner-card" data-partner-id="akshaya_trust" data-region="Tamil Nadu">
             <div class="partner-card-header">
               <div class="partner-title-row">
-                <h4 class="partner-name">Annai Fathima Child Welfare Centre</h4>
+                <h4 class="partner-name">Akshaya Trust &amp; Little Drops Relief</h4>
                 <div class="active-partner-badge" title="Verified Active Partner">
                   <span class="pulse-indicator-emerald"></span>
                   <span class="partner-status-text">Active Partner</span>
@@ -480,24 +467,24 @@
               </div>
               <div class="partner-badge-row">
                 <span class="partner-type-badge">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                  Youth Orphanage &amp; Care
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  Destitute &amp; Palliative Care
                 </span>
-                <span class="partner-verification-tag">OMR Corridor</span>
+                <span class="partner-verification-tag">900+ Daily Residents</span>
               </div>
               <div class="partner-zone-tag">
                 <svg class="zone-pin-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-                Karapakkam, OMR IT Express Highway
+                Chennai, Madurai &amp; Southern Metro Hubs
               </div>
             </div>
             <p class="partner-mission-text">
-              Ensuring daily hot nutrition, clean meals, and schooling support for orphaned children along the southern Chennai IT belt.
+              Rescuing and rehabilitating abandoned elderly citizens and destitute individuals, providing dignity, palliative medical care, and 3 hot wholesome meals every single day.
             </p>
             <div class="partner-card-footer">
               <div class="partner-metric-chip">
-                <span class="metric-text"><strong>640+</strong> portions delivered</span>
+                <span class="metric-text"><strong>2,100+</strong> portions delivered</span>
               </div>
-              <button type="button" class="btn-partner-action" data-partner-id="annai_fathima" data-partner-name="Annai Fathima Child Welfare Centre" data-nav-target="ngo-dispatch">
+              <button type="button" class="btn-partner-action" data-partner-id="akshaya_trust" data-partner-name="Akshaya Trust &amp; Little Drops Relief" data-nav-target="ngo-dispatch">
                 <span>Donate / Dispatch Here &rarr;</span>
               </button>
             </div>
@@ -545,9 +532,6 @@
           <h2 class="portal-heading">Home Chef: Reverse Recipe Hub</h2>
           <p class="portal-sub">Select or scan the ingredients on your counter to discover verified zero-waste culinary recipes.</p>
         </div>
-        <div class="role-indicator-badge">
-          <span>Mode: <strong>Home Chef (Viewer &amp; Cook)</strong></span>
-        </div>
       </div>
 
       <!-- =============================================================== -->
@@ -564,7 +548,7 @@
             </div>
             <div>
               <h3 class="scanner-heading">Smart Kitchen Scrap Photo Scanner</h3>
-              <p class="scanner-subheading">Upload or drop a photo of counter discards. Our vision analyzer instantly identifies the byproduct and reveals its authentic Chennai heritage recipe.</p>
+              <p class="scanner-subheading">Upload or drop a photo of counter discards. Our vision analyzer instantly identifies kitchen byproducts and unlocks verified culinary upcycling recipes.</p>
             </div>
           </div>
           <span class="scanner-pill-tag">
@@ -587,7 +571,7 @@
                 </svg>
               </div>
               <h4 class="dropzone-main-text">Drag &amp; Drop Kitchen Photo Here</h4>
-              <p class="dropzone-sub-text">Supports potato_peels.webp, carrot_peels.jpg, or counter snapshots</p>
+              <p class="dropzone-sub-text">Supports JPG, PNG, and WEBP kitchen counter photos</p>
               <button type="button" class="btn-dropzone-upload" id="btn-trigger-photo-upload">
                 <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 <span>Upload Counter Photo</span>
@@ -610,7 +594,7 @@
             <div class="scanner-samples-wrap">
               <span class="samples-label">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Quick 1-Click Faculty Demo Samples:
+                Instant Sample Scans:
               </span>
               <div class="samples-chip-row">
                 <button type="button" class="btn-sample-chip" data-sample="mixed_peels">
@@ -747,9 +731,6 @@
         <div>
           <h2 class="portal-heading">Master Chef: Recipe Authoring Studio</h2>
           <p class="portal-sub">Select the kitchen byproduct you want to valorize, then specify ingredients and cooking steps to standardize a new dish.</p>
-        </div>
-        <div class="role-indicator-badge master-badge">
-          <span>Mode: <strong>Master Chef (Recipe Author &amp; Uploader)</strong></span>
         </div>
       </div>
 
@@ -1046,7 +1027,7 @@
             <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
           </div>
           <div class="upload-text"><strong>Click to upload</strong> or drag &amp; drop kitchen scrap photo</div>
-          <div class="supported-files-tag">Accepts JPG, PNG, WEBP (e.g. potato_peels.webp, carrot_peels.jpg)</div>
+          <div class="supported-files-tag">Supports JPG, PNG, and WEBP kitchen counter photos</div>
         </div>
 
         <!-- Scanning & Classification Feedback Box -->
@@ -1215,61 +1196,6 @@
           <button type="submit" class="btn-auth-submit" id="btn-submit-register">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
             <span>Create Verified Account</span>
-          </button>
-        </form>
-      </div>
-    </div>
-  </dialog>
-
-  <!-- ===================================================================== -->
-  <!-- NATIVE HTML5 DIALOG: REGION & SPOKEN LANGUAGE LOCALIZATION SELECTOR -->
-  <!-- ===================================================================== -->
-  <dialog class="app-modal" id="locale-modal">
-    <div class="modal-card small">
-      <header class="modal-card-header">
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-            <path d="M2 12h20"/>
-          </svg>
-          <h3 style="margin: 0; font-size: 1.15rem; font-family: var(--font-display);">Select Region &amp; Spoken Language</h3>
-        </div>
-        <button class="btn-close-modal" id="locale-modal-close" aria-label="Close">&times;</button>
-      </header>
-      <div class="modal-card-body">
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
-          Personalize your regional scrap terminology, local heritage recipe curation, and community relief shelters.
-        </p>
-        <form id="form-locale-select">
-          <div class="form-group">
-            <label for="locale-select-region">Active State / Region</label>
-            <select id="locale-select-region" required>
-              <option value="Tamil Nadu">Tamil Nadu (Chennai)</option>
-              <option value="West Bengal">West Bengal (Kolkata)</option>
-              <option value="Delhi NCR">Delhi NCR (New Delhi)</option>
-              <option value="Maharashtra">Maharashtra (Mumbai)</option>
-              <option value="Karnataka">Karnataka (Bengaluru)</option>
-              <option value="Telangana">Telangana (Hyderabad)</option>
-              <option value="All India">All India (Pan-Indian Hub)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="locale-select-language">Preferred Spoken Language</label>
-            <select id="locale-select-language" required>
-              <option value="ta">Tamil (தமிழ்)</option>
-              <option value="bn">Bengali (বাংলা)</option>
-              <option value="hi">Hindi (हिन्दी)</option>
-              <option value="en">English (Universal)</option>
-              <option value="mr">Marathi (मराठी)</option>
-              <option value="te">Telugu (తెలుగు)</option>
-              <option value="kn">Kannada (ಕನ್ನಡ)</option>
-            </select>
-          </div>
-
-          <button type="submit" class="btn-auth-submit" id="btn-save-locale">
-            <span>Apply Region &amp; Language</span>
           </button>
         </form>
       </div>
