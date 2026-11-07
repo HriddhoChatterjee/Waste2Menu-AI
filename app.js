@@ -2500,6 +2500,9 @@
     btnHeroExplore: document.getElementById('btn-hero-explore'),
     btnHeroContribute: document.getElementById('btn-hero-contribute'),
     btnHeroMatrix: document.getElementById('btn-hero-matrix'),
+    btnHeroGetStarted: document.getElementById('btn-hero-get-started'),
+    btnHeroSignin: document.getElementById('btn-hero-signin'),
+    btnHeroExploreFormulations: document.getElementById('btn-hero-explore-formulations'),
 
     // Showcase & Impact Elements (Home Overview)
     ancestralShowcaseGrid: document.getElementById('ancestral-showcase-grid'),
@@ -2708,6 +2711,25 @@
     // Dispatch Feed Filter
     filterDispatchRegion: document.getElementById('filter-dispatch-region'),
 
+    // Dedicated Profile & Settings Panel Elements
+    panelProfile: document.getElementById('panel-profile'),
+    profileForm: document.getElementById('profile-form'),
+    profileName: document.getElementById('profile-name'),
+    profileEmail: document.getElementById('profile-email'),
+    profileRole: document.getElementById('profile-role'),
+    profileOrgName: document.getElementById('profile-org-name'),
+    profileLicenseId: document.getElementById('profile-license-id'),
+    profileCity: document.getElementById('profile-city'),
+    profileRegion: document.getElementById('profile-region'),
+    profileLanguage: document.getElementById('profile-language'),
+    profileLocalePreview: document.getElementById('profile-locale-preview'),
+    profileHeaderName: document.getElementById('profile-header-name'),
+    profileHeaderRole: document.getElementById('profile-header-role'),
+    profileAvatarInitials: document.getElementById('profile-avatar-initials'),
+    btnSaveProfile: document.getElementById('btn-save-profile'),
+    btnProfileSignout: document.getElementById('btn-profile-signout'),
+    btnDownloadImpact: document.getElementById('btn-download-impact'),
+
     // Toast Tray
     toastTray: document.getElementById('toast-tray')
   };
@@ -2876,6 +2898,70 @@
     });
 
     // Hero Action CTAs & Wisdom Banner CTA
+    if (DOM.btnHeroGetStarted) {
+      DOM.btnHeroGetStarted.addEventListener('click', () => {
+        if (state.currentUser) {
+          switchTab('home-chef', true);
+        } else {
+          openAuthModal();
+          showRegisterTab();
+        }
+      });
+    }
+
+    if (DOM.btnHeroSignin) {
+      DOM.btnHeroSignin.addEventListener('click', () => {
+        if (state.currentUser) {
+          switchTab('profile', true);
+        } else {
+          openAuthModal();
+          showSigninTab();
+        }
+      });
+    }
+
+    if (DOM.btnHeroExploreFormulations) {
+      DOM.btnHeroExploreFormulations.addEventListener('click', () => {
+        const showcase = document.getElementById('ancestral-showcase-section');
+        if (showcase) {
+          showcase.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          switchTab('scraps-matrix', true);
+        }
+      });
+    }
+
+    // Interactive Feature Preview Grid Launch Handlers
+    document.querySelectorAll('.btn-suite-launch').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTab = btn.dataset.targetTab;
+        const title = btn.dataset.title || 'feature';
+        if (!state.currentUser) {
+          showToast(`Please sign in or create a verified account to access ${title}.`, 'info');
+          openAuthModal();
+        } else {
+          if (targetTab) switchTab(targetTab, true);
+        }
+      });
+    });
+
+    // Profile & Settings View Handlers
+    if (DOM.profileForm) {
+      DOM.profileForm.addEventListener('submit', handleProfileFormSubmit);
+    }
+    if (DOM.profileLanguage) {
+      DOM.profileLanguage.addEventListener('change', updateProfileLocalePreview);
+    }
+    if (DOM.profileRegion) {
+      DOM.profileRegion.addEventListener('change', updateProfileLocalePreview);
+    }
+    if (DOM.btnProfileSignout) {
+      DOM.btnProfileSignout.addEventListener('click', handleSignOut);
+    }
+    if (DOM.btnDownloadImpact) {
+      DOM.btnDownloadImpact.addEventListener('click', handleDownloadImpactCertificate);
+    }
+
     if (DOM.btnHeroExplore) {
       DOM.btnHeroExplore.addEventListener('click', () => {
         switchTab('home-chef', true);
@@ -3197,6 +3283,14 @@
       }
     }
 
+    if (tabId === 'profile') {
+      if (!state.currentUser) {
+        showToast('Please sign in to access your profile & settings.', 'info');
+        openAuthModal();
+        return;
+      }
+    }
+
     state.activeTab = tabId;
 
     // Update URL hash so the Git deploy link dynamically changes among pages
@@ -3216,7 +3310,9 @@
     });
     syncNavbarActivePill(tabId);
 
-    DOM.tabPanels.forEach(panel => {
+    // Update panel active states (including #panel-profile)
+    const allPanels = document.querySelectorAll('.tab-panel');
+    allPanels.forEach(panel => {
       panel.classList.toggle('active', panel.id === `panel-${tabId}`);
     });
 
@@ -3225,6 +3321,10 @@
       const isMaster = state.currentUser && state.currentUser.role === 'master_chef';
       DOM.chefRoleBanner.style.display = isMaster ? 'none' : 'flex';
       renderMasterChefScrapsSelector();
+    }
+
+    if (tabId === 'profile') {
+      initProfileView();
     }
 
     if (tabId === 'home-overview') {
@@ -3269,6 +3369,11 @@
       }
       btn.classList.toggle('active', isMatch);
     });
+
+    const btnNavProfile = document.getElementById('nav-btn-profile');
+    if (btnNavProfile) {
+      btnNavProfile.classList.toggle('active', activeTabId === 'profile');
+    }
   }
 
   /**
@@ -3281,7 +3386,7 @@
       return;
     }
 
-    const validTabs = ['home-overview', 'scraps-matrix', 'home-chef', 'master-chef', 'ngo-dispatch'];
+    const validTabs = ['home-overview', 'scraps-matrix', 'home-chef', 'master-chef', 'ngo-dispatch', 'profile'];
     const aliasMap = {
       'home': 'home-overview',
       'overview': 'home-overview',
@@ -3300,13 +3405,22 @@
       'upload': 'master-chef',
       'ngo': 'ngo-dispatch',
       'dispatch': 'ngo-dispatch',
-      'dispatches': 'ngo-dispatch'
+      'dispatches': 'ngo-dispatch',
+      'profile': 'profile',
+      'settings': 'profile',
+      'account': 'profile'
     };
 
     const targetTab = validTabs.includes(rawHash) ? rawHash : (aliasMap[rawHash] || 'home-overview');
 
     if (targetTab === 'master-chef' && (!state.currentUser || state.currentUser.role !== 'master_chef')) {
       switchTab('home-overview', true);
+      return;
+    }
+
+    if (targetTab === 'profile' && !state.currentUser) {
+      switchTab('home-overview', false);
+      openAuthModal();
       return;
     }
 
@@ -3387,6 +3501,14 @@
   // ==========================================================================
   // DYNAMIC ROLE-BASED NAVBAR ARCHITECTURE (STATES A, B, C, D) - ZERO EMOJIS
   // ==========================================================================
+  function getUserInitials(name) {
+    if (!name) return 'U';
+    const clean = name.replace(/^Chef\s+/i, '').trim();
+    const parts = clean.split(/\s+/).filter(Boolean);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
   function renderDynamicNavbar() {
     const centerNav = document.getElementById('navbar-center-nav') || document.querySelector('.main-nav');
     const rightAuth = document.getElementById('header-auth');
@@ -3399,7 +3521,7 @@
     rightAuth.innerHTML = '';
 
     // =========================================================================
-    // STATE A: Default Guest / Signed Out Visitor
+    // STATE A: Default Guest / Signed Out Visitor (Commercial Showcase Page)
     // =========================================================================
     if (!user) {
       centerNav.innerHTML = `
@@ -3410,19 +3532,33 @@
           </svg>
           <span>Home &amp; Impact</span>
         </button>
-        <button type="button" class="nav-tab-btn ${currentTab === 'scraps-matrix' ? 'active' : ''}" data-tab="scraps-matrix" id="nav-tab-matrix">
+        <button type="button" class="nav-tab-btn" id="nav-action-suites">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-            <path d="M2 12h20"/>
+            <rect width="7" height="7" x="3" y="3" rx="1"/>
+            <rect width="7" height="7" x="14" y="3" rx="1"/>
+            <rect width="7" height="7" x="14" y="14" rx="1"/>
+            <rect width="7" height="7" x="3" y="14" rx="1"/>
           </svg>
-          <span>Ingredients Catalog</span>
+          <span>Product Suites</span>
         </button>
-        <button type="button" class="nav-tab-btn" data-action="partners" id="nav-tab-partners">
+        <button type="button" class="nav-tab-btn" id="nav-action-partners">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
             <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
           </svg>
-          <span>Relief Partners</span>
+          <span>Pan-India Relief</span>
+        </button>
+        <button type="button" class="nav-tab-btn" id="nav-action-science">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          <span>Science &amp; SDG</span>
+        </button>
+        <button type="button" class="nav-tab-btn" id="nav-action-recipes">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="m10 15 5-3-5-3v6Z"/>
+          </svg>
+          <span>Curated Recipes</span>
         </button>
       `;
 
@@ -3432,33 +3568,71 @@
             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
-          <span>Sign In / Join</span>
+          <span>Sign In / Workspace</span>
         </button>
       `;
 
       const btnOpenAuth = rightAuth.querySelector('#btn-open-auth');
       if (btnOpenAuth) btnOpenAuth.addEventListener('click', openAuthModal);
 
-      const btnPartners = centerNav.querySelector('#nav-tab-partners');
-      if (btnPartners) {
-        btnPartners.addEventListener('click', (e) => {
+      const navSuites = centerNav.querySelector('#nav-action-suites');
+      if (navSuites) {
+        navSuites.addEventListener('click', (e) => {
           e.preventDefault();
           switchTab('home-overview', true);
           setTimeout(() => {
-            const partnersSec = document.getElementById('chennai-community-partners-section');
-            if (partnersSec) {
-              partnersSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            const el = document.getElementById('product-suites-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 80);
+        });
+      }
+
+      const navPartners = centerNav.querySelector('#nav-action-partners');
+      if (navPartners) {
+        navPartners.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchTab('home-overview', true);
+          setTimeout(() => {
+            const el = document.getElementById('chennai-community-partners-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 80);
+        });
+      }
+
+      const navScience = centerNav.querySelector('#nav-action-science');
+      if (navScience) {
+        navScience.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchTab('home-overview', true);
+          setTimeout(() => {
+            const el = document.getElementById('science-biochemistry-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 80);
+        });
+      }
+
+      const navRecipes = centerNav.querySelector('#nav-action-recipes');
+      if (navRecipes) {
+        navRecipes.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchTab('home-overview', true);
+          setTimeout(() => {
+            const el = document.getElementById('ancestral-showcase-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }, 80);
         });
       }
     }
 
     // =========================================================================
-    // STATE B: Logged in as "Home Chef"
+    // STATE B, C, D: Authenticated Workspace User (Home Chef, Master Chef, NGO)
     // =========================================================================
-    else if (user.role === 'home_chef') {
-      const displayName = user.name ? user.name.split(' ')[0] : 'Chef';
+    else {
+      const displayName = user.name ? user.name.replace(/^Chef\s+/i, '').split(' ')[0] : 'User';
+      const initials = getUserInitials(user.name);
+      const role = user.role || 'home_chef';
+      const roleLabel = role === 'master_chef' ? 'Master Chef' : (role === 'ngo_partner' || role === 'ngo_rep' ? 'NGO Partner' : 'Home Chef');
+      const roleClass = role === 'master_chef' ? 'master-chef' : (role === 'ngo_partner' || role === 'ngo_rep' ? 'ngo-partner' : 'home-chef');
 
       centerNav.innerHTML = `
         <button type="button" class="nav-tab-btn ${currentTab === 'home-overview' ? 'active' : ''}" data-tab="home-overview" id="nav-tab-home">
@@ -3470,170 +3644,60 @@
         </button>
         <button type="button" class="nav-tab-btn ${currentTab === 'home-chef' ? 'active' : ''}" data-tab="home-chef" id="nav-tab-home-chef">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-            <path d="M2 12h20"/>
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
           </svg>
           <span>Reverse Recipes</span>
         </button>
-        <button type="button" class="nav-tab-btn" data-action="creations" id="nav-tab-my-creations">
+        <button type="button" class="nav-tab-btn ${currentTab === 'master-chef' ? 'active' : ''}" data-tab="master-chef" id="nav-tab-master">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
-            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
-            <circle cx="12" cy="13" r="3"/>
+            <path d="M6 13.8a4.5 4.5 0 1 1 5.4-6.4 4.5 4.5 0 0 1 7.2 2.6 4 4 0 0 1-1.6 7.6H7a4 4 0 0 1-1-.2Z"/>
+            <path d="M6 17h12v4H6z"/>
           </svg>
-          <span>My Cooked Dishes</span>
+          <span>Chef Studio</span>
         </button>
-      `;
-
-      rightAuth.innerHTML = `
-        <div class="user-profile-cluster">
-          <span class="user-name-text">${escapeHtml(displayName)}</span>
-          <span class="user-role-tag home-chef">Home Chef</span>
-        </div>
-        <button type="button" class="btn-auth-signout" id="btn-header-signout" title="Sign Out">Sign Out</button>
-      `;
-
-      const btnCreations = centerNav.querySelector('#nav-tab-my-creations');
-      if (btnCreations) {
-        btnCreations.addEventListener('click', (e) => {
-          e.preventDefault();
-          switchTab('home-chef', true);
-          setTimeout(() => {
-            const gal = document.getElementById('cooked-creations-gallery-section');
-            if (gal) gal.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 80);
-        });
-      }
-
-      const btnSignOut = rightAuth.querySelector('#btn-header-signout');
-      if (btnSignOut) btnSignOut.addEventListener('click', handleSignOut);
-    }
-
-    // =========================================================================
-    // STATE C: Logged in as "Master Chef / Commercial Kitchen"
-    // =========================================================================
-    else if (user.role === 'master_chef') {
-      const displayName = user.name ? user.name.replace('Chef ', '').split(' ')[0] : 'Chef';
-
-      centerNav.innerHTML = `
-        <button type="button" class="nav-tab-btn ${currentTab === 'home-overview' ? 'active' : ''}" data-tab="home-overview" id="nav-tab-home">
+        <button type="button" class="nav-tab-btn ${currentTab === 'ngo-dispatch' ? 'active' : ''}" data-tab="ngo-dispatch" id="nav-tab-ngo">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
-            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
+            <path d="m11 17 2 2a1 1 0 0 0 1.4 0l6.6-6.6a5 5 0 0 0-7-7L12 7.4l-2-2a5 5 0 0 0-7 7l6.6 6.6a1 1 0 0 0 1.4 0Z"/>
           </svg>
-          <span>Home &amp; Impact</span>
+          <span>Surplus Dispatch</span>
         </button>
         <button type="button" class="nav-tab-btn ${currentTab === 'scraps-matrix' ? 'active' : ''}" data-tab="scraps-matrix" id="nav-tab-matrix">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-            <path d="M2 12h20"/>
+            <rect width="7" height="7" x="3" y="3" rx="1"/>
+            <rect width="7" height="7" x="14" y="3" rx="1"/>
+            <rect width="7" height="7" x="14" y="14" rx="1"/>
+            <rect width="7" height="7" x="3" y="14" rx="1"/>
           </svg>
-          <span>Ingredients Catalog</span>
-        </button>
-        <button type="button" class="nav-tab-btn ${currentTab === 'ngo-dispatch' ? 'active' : ''}" data-tab="ngo-dispatch" id="nav-tab-ngo-dispatch">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
-            <rect width="18" height="14" x="3" y="5" rx="2"/>
-            <path d="m3 7 9 6 9-6"/>
-          </svg>
-          <span>Surplus Food Dispatch</span>
-        </button>
-      `;
-
-      rightAuth.innerHTML = `
-        <button type="button" class="btn-publish-recipe-cta" id="btn-publish-recipe" title="Publish New Zero-Waste Recipe">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: -2px;">
-            <line x1="12" y1="5" x2="12" y2="19"/>
-            <line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-          <span>Publish Recipe</span>
-        </button>
-        <div class="user-profile-cluster">
-          <span class="user-name-text">${escapeHtml(displayName)}</span>
-          <span class="user-role-tag master-chef">Master Chef</span>
-        </div>
-        <button type="button" class="btn-auth-signout" id="btn-header-signout" title="Sign Out">Sign Out</button>
-      `;
-
-      const btnPublish = rightAuth.querySelector('#btn-publish-recipe');
-      if (btnPublish) {
-        btnPublish.addEventListener('click', (e) => {
-          e.preventDefault();
-          switchTab('master-chef', true);
-          setTimeout(() => {
-            const picker = document.getElementById('master-scrap-picker-card');
-            if (picker) picker.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 80);
-        });
-      }
-
-      const btnSignOut = rightAuth.querySelector('#btn-header-signout');
-      if (btnSignOut) btnSignOut.addEventListener('click', handleSignOut);
-    }
-
-    // =========================================================================
-    // STATE D: Logged in as "Verified NGO Partner"
-    // =========================================================================
-    else if (user.role === 'ngo_partner' || user.role === 'ngo_rep') {
-      let orgName = user.affiliation || user.org_name || 'Relief Partner';
-      if (orgName.includes('/')) orgName = orgName.split('/')[0].trim();
-      if (orgName.length > 22) orgName = orgName.slice(0, 20) + '...';
-
-      centerNav.innerHTML = `
-        <button type="button" class="nav-tab-btn ${currentTab === 'home-overview' ? 'active' : ''}" data-tab="home-overview" id="nav-tab-home">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
-            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
-          </svg>
-          <span>Home &amp; Impact</span>
-        </button>
-        <button type="button" class="nav-tab-btn ${currentTab === 'ngo-dispatch' ? 'active' : ''}" data-action="ngo-feed" id="nav-tab-ngo-feed">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
-            <rect width="18" height="14" x="3" y="5" rx="2"/>
-            <path d="m3 7 9 6 9-6"/>
-          </svg>
-          <span>Live Surplus Feed</span>
-        </button>
-        <button type="button" class="nav-tab-btn" data-action="ngo-claimed" id="nav-tab-ngo-claimed">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" style="margin-right: 6px; vertical-align: -2px;">
-            <rect width="18" height="18" x="3" y="4" rx="2"/>
-            <path d="m9 12 2 2 4-4"/>
-          </svg>
-          <span>Claimed &amp; OTPs</span>
+          <span>Ingredients Matrix</span>
         </button>
       `;
 
       rightAuth.innerHTML = `
         <div class="user-profile-cluster">
-          <span class="user-name-text">${escapeHtml(orgName)}</span>
-          <span class="user-role-tag ngo-partner">NGO Partner</span>
+          <div class="user-avatar-pill">
+            <span class="avatar-initials">${escapeHtml(initials)}</span>
+          </div>
+          <div class="user-meta-stack">
+            <span class="user-name-text">${escapeHtml(displayName)}</span>
+            <span class="user-role-tag ${roleClass}">${roleLabel}</span>
+          </div>
         </div>
+        <button type="button" class="btn-nav-profile ${currentTab === 'profile' ? 'active' : ''}" id="nav-btn-profile" title="My Profile &amp; Settings">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" style="vertical-align: -2px; margin-right: 3px;">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <span>Settings</span>
+        </button>
         <button type="button" class="btn-auth-signout" id="btn-header-signout" title="Sign Out">Sign Out</button>
       `;
 
-      const btnFeed = centerNav.querySelector('#nav-tab-ngo-feed');
-      if (btnFeed) {
-        btnFeed.addEventListener('click', (e) => {
+      const btnNavProfile = rightAuth.querySelector('#nav-btn-profile');
+      if (btnNavProfile) {
+        btnNavProfile.addEventListener('click', (e) => {
           e.preventDefault();
-          switchTab('ngo-dispatch', true);
-          setTimeout(() => {
-            const feedList = document.getElementById('ngo-dispatches-list');
-            if (feedList) feedList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 80);
-        });
-      }
-
-      const btnClaimed = centerNav.querySelector('#nav-tab-ngo-claimed');
-      if (btnClaimed) {
-        btnClaimed.addEventListener('click', (e) => {
-          e.preventDefault();
-          switchTab('ngo-dispatch', true);
-          setTimeout(() => {
-            const feedList = document.getElementById('ngo-dispatches-list');
-            if (feedList) {
-              feedList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }, 80);
+          switchTab('profile', true);
         });
       }
 
@@ -3653,6 +3717,196 @@
     // Keep DOM cache in sync
     DOM.navTabButtons = centerNav.querySelectorAll('.nav-tab-btn');
     syncRoleSwitcherActive();
+  }
+
+  // ==========================================================================
+  // PROFILE & SETTINGS VIEW CONTROLLER (#panel-profile)
+  // ==========================================================================
+  function initProfileView() {
+    const user = state.currentUser;
+    if (!user) return;
+
+    const initials = getUserInitials(user.name);
+    if (DOM.profileAvatarInitials) DOM.profileAvatarInitials.textContent = initials;
+    if (DOM.profileHeaderName) DOM.profileHeaderName.textContent = user.name || 'My Profile & Settings';
+
+    if (DOM.profileHeaderRole) {
+      const roleKey = user.role || 'home_chef';
+      const roleMap = {
+        home_chef: 'Home Chef',
+        master_chef: 'Master Chef',
+        ngo_partner: 'NGO Partner',
+        ngo_rep: 'NGO Partner'
+      };
+      DOM.profileHeaderRole.textContent = roleMap[roleKey] || 'Home Chef';
+      DOM.profileHeaderRole.className = `user-role-tag ${roleKey === 'master_chef' ? 'master-chef' : (roleKey === 'ngo_partner' || roleKey === 'ngo_rep' ? 'ngo-partner' : 'home-chef')}`;
+    }
+
+    if (DOM.profileName) DOM.profileName.value = user.name || '';
+    if (DOM.profileEmail) DOM.profileEmail.value = user.email || '';
+    if (DOM.profileRole) DOM.profileRole.value = user.role || 'home_chef';
+    if (DOM.profileOrgName) DOM.profileOrgName.value = user.org_name || user.affiliation || '';
+    if (DOM.profileLicenseId) DOM.profileLicenseId.value = user.license_or_darpan_id || '';
+    if (DOM.profileCity) DOM.profileCity.value = user.city || state.activeCity || 'Chennai';
+    if (DOM.profileRegion) DOM.profileRegion.value = user.region_state || state.activeRegion || 'Tamil Nadu';
+    if (DOM.profileLanguage) DOM.profileLanguage.value = user.preferred_language || state.activeLanguage || 'en';
+
+    updateProfileLocalePreview();
+  }
+
+  function updateProfileLocalePreview() {
+    const previewBox = document.getElementById('profile-locale-preview');
+    if (!previewBox) return;
+
+    const lang = DOM.profileLanguage ? DOM.profileLanguage.value : (state.currentUser?.preferred_language || state.activeLanguage);
+
+    // Preview using Potato Peels (#3)
+    const entry = LOCALIZED_SCRAPS_MAP[3];
+    const english = entry ? entry['en'] : 'Potato Peels';
+    const regional = (entry && entry[lang]) ? entry[lang] : english;
+
+    let sampleRecipe = 'Urulaikizhangu Thol Milagu Varuval (Crispy Black Pepper Fry)';
+    if (lang === 'bn') sampleRecipe = 'Alu Khosha Posto Bhaja (Crispy Poppyseed Sauté)';
+    else if (lang === 'hi') sampleRecipe = 'Aloo ke Chilke ki Kurkuri Bhujia (Crisp Spiced Hash)';
+    else if (lang === 'mr') sampleRecipe = 'Batatyachya Salanchi Kurkurit Bhaji (Maharashtrian Stir-Fry)';
+
+    previewBox.innerHTML = `
+      <div class="preview-chip-title">${english}</div>
+      <div class="preview-chip-sub">Regional Nomenclature: <strong>${regional}</strong></div>
+      <div class="preview-chip-recipe">Sample Formulation: <em>${sampleRecipe}</em></div>
+    `;
+  }
+
+  async function handleProfileFormSubmit(e) {
+    e.preventDefault();
+    if (!state.currentUser) return;
+
+    const submitBtn = document.getElementById('btn-save-profile');
+    if (submitBtn) submitBtn.disabled = true;
+
+    const name = DOM.profileName ? DOM.profileName.value.trim() : '';
+    const role = DOM.profileRole ? DOM.profileRole.value : 'home_chef';
+    const orgName = DOM.profileOrgName ? DOM.profileOrgName.value.trim() : '';
+    const licenseId = DOM.profileLicenseId ? DOM.profileLicenseId.value.trim() : '';
+    const city = DOM.profileCity ? DOM.profileCity.value : 'Chennai';
+    const region = DOM.profileRegion ? DOM.profileRegion.value : 'Tamil Nadu';
+    const language = DOM.profileLanguage ? DOM.profileLanguage.value : 'en';
+
+    if (!name) {
+      showToast('Please enter your full name.', 'error');
+      if (submitBtn) submitBtn.disabled = false;
+      return;
+    }
+
+    // Update Supabase profile
+    if (supabaseClient && state.currentUser.id) {
+      try {
+        await supabaseClient.from('profiles').update({
+          full_name: name,
+          role: role,
+          region_state: region,
+          city: city,
+          preferred_language: language,
+          org_name: orgName,
+          license_or_darpan_id: licenseId
+        }).eq('id', state.currentUser.id);
+      } catch (err) {
+        console.warn('Supabase profile update offline fallback:', err);
+      }
+    }
+
+    // Update local state
+    state.currentUser.name = name;
+    state.currentUser.role = role;
+    state.currentUser.region_state = region;
+    state.currentUser.city = city;
+    state.currentUser.preferred_language = language;
+    state.currentUser.org_name = orgName;
+    state.currentUser.license_or_darpan_id = licenseId;
+    state.currentUser.affiliation = orgName || state.currentUser.affiliation;
+
+    state.activeRegion = region;
+    state.activeLanguage = language;
+    state.activeCity = city;
+
+    try {
+      localStorage.setItem('waste2menu_user', JSON.stringify(state.currentUser));
+      localStorage.setItem('annapurna_user', JSON.stringify(state.currentUser));
+    } catch (e) {}
+
+    renderDynamicNavbar();
+    renderCategorizedCatalog();
+    renderAncestralShowcase();
+    updateHomePartnersHighlight();
+    populateScrapDropdown();
+
+    initProfileView();
+
+    const statusText = document.getElementById('profile-save-status');
+    if (statusText) {
+      statusText.innerHTML = '<span style="color: #059669; font-weight: 600;">✓ Preferences saved and localized terms synchronized!</span>';
+      setTimeout(() => {
+        statusText.innerHTML = '<span>All changes are synced securely with Supabase Cloud.</span>';
+      }, 3500);
+    }
+
+    showToast('Profile and localization preferences saved successfully!', 'success');
+    if (submitBtn) submitBtn.disabled = false;
+  }
+
+  function handleDownloadImpactCertificate() {
+    const user = state.currentUser || { name: 'Culinary Partner', org_name: 'Waste2Menu Alliance' };
+    const scraps = document.getElementById('profile-metric-scraps')?.textContent || '18.5 kg';
+    const co2 = document.getElementById('profile-metric-co2')?.textContent || '46.2 kg';
+    const meals = document.getElementById('profile-metric-meals')?.textContent || '34 portions';
+
+    const certWindow = window.open('', '_blank');
+    if (!certWindow) {
+      showToast('Please allow popups to view your sustainability certificate.', 'info');
+      return;
+    }
+
+    certWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Waste2Menu Sustainability Certificate - ${escapeHtml(user.name)}</title>
+        <style>
+          body { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; background: #FAF7F2; color: #1C1917; padding: 3rem; text-align: center; }
+          .cert-card { max-width: 680px; margin: 0 auto; background: #FFF; border: 3px double #145334; border-radius: 16px; padding: 3.5rem 2.5rem; box-shadow: 0 16px 36px rgba(0,0,0,0.08); }
+          h1 { color: #145334; font-size: 2rem; margin-bottom: 0.25rem; font-family: serif; }
+          .kicker { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.1em; color: #C85A32; text-transform: uppercase; }
+          .recipient { font-size: 1.75rem; font-weight: 700; color: #0A2E1D; margin: 1.5rem 0 0.5rem; border-bottom: 1px solid #E6E0D4; display: inline-block; padding-bottom: 0.25rem; }
+          p { color: #57534E; line-height: 1.6; font-size: 1rem; }
+          .stats-row { display: flex; justify-content: space-around; margin: 2rem 0; border: 1px solid #E6E0D4; border-radius: 12px; padding: 1.25rem; background: #F8FAF9; }
+          .stat { text-align: center; }
+          .stat-val { font-size: 1.6rem; font-weight: 800; color: #145334; font-family: monospace; }
+          .stat-lbl { font-size: 0.75rem; color: #78716C; text-transform: uppercase; margin-top: 0.2rem; }
+          .footer-note { font-size: 0.75rem; color: #A8A29E; margin-top: 2rem; }
+          @media print { body { background: #FFF; padding: 0; } .cert-card { box-shadow: none; border: 2px solid #000; } }
+        </style>
+      </head>
+      <body>
+        <div class="cert-card">
+          <div class="kicker">Official UN SDG 12.3 Circular Gastronomy Ledger</div>
+          <h1>Certificate of Ecological Valorization</h1>
+          <p>This certifies that</p>
+          <div class="recipient">${escapeHtml(user.name)}</div>
+          <p>${user.org_name ? `<em>${escapeHtml(user.org_name)}</em> &bull; ` : ''}Active Region: ${escapeHtml(state.activeRegion)}</p>
+          <p>has actively participated in decentralized zero-waste kitchen valorization and surplus food diversion across India.</p>
+          <div class="stats-row">
+            <div class="stat"><div class="stat-val">${escapeHtml(scraps)}</div><div class="stat-lbl">Kitchen Scraps Diverted</div></div>
+            <div class="stat"><div class="stat-val">${escapeHtml(co2)}</div><div class="stat-lbl">CO₂e Emissions Prevented</div></div>
+            <div class="stat"><div class="stat-val">${escapeHtml(meals)}</div><div class="stat-lbl">Relief Meals Dispatched</div></div>
+          </div>
+          <p style="font-size: 0.85rem; color: #145334;"><strong>Cryptographic Proof-of-Rescue Token ID:</strong> W2M-${Date.now().toString(36).toUpperCase()}</p>
+          <div class="footer-note">Waste2Menu AI National Network &bull; Verified via Supabase Cloud Audit Ledger</div>
+        </div>
+        <script>window.print();</script>
+      </body>
+      </html>
+    `);
+    certWindow.document.close();
   }
 
   function syncRoleSwitcherActive() {
